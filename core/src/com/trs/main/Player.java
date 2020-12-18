@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
@@ -19,17 +20,23 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class Player extends Actor{
     
+    //Rectangle r;
+    //ShapeRenderer renderer;
     Texture t;
     
     Player(){
+        //renderer = new ShapeRenderer();
+        //r = new Rectangle(0,0,800,800);
+        //setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         t = new Texture(Gdx.files.internal("badlogic.jpg"));
-        setBounds(50, 50, t.getWidth(), t.getHeight());
+        setBounds(0, 0, t.getWidth(), t.getHeight());
     }
 
     @Override
     protected void positionChanged() {
-        setX(getX());
-        setY(getY());
+        //r.setX(getX());
+        //r.setY(getY());
+        
         super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -54,6 +61,12 @@ public class Player extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        //batch.end();
+        //renderer.setProjectionMatrix(batch.getProjectionMatrix());
+        //renderer.begin(ShapeRenderer.ShapeType.Filled);
+        //renderer.rect(getX(), getY(), getWidth(), getHeight());
+        //renderer.end();
+        //batch.begin();
         batch.draw(t, getX(), getY());
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
     }
