@@ -59,32 +59,31 @@ public class Player extends Actor{
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
             movementY = -speed;
         }
-        
-        boolean canMoveRight = true;
-        boolean canMoveLeft = true;
-        boolean canMoveBoth = true;
-        for(Actor a : getStage().getActors()){
-            if(a.getName().equals("mapobject")){
-                Rectangle p = new Rectangle(getX()+movementX, getY(), getWidth(), getHeight());
-                Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
-                if(Intersector.overlaps(p, o)){
-                    canMoveRight = false;
-                    break;
-                }
-            }
+        /**
+        *   return
+        *   0:  only vertical movement available
+        *   1:  only horizontal movement available
+        *   2:  full movement available
+        *   3:  no movement available
+        */
+        int movementAvailable = getMovementAvailable();
+        switch(movementAvailable){
+            case 0:
+                setY(getY()+movementY);
+                break;
+            case 1:
+                setX(getX()+movementX);
+                break;
+            case 2:
+                setX(getX()+movementX);
+                setY(getY()+movementY);
+                break;
+            case 3:
+                break;
         }
-        for(Actor a : getStage().getActors()){
-            if(a.getName().equals("mapobject")){
-                Rectangle p = new Rectangle(getX(), getY()+movementY, getWidth(), getHeight());
-                Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
-                if(Intersector.overlaps(p, o)){
-                    canMoveRight = false;
-                    break;
-                }
-            }
-        }
-        
-        
+
+        movementX = 0;
+        movementY = 0;
         
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
@@ -99,6 +98,61 @@ public class Player extends Actor{
     @Override
     public boolean remove() {
         return super.remove(); //To change body of generated methods, choose Tools | Templates.
+    }
+    /**
+    *   return
+    *   0:  only vertical movement available
+    *   1:  only horizontal movement available
+    *   2:  full movement available
+    *   3:  no movement available
+    */
+    public int getMovementAvailable(){
+        
+        boolean canMoveVer = true;
+        boolean canMoveHor = true;
+        boolean canMoveBoth = true;
+        for(Actor a : getStage().getActors()){
+            if(a.getName().equals("mapobject")){
+                Rectangle p = new Rectangle(getX()+movementX, getY() + movementY, getWidth(), getHeight());
+                Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                if(Intersector.overlaps(p, o)){
+                    canMoveBoth = false;
+                    break;
+                }
+            }
+        }
+        if(canMoveBoth){
+            return 2;
+        }
+        
+        for(Actor a : getStage().getActors()){
+            if(a.getName().equals("mapobject")){
+                Rectangle p = new Rectangle(getX()+movementX, getY(), getWidth(), getHeight());
+                Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                if(Intersector.overlaps(p, o)){
+                    canMoveHor = false;
+                    break;
+                }
+            }
+        }
+        if(canMoveHor){
+            return 1;
+        }
+        for(Actor a : getStage().getActors()){
+            if(a.getName().equals("mapobject")){
+                Rectangle p = new Rectangle(getX(), getY()+movementY, getWidth(), getHeight());
+                Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                if(Intersector.overlaps(p, o)){
+                    canMoveVer = false;
+                    break;
+                }
+            }
+        }
+        if(canMoveVer){
+            return 0;
+        }
+         
+        return 3;
     }
     
     
