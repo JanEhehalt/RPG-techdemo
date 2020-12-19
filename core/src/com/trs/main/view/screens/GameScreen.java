@@ -50,7 +50,7 @@ public class GameScreen extends AbstractScreen{
         
         for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            stage.addActor(new com.trs.main.MapObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
+            stage.addActor(new com.trs.main.MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
         }
     }
 

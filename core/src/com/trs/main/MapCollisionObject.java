@@ -13,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  *
  * @author Jan
  */
-public class MapObject extends Actor{
+public class MapCollisionObject extends Actor{
     
     Rectangle r;
     
-    public MapObject(int x, int y, int width, int height){
+    public MapCollisionObject(int x, int y, int width, int height){
         setName("mapobject");
         r = new Rectangle(x, y, width, height);
         setBounds(x, y, width, height);

@@ -25,6 +25,7 @@ public class Player extends Actor{
     private AnimatedSprite playerSprite;
     float movementX = 0;
     float movementY = 0;
+    float speed = 2f;
     
     public Player(int xPos, int yPos){
         
@@ -46,7 +47,7 @@ public class Player extends Actor{
     @Override
     public void act(float delta) {
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            
+            movementX = speed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             setX(getX()-5);
