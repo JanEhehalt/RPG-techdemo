@@ -10,6 +10,9 @@ public class Main extends Game{
     /**
      * TODO: set final Value for World
      */
+	
+	// 0: normal game world, 1: dialogue, 2: fight
+	public static int gamestate = 0;
        
     @Override
     public void create () {

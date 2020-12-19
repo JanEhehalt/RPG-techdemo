@@ -19,6 +19,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.trs.main.Main;
+import com.trs.main.MapCollisionObject;
 import com.trs.main.Player;
 import com.trs.main.Textbox;
 import java.util.ArrayList;
@@ -28,8 +30,6 @@ import java.util.ArrayList;
  * @author Jan
  */
 public class GameScreen extends AbstractScreen{
-    
-    boolean textbox = false;
     
     TmxMapLoader maploader;
     TiledMap map;
@@ -50,14 +50,8 @@ public class GameScreen extends AbstractScreen{
         
         for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            stage.addActor(new com.trs.main.MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
+            stage.addActor(new MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
         }
-    }
-
-    @Override
-    public void setTextbox(Textbox t) {
-        stage.addActor(t);
-        textbox = true;
     }
 
     @Override
@@ -69,21 +63,18 @@ public class GameScreen extends AbstractScreen{
         
         renderer.render();
         
-        if(!textbox){
-            stage.act(f);
-            stage.draw();
-        }
-        else{
+        stage.act(f);
+        stage.draw();
+        
+        if(Main.gamestate == 1) {
             Textbox t = null;
             for(Actor a : stage.getActors()){
                 if(a.getName().equals("textbox")){
-                    a.act(f);
-                    a.draw(stage.getBatch(), CAMERA_WIDTH);
                     t = (Textbox)a;
                     if(t.getState() == 2){
                         a.remove();
+                        Main.gamestate = 0;
                         t.getSelectedAsw(); // DO STUFF NICENICE
-                        textbox = false;
                     }
                 }
             }

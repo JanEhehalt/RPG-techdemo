@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 
 public class AnimatedSprite {
-	private final static int[] rowLengths = {7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 6, 6, 6, 12, 12, 12, 12, 6};
+	private final static int[] ROWLENGTHS = {7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 6, 6, 6, 12, 12, 12, 12, 6};
 	
     private Sprite sprite;
     private TextureRegion[][] texture;
@@ -34,7 +34,7 @@ public class AnimatedSprite {
     	
     	if(this.delta >= 0.1f) {
     		this.delta = 0;
-    		if(getFrame() >= rowLengths[getRow()] - 1){
+    		if(getFrame() >= ROWLENGTHS[getRow()] - 1){
                 setFrame(0);
             }
             else{
