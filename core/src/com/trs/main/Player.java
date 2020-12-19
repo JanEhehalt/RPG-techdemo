@@ -27,6 +27,8 @@ public class Player extends Actor{
     float movementX = 0;
     float movementY = 0;
     float speed = 2f;
+    // 0: up, 1: left, 2: down, 3: right
+    int facing = 0;
     
     public Player(int xPos, int yPos){
         
@@ -49,15 +51,19 @@ public class Player extends Actor{
     public void act(float delta) {
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             movementX = speed;
+            facing = 3;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             movementX = -speed;
+            facing = 1;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             movementY = speed;
+            facing = 0;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
             movementY = -speed;
+            facing = 2;
         }
         /**
         *   return
@@ -81,12 +87,20 @@ public class Player extends Actor{
             case 3:
                 break;
         }
-
+        
+        int animationRow = 0;
+        if(movementX != 0 || movementY != 0) {
+        	animationRow = 8;
+        }
+        		
+        playerSprite.setRow(animationRow + facing);
+        
         movementX = 0;
         movementY = 0;
         
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override
@@ -154,6 +168,5 @@ public class Player extends Actor{
          
         return 3;
     }
-    
     
 }

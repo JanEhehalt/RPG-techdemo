@@ -45,19 +45,6 @@ public class AnimatedSprite {
     	}
     }
     
-    /*
-    public void updateBackwards(){
-        if(getFrame() <= 0){
-            setFrame(texture[0].length - 1);
-        }
-        else{
-            setFrame(getFrame() - 1);
-        }
-        
-        sprite.setRegion(texture[getRow()][getFrame()]);
-    }
-    */
-    
     public void draw(Batch batch) {
     	sprite.draw(batch);
     }
