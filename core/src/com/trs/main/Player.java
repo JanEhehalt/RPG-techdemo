@@ -23,6 +23,7 @@ public class Player extends Actor{
     Texture t;
     
     public Player(int xPos, int yPos){
+        setName("player");
         t = new Texture(Gdx.files.internal("badlogic.jpg"));
         setBounds(xPos, yPos, t.getWidth(), t.getHeight());
     }

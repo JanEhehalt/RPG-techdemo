@@ -6,30 +6,30 @@
 package com.trs.main.view.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.trs.main.Player;
+import com.trs.main.Textbox;
 
 /**
  *
  * @author Jan
  */
 public class GameScreen extends AbstractScreen{
+    
+    boolean textbox = false;
 
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
-        Group group = new Group();
-        group.addActor(new Player(0,0));
-        group.addActor(new Player(256,0));
-        group.addActor(new Player(0,256));
-        group.addActor(new Player(256,256));
-        group.addActor(new Player(512,512));
-        group.addActor(new Player(256,512));
-        group.addActor(new Player(0,512));
-        group.addActor(new Player(512,256));
-        group.addActor(new Player(512,0));
-        stage.addActor(group);
+        
+        //setTextbox(new Textbox("How are you doing my friend How are you doing my friend How are you doing my friend How are you doing my friend", "good", "bad"));
     }
-
+    
+    @Override
+    public void setTextbox(Textbox t) {
+        stage.addActor(t);
+        textbox = true;
+    }
 
     @Override
     public void show() {
@@ -37,8 +37,23 @@ public class GameScreen extends AbstractScreen{
 
     @Override
     public void render(float f) {
-        stage.act(f);
-        stage.draw();
+        if(!textbox){
+            stage.act(f);
+            stage.draw();
+        }
+        else{
+            Textbox t = null;
+            for(Actor a : stage.getActors()){
+                if(a.getName().equals("textbox")){
+                    a.act(f);
+                    a.draw(stage.getBatch(), CAMERA_WIDTH);
+                    t = (Textbox)a;
+                    if(t.getState() == 2){
+                        a.remove();
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -61,5 +76,7 @@ public class GameScreen extends AbstractScreen{
     @Override
     public void dispose() {
     }
+
+    
     
 }

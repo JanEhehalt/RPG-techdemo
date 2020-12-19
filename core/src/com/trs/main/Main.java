@@ -17,7 +17,7 @@ public class Main extends Game{
        
     @Override
     public void create () {
-        screen = new GameScreen(this, 800f, 800f);
+        screen = new GameScreen(this, 1200f, 800f);
     }
 
     @Override

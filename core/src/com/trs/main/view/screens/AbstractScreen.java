@@ -11,6 +11,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.trs.main.Textbox;
 
 /**
  *
@@ -36,6 +37,8 @@ public abstract class AbstractScreen implements Screen{
         stage = new Stage(new FitViewport(this.CAMERA_WIDTH, this.CAMERA_HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);
     }
+    
+    public abstract void setTextbox(Textbox t);
     
     @Override
     public abstract void show();
