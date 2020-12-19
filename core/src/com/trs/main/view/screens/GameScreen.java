@@ -16,9 +16,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.trs.main.MapCollisionObject;
 import com.trs.main.Player;
 import com.trs.main.Textbox;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class GameScreen extends AbstractScreen{
     
     boolean textbox = false;
     
+    
     TmxMapLoader maploader;
     TiledMap map;
     OrthogonalTiledMapRenderer renderer;
@@ -39,18 +42,18 @@ public class GameScreen extends AbstractScreen{
 
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
-        stage.addActor(new Player(50,50));
+        stage.addActor(new Player(250,50));
         //setTextbox(new Textbox("How are you doing my friend How are you doing my friend How are you doing my friend How are you doing my friend", "good", "bad"));
         
         maploader = new TmxMapLoader();
-        map = maploader.load("map.tmx");
+        map = maploader.load("map2.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView((OrthographicCamera)stage.getCamera());
         stage.getCamera().update();
         
         for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            stage.addActor(new com.trs.main.MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
+            stage.addActor(new MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
         }
     }
 
@@ -66,6 +69,9 @@ public class GameScreen extends AbstractScreen{
 
     @Override
     public void render(float f) {
+        
+        renderer.setView((OrthographicCamera)stage.getCamera());
+        
         
         renderer.render();
         
@@ -86,6 +92,15 @@ public class GameScreen extends AbstractScreen{
                         textbox = false;
                     }
                 }
+            }
+        }
+        
+        // center camera
+        for(Actor a : stage.getActors()){
+            if(a.getName().equals("player")){
+                stage.getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
+                stage.getCamera().update();
+                break;
             }
         }
     }

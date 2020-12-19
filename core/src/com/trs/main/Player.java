@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
  * 
@@ -21,12 +22,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class Player extends Actor{
     
+    public static final double SQRT2 = 1.414;
     
     Texture t;
     private AnimatedSprite playerSprite;
     float movementX = 0;
     float movementY = 0;
-    float speed = 2f;
+    float speed = 3f;
     // 0: up, 1: left, 2: down, 3: right
     int facing = 0;
     
@@ -49,6 +51,7 @@ public class Player extends Actor{
 
     @Override
     public void act(float delta) {
+        
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             movementX = speed;
             facing = 3;
@@ -81,8 +84,33 @@ public class Player extends Actor{
                 setX(getX()+movementX);
                 break;
             case 2:
-                setX(getX()+movementX);
-                setY(getY()+movementY);
+                Vector2 movement = new Vector2();
+                movement.set(speed, 0);
+                if(movementX > 0 && movementY > 0){
+                    movement.setAngleDeg(45);
+                setX(getX()+movement.x);
+                setY(getY()+movement.y);
+                }
+                else if(movementX < 0 && movementY > 0){
+                    movement.setAngleDeg(135);
+                setX(getX()+movement.x);
+                setY(getY()+movement.y);
+                }
+                else if(movementX > 0 && movementY < 0){
+                    movement.setAngleDeg(315);
+                setX(getX()+movement.x);
+                setY(getY()+movement.y);
+                }
+                else if(movementX < 0 && movementY < 0){
+                    movement.setAngleDeg(225);
+                setX(getX()+movement.x);
+                setY(getY()+movement.y);
+                }
+                else{
+                    setX(getX()+movementX);
+                    setY(getY()+movementY);
+                }
+                
                 break;
             case 3:
                 break;
@@ -94,10 +122,34 @@ public class Player extends Actor{
         }
         		
         playerSprite.setRow(animationRow + facing);
+        /*
+        if(movementX > 0){
+            movementX -= 0.5;
+            if(movementX < 0){
+                movementX = 0;
+            }
+        }
+        else if(movementX < 0){
+            movementX += 0.5;
+            if(movementX > 0){
+                movementX = 0;
+            }
+        }
         
+        if(movementY > 0){
+            movementY -= 0.5;
+            if(movementY < 0){
+                movementY = 0;
+            }
+        }
+        else if(movementY < 0){
+            movementY += 0.5;
+            if(movementY > 0){
+                movementY = 0;
+            }
+        }*/
         movementX = 0;
         movementY = 0;
-        
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
 
