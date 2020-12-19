@@ -103,8 +103,6 @@ public class Textbox extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if(!batch.isDrawing()){
-        batch.begin();}
         if(state == 0){
             for(int i = 0; i < splitted.size(); i++){
                 if(i == printLine){
@@ -130,7 +128,6 @@ public class Textbox extends Actor{
             font.draw(batch, asw2, 0.6f * r.getWidth(), getX() + getHeight() - splitted.size() * 1.2f * getTextHeight("A"));
             font.setColor(Color.BLACK);
         }
-        batch.end();
         super.draw(batch, parentAlpha);
     }
     

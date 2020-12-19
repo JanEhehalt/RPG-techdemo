@@ -51,23 +51,31 @@ public class Player extends Actor{
 
     @Override
     public void act(float delta) {
-        
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            movementX = speed;
-            facing = 3;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            movementX = -speed;
-            facing = 1;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            movementY = speed;
-            facing = 0;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            movementY = -speed;
-            facing = 2;
-        }
+    	if(Main.gamestate == 0) {
+    		if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                movementX = speed;
+                facing = 3;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                movementX = -speed;
+                facing = 1;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.W)){
+                movementY = speed;
+                facing = 0;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.S)){
+                movementY = -speed;
+                facing = 2;
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            	Main.gamestate = 1;
+            	getStage().addActor(new Textbox("Dies ist eine coole Test Textbox", "Feier ich", "Ehre"));
+            }
+    	}
+    	else if(Main.gamestate == 1) {
+    		// Input handled by invoked textbox
+    	}
         /**
         *   return
         *   0:  only vertical movement available

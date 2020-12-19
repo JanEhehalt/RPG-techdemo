@@ -38,8 +38,6 @@ public abstract class AbstractScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
     }
     
-    public abstract void setTextbox(Textbox t);
-    
     @Override
     public abstract void show();
 
