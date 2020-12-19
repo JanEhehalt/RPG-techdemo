@@ -23,10 +23,11 @@ public class Player extends Actor{
     
     Texture t;
     private AnimatedSprite playerSprite;
-    float movementX;
-    float movementY;
+    float movementX = 0;
+    float movementY = 0;
     
     public Player(int xPos, int yPos){
+        
         setName("player");
         t = new Texture(Gdx.files.internal("player.png"));
         playerSprite = new AnimatedSprite(t, 64, 64);
@@ -45,7 +46,7 @@ public class Player extends Actor{
     @Override
     public void act(float delta) {
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            setX(getX()+5);
+            
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             setX(getX()-5);
