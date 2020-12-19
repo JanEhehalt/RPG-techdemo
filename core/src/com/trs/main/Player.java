@@ -21,11 +21,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Player extends Actor{
     
     Texture t;
+    private AnimatedSprite playerSprite;
     
     public Player(int xPos, int yPos){
         setName("player");
         t = new Texture(Gdx.files.internal("badlogic.jpg"));
         setBounds(xPos, yPos, t.getWidth(), t.getHeight());
+        playerSprite = new AnimatedSprite(t, 64, 64);
     }
 
     @Override
@@ -49,12 +51,14 @@ public class Player extends Actor{
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
             setY(getY()-10);
         }
+        
+        playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(t, getX(), getY());
+        playerSprite.draw(batch);
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
     }
 
