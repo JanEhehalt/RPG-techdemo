@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
@@ -50,18 +51,40 @@ public class Player extends Actor{
             movementX = speed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            setX(getX()-5);
+            movementX = -speed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            setY(getY()+5);
+            movementY = speed;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            setY(getY()-5);
+            movementY = -speed;
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            playerSprite.setRow(playerSprite.getRow()+1);
-            playerSprite.setFrame(0);
+        
+        boolean canMoveRight = true;
+        boolean canMoveLeft = true;
+        boolean canMoveBoth = true;
+        for(Actor a : getStage().getActors()){
+            if(a.getName().equals("mapobject")){
+                Rectangle p = new Rectangle(getX()+movementX, getY(), getWidth(), getHeight());
+                Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                if(Intersector.overlaps(p, o)){
+                    canMoveRight = false;
+                    break;
+                }
+            }
         }
+        for(Actor a : getStage().getActors()){
+            if(a.getName().equals("mapobject")){
+                Rectangle p = new Rectangle(getX(), getY()+movementY, getWidth(), getHeight());
+                Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                if(Intersector.overlaps(p, o)){
+                    canMoveRight = false;
+                    break;
+                }
+            }
+        }
+        
+        
         
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
