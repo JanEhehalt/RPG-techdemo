@@ -84,7 +84,7 @@ public class Player extends Actor{
             }
         }
         
-        
+        int animationRow = 0;
         
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
