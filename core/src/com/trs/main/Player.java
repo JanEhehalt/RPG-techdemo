@@ -20,23 +20,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class Player extends Actor{
     
-    //Rectangle r;
-    //ShapeRenderer renderer;
     Texture t;
     
-    Player(){
-        //renderer = new ShapeRenderer();
-        //r = new Rectangle(0,0,800,800);
-        //setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+    public Player(int xPos, int yPos){
         t = new Texture(Gdx.files.internal("badlogic.jpg"));
-        setBounds(0, 0, t.getWidth(), t.getHeight());
+        setBounds(xPos, yPos, t.getWidth(), t.getHeight());
     }
 
     @Override
     protected void positionChanged() {
-        //r.setX(getX());
-        //r.setY(getY());
-        
         super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -61,12 +53,6 @@ public class Player extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        //batch.end();
-        //renderer.setProjectionMatrix(batch.getProjectionMatrix());
-        //renderer.begin(ShapeRenderer.ShapeType.Filled);
-        //renderer.rect(getX(), getY(), getWidth(), getHeight());
-        //renderer.end();
-        //batch.begin();
         batch.draw(t, getX(), getY());
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
     }
