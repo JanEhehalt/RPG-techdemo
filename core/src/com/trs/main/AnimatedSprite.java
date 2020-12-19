@@ -19,6 +19,7 @@ public class AnimatedSprite {
     
     public AnimatedSprite(Texture tx, int tileWidth, int tileHeight){
         texture = TextureRegion.split(tx, tileWidth, tileHeight);
+        sprite = new Sprite();
         
         row = (int) (Math.random()*texture.length);
         frame = (int) (Math.random()*texture[row].length);
@@ -29,7 +30,7 @@ public class AnimatedSprite {
     public void updateAnimation(float delta){
     	this.delta += delta;
     	
-    	if(this.delta >= 0.2f) {
+    	if(this.delta >= 0.1f) {
     		this.delta = 0;
     		if(getFrame() >= texture[getRow()].length - 1){
                 setFrame(0);

@@ -36,6 +36,8 @@ public class Textbox extends Actor{
     String asw2;
     
     public Textbox(String toPrint, String asw1, String asw2) {
+        printLine = 0;
+        printChar = 0;
         this.asw1 = asw1;
         this.asw2 = asw2;
         setName("textbox");
@@ -60,22 +62,22 @@ public class Textbox extends Actor{
     public void act(float delta) {
         if(state == 1){
             if(selectedAsw == 0){
-                if(Gdx.input.isButtonJustPressed(Input.Keys.RIGHT)){
+                if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
                     selectedAsw = 1;
                 }
             }
             else if(selectedAsw == 1){
-                if(Gdx.input.isButtonJustPressed(Input.Keys.LEFT)){
+                if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
                     selectedAsw = 0;
                 }
             }
-            if(Gdx.input.isButtonJustPressed(Input.Keys.ENTER)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 state = 2;
             }
         }
         else{
             if(printChar >= splitted.get(printLine).length()){
-                if(splitted.size() <= printLine){
+                if(splitted.size()-1 <= printLine){
                     state = 1;
                 }
                 else{
@@ -114,17 +116,18 @@ public class Textbox extends Actor{
             }
         }
         else{
-            for(int i = 0; i < printLine; i++){
+            for(int i = 0; i <= printLine; i++){
                     font.draw(batch, splitted.get(i), 0, getX() + getHeight()-i*1.2f*getTextHeight("A"));
             }
             if(selectedAsw == 0){
                 font.setColor(Color.RED);
             }
             font.draw(batch, asw1, 0.2f * r.getWidth(), getX() + getHeight() - splitted.size() * 1.2f * getTextHeight("A"));
+            font.setColor(Color.BLACK);
             if(selectedAsw == 1){
                 font.setColor(Color.RED);
             }
-            font.draw(batch, asw1, 0.6f * r.getWidth(), getX() + getHeight() - splitted.size() * 1.2f * getTextHeight("asdf"));
+            font.draw(batch, asw2, 0.6f * r.getWidth(), getX() + getHeight() - splitted.size() * 1.2f * getTextHeight("A"));
             font.setColor(Color.BLACK);
         }
         batch.end();
