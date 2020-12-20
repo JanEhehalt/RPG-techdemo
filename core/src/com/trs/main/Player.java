@@ -71,7 +71,8 @@ public class Player extends Actor{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             	Main.gamestate = 1;
-            	getStage().addActor(new Textbox("Dies ist eine coole Test Textbox", "Feier ich", "Ehre"));
+            	String[] ans = {"Feier ich", "Ehre", "Hallo"};
+            	getStage().addActor(new Textbox("Dies ist eine coole Test Textbox", ans));
             }
     	}
     	else if(Main.gamestate == 1) {

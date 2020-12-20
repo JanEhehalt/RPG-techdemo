@@ -32,17 +32,15 @@ public class Textbox extends Actor{
     
     int selectedAsw = 0;
     
-    String asw1;
-    String asw2;
+    String[] ans;
     
-    public Textbox(String toPrint, String asw1, String asw2) {
+    public Textbox(String toPrint, String[] ans) {
         printLine = 0;
         printChar = 0;
-        this.asw1 = asw1;
-        this.asw2 = asw2;
+        this.ans = ans;
         setName("textbox");
         font = new BitmapFont();
-        r = new Rectangle(50, 50, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/4);
+        r = new Rectangle(50, 50, Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight()/5);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -61,18 +59,21 @@ public class Textbox extends Actor{
     @Override
     public void act(float delta) {
         if(state == 1){
-            if(selectedAsw == 0){
-                if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
-                    selectedAsw = 1;
+            if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+                if(selectedAsw < ans.length - 1) {
+                	selectedAsw++;
                 }
             }
-            else if(selectedAsw == 1){
-                if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-                    selectedAsw = 0;
+        
+            if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
+                if(selectedAsw > 0) {
+                	selectedAsw--;
                 }
             }
+            
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 state = 2;
+                System.out.println(ans[selectedAsw]);
             }
         }
         else{
@@ -103,6 +104,8 @@ public class Textbox extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+    	font.setColor(Color.BLACK);
+    	
         if(state == 0){
             for(int i = 0; i < splitted.size(); i++){
                 if(i == printLine){
@@ -117,16 +120,17 @@ public class Textbox extends Actor{
             for(int i = 0; i <= printLine; i++){
                     font.draw(batch, splitted.get(i), 0, getX() + getHeight()-i*1.2f*getTextHeight("A"));
             }
-            if(selectedAsw == 0){
-                font.setColor(Color.RED);
+            
+            for(int i = 0; i < ans.length; i++) {
+            	if(selectedAsw == i) {
+            		font.setColor(Color.RED);
+            	}
+            	else {
+            		font.setColor(Color.BLACK);
+            	}
+            	
+            	font.draw(batch, ans[i], getX(), getY() + getHeight() - ((splitted.size() + i + 1) * 1.2f * getTextHeight("A")));
             }
-            font.draw(batch, asw1, 0.2f * r.getWidth(), getX() + getHeight() - splitted.size() * 1.2f * getTextHeight("A"));
-            font.setColor(Color.BLACK);
-            if(selectedAsw == 1){
-                font.setColor(Color.RED);
-            }
-            font.draw(batch, asw2, 0.6f * r.getWidth(), getX() + getHeight() - splitted.size() * 1.2f * getTextHeight("A"));
-            font.setColor(Color.BLACK);
         }
         super.draw(batch, parentAlpha);
     }
