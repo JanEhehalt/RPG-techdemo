@@ -42,11 +42,11 @@ public class StaticMath {
         return (float) alpha;
     }
     
-    public static double calculateDistance(int xPos1, int yPos1, int xPos2, int yPos2, double angle){
+    public static float calculateDistance(float xPos1, float yPos1, float xPos2, float yPos2, float angle){
         float deltaX = xPos2 - xPos1;
         float deltaY = yPos2 - yPos1;
         
         double distance = Math.abs((deltaY / Math.sin(angle)));
-        return distance;
+        return (float) distance;
     }
 }

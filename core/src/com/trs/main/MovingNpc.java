@@ -57,7 +57,6 @@ public class MovingNpc extends Actor{
             POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
         }
         Vector2 movement = new Vector2(speed,0);
-        //movement.setAngleRad((float)Math.atan((double)(POI.y-getY())/(double)(POI.x-getX())));
         movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
         
         if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
@@ -73,12 +72,17 @@ public class MovingNpc extends Actor{
         	facing = 3;
         }
         
-        System.out.println(movement.angleDeg());
-        System.out.println(POI.x + " " + POI.y);
-        System.out.println();
-        movementX = movement.x;
-        movementY = movement.y;
+        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y, movement.angleRad()) < 10f) {
+        	movementX = 0;
+        	movementY = 0;
+        }
+        else {
+            movementX = movement.x;
+            movementY = movement.y;
+        }
+        
         if(movementX == 0 && movementY == 0){
+        	
         }
         else if(movementX == 0 && movementY != 0){
             setY(getY()+movementY);
