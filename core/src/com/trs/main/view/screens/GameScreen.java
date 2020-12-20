@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.trs.main.Main;
 import com.trs.main.MapCollisionObject;
+import com.trs.main.MovingNpc;
 import com.trs.main.Player;
 import com.trs.main.Textbox;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class GameScreen extends AbstractScreen{
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
         stage.addActor(new Player(250,50));
+        stage.addActor(new MovingNpc(new Rectangle(20,20,400,400), 80, 80));
         //setTextbox(new Textbox("How are you doing my friend How are you doing my friend How are you doing my friend How are you doing my friend", "good", "bad"));
         
         maploader = new TmxMapLoader();

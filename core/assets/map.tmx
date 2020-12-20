@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="9">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="10">
  <tileset firstgid="1" source="nice2.tsx"/>
  <layer id="1" name="Kachelebene 1" width="10" height="10">
   <data encoding="csv">
@@ -18,11 +18,11 @@
  <layer id="2" name="Kachelebene 2" width="10" height="10">
   <data encoding="csv">
 137,221,221,221,221,221,221,222,260,261,
-201,0,236,237,233,0,0,0,281,178,
-201,0,236,233,232,232,0,0,0,199,
-201,0,233,178,179,180,0,0,0,199,
-201,0,234,199,200,201,0,0,0,199,
-201,0,0,220,221,222,236,234,0,199,
+201,257,258,237,233,0,0,0,281,178,
+201,278,279,233,232,232,0,0,0,199,
+201,0,233,0,0,0,0,0,0,199,
+201,0,0,0,0,0,0,0,0,199,
+201,0,0,0,0,0,236,234,0,199,
 201,0,0,0,233,235,235,235,0,199,
 201,0,0,0,0,237,232,235,0,199,
 158,179,179,179,179,179,179,179,179,159,
@@ -35,6 +35,12 @@
   <object id="3" x="32" y="288" width="288" height="32"/>
   <object id="4" x="288" y="64" width="32" height="224"/>
   <object id="5" x="256" y="0" width="64" height="64"/>
-  <object id="6" x="96" y="128" width="96" height="64"/>
+ </objectgroup>
+ <objectgroup id="4" name="tuerebene">
+  <object id="9" x="32" y="32" width="64" height="64">
+   <properties>
+    <property name="id" type="int" value="0"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
