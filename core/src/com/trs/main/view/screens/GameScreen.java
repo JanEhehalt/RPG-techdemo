@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.trs.main.Main;
 import com.trs.main.MapCollisionObject;
+import com.trs.main.MapContainer;
 import com.trs.main.MovingNpc;
 import com.trs.main.Player;
 import com.trs.main.Textbox;
@@ -48,6 +49,7 @@ public class GameScreen extends AbstractScreen{
         
         maploader = new TmxMapLoader();
         map = maploader.load("map2.tmx");
+        MapContainer test = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, map);
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView((OrthographicCamera)stage.getCamera());
         stage.getCamera().update();

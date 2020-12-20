@@ -241,7 +241,8 @@
  <objectgroup id="4" name="tuerebene">
   <object id="40" x="192" y="2720" width="64" height="64">
    <properties>
-    <property name="id" type="int" value="0"/>
+    <property name="ID" type="int" value="1337"/>
+    <property name="test" value="Hallo"/>
    </properties>
   </object>
  </objectgroup>

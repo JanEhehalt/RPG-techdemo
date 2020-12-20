@@ -39,7 +39,7 @@ public class MovingNpc extends Actor{
         animatedSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
         this.area = area;
-        speed = 2.5f;
+        speed = 1f;
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
     }
     
@@ -47,17 +47,32 @@ public class MovingNpc extends Actor{
     protected void positionChanged() {
         animatedSprite.setSpritePosition((int)getX(), (int)getY());
         collisionRect = new Rectangle(getX() + 16, getY(), 32, 48);
-        super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
+        super.positionChanged();
     }
     
     @Override
     public void act(float delta) {
         
-        if(POI == null || Math.random() < 0.05f){
-            POI = new Vector2(area.getX()+(float)Math.random() * (float)area.getWidth(), area.getY()+(float)Math.random()*(float)area.getHeight());
+        if(POI == null || Math.random() < 0.01f){
+            POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
         }
         Vector2 movement = new Vector2(speed,0);
-        movement.setAngleRad((float)Math.atan((double)(POI.y-getY())/(double)(POI.x-getX())));
+        //movement.setAngleRad((float)Math.atan((double)(POI.y-getY())/(double)(POI.x-getX())));
+        movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
+        
+        if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
+        	facing = 0;
+        }
+        else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
+        	facing = 1;
+        }
+        else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
+        	facing = 2;
+        }
+        else {
+        	facing = 3;
+        }
+        
         System.out.println(movement.angleDeg());
         System.out.println(POI.x + " " + POI.y);
         System.out.println();
