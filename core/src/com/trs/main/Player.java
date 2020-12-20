@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class Player extends Actor{
     
-    public static final double SQRT2 = 1.414;
+    public static final float SQRT2 = 1.414f;
     
     Texture t;
     private AnimatedSprite playerSprite;
@@ -99,11 +99,14 @@ public class Player extends Actor{
             }
         }
         else if(movementX != 0 && movementY != 0){
-            setX(getX()+movementX/(float)SQRT2);
-            setY(getY()+movementY/(float)SQRT2);
+        	setX(getX()+ (movementX / SQRT2));
             if(collidingWithMapCollisionObject()){
-                setX(getX()-movementX/(float)SQRT2);
-                setY(getY()-movementY/(float)SQRT2);
+                setX(getX() - (movementX / SQRT2));
+            }
+
+            setY(getY() + (movementY / SQRT2));
+            if(collidingWithMapCollisionObject()){
+                setY(getY()- (movementY / SQRT2));
             }
         }
         
