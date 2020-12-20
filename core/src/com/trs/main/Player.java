@@ -33,18 +33,22 @@ public class Player extends Actor{
     // 0: up, 1: left, 2: down, 3: right
     int facing = 0;
     
+    Rectangle collisionRect;
+    
     public Player(int xPos, int yPos){
         
         setName("player");
         t = new Texture(Gdx.files.internal("player.png"));
         playerSprite = new AnimatedSprite(t, 64, 64);
         playerSprite.setRow(0);
+        collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
         setBounds(xPos, yPos, playerSprite.getSprite().getWidth(), playerSprite.getSprite().getHeight());
     }
 
     @Override
     protected void positionChanged() {
         playerSprite.setSpritePosition((int)getX(), (int)getY());
+        collisionRect = new Rectangle(getX() + 16, getY(), 32, 48);
         super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -71,8 +75,10 @@ public class Player extends Actor{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             	Main.gamestate = 1;
-            	String[] ans = {"Feier ich", "Ehre", "Hallo"};
-            	getStage().addActor(new Textbox("Dies ist eine coole Test Textbox", ans));
+            	String[] ans = {"Antwort1", "Antwort2"};
+            	getStage().addActor(new Textbox("Frage", ans, getX()+getWidth()/2, getY()+getHeight()/2, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT));
+                movementX = 0;
+                movementY = 0;
             }
     	}
     	else if(Main.gamestate == 1) {
@@ -138,9 +144,9 @@ public class Player extends Actor{
         boolean  value = false;
         for(Actor a : getStage().getActors()){
                 if(a.getName().equals("mapobject")){
-                    Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
+                    //Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
                     Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
-                    if(Intersector.overlaps(p, o)){
+                    if(Intersector.overlaps(collisionRect, o)){
                         value = true;
                         break;
                     }

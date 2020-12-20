@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import java.util.ArrayList;
@@ -28,19 +30,22 @@ public class Textbox extends Actor{
     int printChar;
     ArrayList<String> splitted;
     
+    ShapeRenderer renderer;
+    
     int state; // 0: drawing    1: waiting for input    2: finished
     
     int selectedAsw = 0;
     
     String[] ans;
     
-    public Textbox(String toPrint, String[] ans) {
+    public Textbox(String toPrint, String[] ans, float xPos, float yPos, float cameraWidth, float cameraHeight) {
+        renderer = new ShapeRenderer();
         printLine = 0;
         printChar = 0;
         this.ans = ans;
         setName("textbox");
         font = new BitmapFont();
-        r = new Rectangle(50, 50, Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight()/5);
+        r = new Rectangle(xPos - cameraWidth/2 + 20, yPos - cameraHeight/2 + 20, cameraWidth - 40, cameraHeight/5);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -105,20 +110,30 @@ public class Textbox extends Actor{
     @Override
     public void draw(Batch batch, float parentAlpha) {
     	font.setColor(Color.BLACK);
-    	
+        batch.end();
+        renderer.setProjectionMatrix(batch.getProjectionMatrix());
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setColor(Color.BLUE);
+    	renderer.rect(getX(), getY(), getWidth(), getHeight());
+        renderer.end();
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.RED);
+    	renderer.rect(getX(), getY(), getWidth(), getHeight());
+        renderer.end();
+        batch.begin();
         if(state == 0){
             for(int i = 0; i < splitted.size(); i++){
                 if(i == printLine){
-                    font.draw(batch, splitted.get(i).substring(0, printChar), 0, getX() + getHeight()-i*1.2f*getTextHeight("A"));
+                    font.draw(batch, splitted.get(i).substring(0, printChar), getX(), getY() + getHeight()-i*1.2f*getTextHeight("A"));
                 }
                 else if(i < printLine){
-                    font.draw(batch, splitted.get(i), 0, getX() + getHeight()-i*1.2f*getTextHeight("A"));
+                    font.draw(batch, splitted.get(i), getX(), getY() + getHeight()-i*1.2f*getTextHeight("A"));
                 }
             }
         }
         else{
             for(int i = 0; i <= printLine; i++){
-                    font.draw(batch, splitted.get(i), 0, getX() + getHeight()-i*1.2f*getTextHeight("A"));
+                    font.draw(batch, splitted.get(i), getX(), getY() + getHeight()-i*1.2f*getTextHeight("A"));
             }
             
             for(int i = 0; i < ans.length; i++) {

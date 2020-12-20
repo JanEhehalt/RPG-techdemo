@@ -13,10 +13,12 @@ public class Main extends Game{
 	
 	// 0: normal game world, 1: dialogue, 2: fight
 	public static int gamestate = 0;
+        public static float CAMERA_WIDTH = 400f;
+        public static float CAMERA_HEIGHT = 400f;
        
     @Override
     public void create () {
-        screen = new GameScreen(this, 400f, 400f);
+        screen = new GameScreen(this, CAMERA_WIDTH, CAMERA_HEIGHT);
     }
 
     @Override
