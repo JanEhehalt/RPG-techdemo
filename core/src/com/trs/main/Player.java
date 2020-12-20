@@ -29,6 +29,7 @@ public class Player extends Actor{
     float movementX = 0;
     float movementY = 0;
     float speed = 3f;
+    float velocity = 0.2f;
     // 0: up, 1: left, 2: down, 3: right
     int facing = 0;
     
@@ -83,45 +84,27 @@ public class Player extends Actor{
         *   2:  full movement available
         *   3:  no movement available
         */
-        int movementAvailable = getMovementAvailable();
-        switch(movementAvailable){
-            case 0:
-                setY(getY()+movementY);
-                break;
-            case 1:
-                setX(getX()+movementX);
-                break;
-            case 2:
-                Vector2 movement = new Vector2();
-                movement.set(speed, 0);
-                if(movementX > 0 && movementY > 0){
-                    movement.setAngleDeg(45);
-                setX(getX()+movement.x);
-                setY(getY()+movement.y);
-                }
-                else if(movementX < 0 && movementY > 0){
-                    movement.setAngleDeg(135);
-                setX(getX()+movement.x);
-                setY(getY()+movement.y);
-                }
-                else if(movementX > 0 && movementY < 0){
-                    movement.setAngleDeg(315);
-                setX(getX()+movement.x);
-                setY(getY()+movement.y);
-                }
-                else if(movementX < 0 && movementY < 0){
-                    movement.setAngleDeg(225);
-                setX(getX()+movement.x);
-                setY(getY()+movement.y);
-                }
-                else{
-                    setX(getX()+movementX);
-                    setY(getY()+movementY);
-                }
-                
-                break;
-            case 3:
-                break;
+        if(movementX == 0 && movementY == 0){
+        }
+        else if(movementX == 0 && movementY != 0){
+            setY(getY()+movementY);
+            if(collidingWithMapCollisionObject()){
+                setY(getY()-movementY);
+            }
+        }
+        else if(movementY == 0 && movementX != 0){
+            setX(getX()+movementX);
+            if(collidingWithMapCollisionObject()){
+                setX(getX()-movementX);
+            }
+        }
+        else if(movementX != 0 && movementY != 0){
+            setX(getX()+movementX/(float)SQRT2);
+            setY(getY()+movementY/(float)SQRT2);
+            if(collidingWithMapCollisionObject()){
+                setX(getX()-movementX/(float)SQRT2);
+                setY(getY()-movementY/(float)SQRT2);
+            }
         }
         
         int animationRow = 0;
@@ -130,34 +113,7 @@ public class Player extends Actor{
         }
         		
         playerSprite.setRow(animationRow + facing);
-        /*
-        if(movementX > 0){
-            movementX -= 0.5;
-            if(movementX < 0){
-                movementX = 0;
-            }
-        }
-        else if(movementX < 0){
-            movementX += 0.5;
-            if(movementX > 0){
-                movementX = 0;
-            }
-        }
-        
-        if(movementY > 0){
-            movementY -= 0.5;
-            if(movementY < 0){
-                movementY = 0;
-            }
-        }
-        else if(movementY < 0){
-            movementY += 0.5;
-            if(movementY > 0){
-                movementY = 0;
-            }
-        }*/
-        movementX = 0;
-        movementY = 0;
+        velocity(velocity);
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
 
@@ -173,13 +129,50 @@ public class Player extends Actor{
     public boolean remove() {
         return super.remove(); //To change body of generated methods, choose Tools | Templates.
     }
-    /**
-    *   return
-    *   0:  only vertical movement available
-    *   1:  only horizontal movement available
-    *   2:  full movement available
-    *   3:  no movement available
-    */
+    
+    public boolean collidingWithMapCollisionObject(){
+        boolean  value = false;
+        for(Actor a : getStage().getActors()){
+                if(a.getName().equals("mapobject")){
+                    Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
+                    Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                    if(Intersector.overlaps(p, o)){
+                        value = true;
+                        break;
+                    }
+                }
+        }
+        return value;
+    }   
+    
+    public void velocity(float velocity){
+        if(movementX > 0){
+            movementX -= velocity;
+            if(movementX < 0){
+                movementX = 0;
+            }
+        }
+        else if(movementX < 0){
+            movementX += velocity;
+            if(movementX > 0){
+                movementX = 0;
+            }
+        }
+        
+        if(movementY > 0){
+            movementY -= velocity;
+            if(movementY < 0){
+                movementY = 0;
+            }
+        }
+        else if(movementY < 0){
+            movementY += velocity;
+            if(movementY > 0){
+                movementY = 0;
+            }
+        }
+    }
+    /*
     public int getMovementAvailable(){
         
         boolean canMoveVer = true;
@@ -228,5 +221,5 @@ public class Player extends Actor{
          
         return 3;
     }
-    
+    */
 }
