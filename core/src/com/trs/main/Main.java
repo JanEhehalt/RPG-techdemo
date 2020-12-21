@@ -32,7 +32,7 @@ public class Main extends Game{
     @Override
     public void render () {
         //Gdx.gl.glClearColor(1f, (20f/255f), (147f/255f), 1);
-        Gdx.gl.glClearColor(1f, (1), (1), 1);
+        Gdx.gl.glClearColor(0f, (0), (0), 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screen.render(Gdx.graphics.getDeltaTime());
     }

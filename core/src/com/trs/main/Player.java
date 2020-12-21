@@ -92,6 +92,7 @@ public class Player extends Actor{
         *   3:  no movement available
         */
         if(movementX == 0 && movementY == 0){
+            System.out.println(collidingWithMapCollisionObject());
         }
         else if(movementX == 0 && movementY != 0){
             setY(getY()+movementY);

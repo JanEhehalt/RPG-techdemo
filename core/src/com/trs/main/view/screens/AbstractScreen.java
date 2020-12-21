@@ -19,23 +19,12 @@ import com.trs.main.Textbox;
  */
 public abstract class AbstractScreen implements Screen{
     
-    float CAMERA_WIDTH;
-    float CAMERA_HEIGHT;
     
     protected Game game;
-    Stage stage;
-    OrthographicCamera camera;
     
 
     public AbstractScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         this.game = game;
-        this.CAMERA_WIDTH = CAMERA_WIDTH;
-        this.CAMERA_HEIGHT = CAMERA_HEIGHT;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, this.CAMERA_WIDTH, this.CAMERA_HEIGHT);
-        camera.update();
-        stage = new Stage(new FitViewport(this.CAMERA_WIDTH, this.CAMERA_HEIGHT, camera));
-        Gdx.input.setInputProcessor(stage);
     }
     
     @Override

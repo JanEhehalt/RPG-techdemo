@@ -34,30 +34,19 @@ import java.util.ArrayList;
  */
 public class GameScreen extends AbstractScreen{
     
-    
-    TmxMapLoader maploader;
-    TiledMap map;
-    OrthogonalTiledMapRenderer renderer;
-    ArrayList<TiledMapTileMapObject> object = new ArrayList<>();
-    
+    MapContainer map;
 
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
-        stage.addActor(new Player(250,50));
-        stage.addActor(new MovingNpc(new Rectangle(20,20,400,400), 80, 80));
         //setTextbox(new Textbox("How are you doing my friend How are you doing my friend How are you doing my friend How are you doing my friend", "good", "bad"));
         
-        maploader = new TmxMapLoader();
-        map = maploader.load("map2.tmx");
-        MapContainer test = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, map);
-        renderer = new OrthogonalTiledMapRenderer(map);
-        renderer.setView((OrthographicCamera)stage.getCamera());
-        stage.getCamera().update();
+        map = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, new Player(200, 200), "map2.tmx");
         
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            stage.addActor(new MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
-        }
+        
+    }
+    
+    public void loadNewMap(String map){
+        this.map = new MapContainer(Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT, this.map.getPlayer(), map);
     }
 
     @Override
@@ -66,42 +55,18 @@ public class GameScreen extends AbstractScreen{
 
     @Override
     public void render(float f) {
-        
-        renderer.setView((OrthographicCamera)stage.getCamera());
-        
-        
-        renderer.render();
-        
-        stage.act(f);
-        stage.draw();
-        
-        if(Main.gamestate == 1) {
-            Textbox t = null;
-            for(Actor a : stage.getActors()){
-                if(a.getName().equals("textbox")){
-                    t = (Textbox)a;
-                    if(t.getState() == 2){
-                        a.remove();
-                        Main.gamestate = 0;
-                        t.getSelectedAsw(); // DO STUFF NICENICE
-                    }
-                }
-            }
+        map.render(f);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
+            loadNewMap("map.tmx");
         }
-        
-        // center camera
-        for(Actor a : stage.getActors()){
-            if(a.getName().equals("player")){
-                stage.getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
-                stage.getCamera().update();
-                break;
-            }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
+            loadNewMap("map2.tmx");
         }
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, false);
+        map.resize(width, height);
     }
 
     @Override
