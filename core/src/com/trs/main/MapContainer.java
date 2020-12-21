@@ -9,17 +9,12 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class MapContainer {
         
@@ -40,10 +35,6 @@ public class MapContainer {
         stage = new Stage(new FitViewport(CAMERA_WIDTH, CAMERA_HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);
         
-        // set position according to the door the player is coming from
-        p.setPosition(64, 64);
-        
-        stage.addActor(p);
         stage.addActor(new MovingNpc(new Rectangle(320,320,80,80), 340, 340));
         
         //CREATION OF TILEDMAP
@@ -77,7 +68,31 @@ public class MapContainer {
     	doors = new Door[tempDoors.size()];
     	for(int i = 0; i < doors.length; i++) {
     		doors[i] = tempDoors.get(i);
+    		
+    		if(i == inDoor) {
+    			int facing = doors[i].exit;
+    			
+    			switch(facing) {
+    			case 0:
+    				p.setPosition(doors[i].rect.x, doors[i].rect.y + doors[i].rect.height);
+    				break;
+    			case 1:
+    				p.setPosition(doors[i].rect.x - p.getWidth(), doors[i].rect.y);
+    				break;
+    			case 2:
+    				p.setPosition(doors[i].rect.x, doors[i].rect.y - p.getHeight());
+    				break;
+    			default:
+    				p.setPosition(doors[i].rect.x + doors[i].rect.width, doors[i].rect.y);
+    				break;
+    			}
+    		}
     	}
+    	
+    	p.movementX = 0;
+    	p.movementY = 0;
+    	
+        stage.addActor(p);
     }
         
     public void render(float f){
@@ -88,6 +103,18 @@ public class MapContainer {
         stage.clear();
         for(Actor a : sort(old)){
             stage.addActor(a);
+        }
+        for(Actor a : stage.getActors()) {
+            if(a instanceof Player) {
+            	Rectangle rect = ((Player) a).collisionRect;
+            	
+            	for(Door d : doors) {
+            		if(Intersector.overlaps(rect, d.rect)) {
+            			collidingDoor = d;
+            			break;
+            		}
+            	}
+            }
         }
         
         stage.act(f);
@@ -102,15 +129,6 @@ public class MapContainer {
                         Main.gamestate = 0;
                         t.getSelectedAsw(); // DO STUFF NICENICE
                     }
-                }
-                if(a instanceof Player) {
-                	Rectangle rect = ((Player) a).collisionRect;
-                	
-                	for(Door d : doors) {
-                		if(Intersector.overlaps(rect, d.rect)) {
-                			collidingDoor = d;
-                		}
-                	}
                 }
             }
         }
