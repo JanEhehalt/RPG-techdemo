@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,16 +19,16 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MapContainer {
         
-    
 	Stage stage;
 	OrthographicCamera camera;
 	TmxMapLoader maploader;
-        TiledMap map;
-        OrthogonalTiledMapRenderer renderer;
-	ArrayList<Door> doors = new ArrayList<>();
+    TiledMap map;
+    OrthogonalTiledMapRenderer renderer;
+	Door[] doors;
+	public Door collidingDoor;
 	
         // TODO: Value which shows from which door the player is coming?
-    public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString) {
+    public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor) {
         // CREATION OF STAGE
         camera = new OrthographicCamera();
         camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -55,14 +56,24 @@ public class MapContainer {
         }
         
         // adding the door links
+        ArrayList<Door> tempDoors = new ArrayList<>();
     	for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             MapProperties props = object.getProperties();
-            //Door door = new Door(props.get("id"), props.get("destinationMap"), props.get("destinationDoor"), rect);
             
-            //System.out.println("ID: " + props.get("ID", Integer.class));
-            //System.out.println("ID: " + props.get("y"));
+            int id = props.get("id", Integer.class);
+            int exit = props.get("exit", Integer.class);
+            int destinationMap = props.get("destinationMap", Integer.class);
+            int destinationDoor = props.get("destinationDoor", Integer.class);
+            
+            Door door = new Door(id, exit, destinationMap, destinationDoor, rect);
+            tempDoors.add(door);
         }
+    	
+    	doors = new Door[tempDoors.size()];
+    	for(int i = 0; i < doors.length; i++) {
+    		doors[i] = tempDoors.get(i);
+    	}
     }
         
     public void render(float f){
@@ -81,6 +92,15 @@ public class MapContainer {
                         Main.gamestate = 0;
                         t.getSelectedAsw(); // DO STUFF NICENICE
                     }
+                }
+                if(a instanceof Player) {
+                	Rectangle rect = ((Player) a).collisionRect;
+                	
+                	for(Door d : doors) {
+                		if(Intersector.overlaps(rect, d.rect)) {
+                			collidingDoor = d;
+                		}
+                	}
                 }
             }
         }

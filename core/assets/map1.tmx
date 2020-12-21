@@ -39,6 +39,9 @@
  <objectgroup id="4" name="tuerebene">
   <object id="9" x="32" y="32" width="64" height="64">
    <properties>
+    <property name="destinationDoor" type="int" value="0"/>
+    <property name="destinationMap" type="int" value="2"/>
+    <property name="exit" type="int" value="3"/>
     <property name="id" type="int" value="0"/>
    </properties>
   </object>
