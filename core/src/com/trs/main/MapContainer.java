@@ -14,7 +14,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class MapContainer {
         
@@ -39,7 +43,7 @@ public class MapContainer {
         p.setPosition(64, 64);
         
         stage.addActor(p);
-        stage.addActor(new MovingNpc(new Rectangle(20,20,400,400), 64, 64));
+        stage.addActor(new MovingNpc(new Rectangle(320,320,80,80), 340, 340));
         
         //CREATION OF TILEDMAP
         maploader = new TmxMapLoader();
@@ -63,11 +67,18 @@ public class MapContainer {
             //System.out.println("ID: " + props.get("ID", Integer.class));
             //System.out.println("ID: " + props.get("y"));
         }
+        
     }
         
     public void render(float f){
         renderer.setView((OrthographicCamera)stage.getCamera());
         renderer.render();
+        
+        Actor[] old = stage.getActors().toArray();
+        stage.clear();
+        for(Actor a : sort(old)){
+            stage.addActor(a);
+        }
         
         stage.act(f);
         stage.draw();
@@ -108,5 +119,21 @@ public class MapContainer {
         System.out.println("OLD MAP DIDNT FIND PLAYER");
         return null;
     }
+    
+    public Actor[] sort(Actor[] unsorted){
+        // TODO: Textboxes to the end of the Array to draw them last
+        for(int j = 0; j < unsorted.length-1; j++){
+            for(int i = unsorted.length-1; i >= 0; i--){
+                if(i > 0 && unsorted[i].getY() > unsorted[i-1].getY()){
+                    Actor temp = unsorted[i-1];
+                    unsorted[i-1] = unsorted[i];
+                    unsorted[i] = temp;
+                }
+            }
+        }
+        
+        return unsorted;
+    }
 	
+    
 }

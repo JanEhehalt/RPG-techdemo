@@ -36,7 +36,6 @@ public class Player extends Actor{
     Rectangle collisionRect;
     
     public Player(int xPos, int yPos){
-        
         setName("player");
         t = new Texture(Gdx.files.internal("player.png"));
         playerSprite = new AnimatedSprite(t, 64, 64);
@@ -74,11 +73,14 @@ public class Player extends Actor{
                 facing = 2;
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            	Main.gamestate = 1;
-            	String[] ans = {"Antwort1", "Antwort2"};
-            	getStage().addActor(new Textbox("Frage", ans, getX()+getWidth()/2, getY()+getHeight()/2, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT));
-                movementX = 0;
-                movementY = 0;
+                Actor a = collidingActor();
+                if(a != null && a instanceof MovingNpc){
+                    Main.gamestate = 1;
+                    Textbox t = ((MovingNpc)a).getTextbox();
+                    getStage().addActor(new Textbox(t, getX()+32, getY()+32));
+                    movementX = 0;
+                    movementY = 0;
+                }
             }
     	}
     	else if(Main.gamestate == 1) {
@@ -92,7 +94,6 @@ public class Player extends Actor{
         *   3:  no movement available
         */
         if(movementX == 0 && movementY == 0){
-            System.out.println(collidingWithMapCollisionObject());
         }
         else if(movementX == 0 && movementY != 0){
             setY(getY()+movementY);
@@ -182,6 +183,19 @@ public class Player extends Actor{
                 movementY = 0;
             }
         }
+    }
+    
+    public Actor collidingActor(){
+        for(Actor a : getStage().getActors()){
+            if(a.getName().equals("npc")){
+                Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
+                Rectangle npc = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                if(Intersector.overlaps(p, npc)){
+                    return a;
+                }
+            }
+        }
+        return null;
     }
     /*
     public int getMovementAvailable(){

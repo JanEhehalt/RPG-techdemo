@@ -29,6 +29,7 @@ public class Textbox extends Actor{
     int printLine;
     int printChar;
     ArrayList<String> splitted;
+    String toPring;
     
     ShapeRenderer renderer;
     
@@ -55,10 +56,26 @@ public class Textbox extends Actor{
         font.setColor(Color.BLACK);
         state = 0;
         splitted = getSplitted(toPrint, (int)getWidth());
-        for(String s : splitted){
-            System.out.println(s);
-        }
+    }
+    
+    public Textbox(Textbox t, float xPos, float yPos){
+        splitted = t.splitted;
+        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH - 40, Main.CAMERA_HEIGHT/5);
         
+        renderer = new ShapeRenderer();
+        printLine = 0;
+        printChar = 0;
+        this.ans = t.ans;
+        setName("textbox");
+        
+        font = new BitmapFont();
+        setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 21;
+        font = generator.generateFont(parameter);
+        generator.dispose();
+        font.setColor(Color.BLACK);
     }
 
     @Override
