@@ -40,6 +40,13 @@ public class MovingNpc extends Actor{
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
         this.area = area;
         speed = 1f;
+        
+        movementX = 0;
+        movementY = 0;
+        
+        String[] ans = {"Antwort1", "Antwort2"};
+        this.t = new Textbox("Frage", ans, getX()+getWidth()/2, getY()+getHeight()/2, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT);
+        
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
     }
     
@@ -139,5 +146,9 @@ public class MovingNpc extends Actor{
         }
         return value;
     }  
+    
+    public Textbox getTextbox(){
+        return t;
+    }
     
 }
