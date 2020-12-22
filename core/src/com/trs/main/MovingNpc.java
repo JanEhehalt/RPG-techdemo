@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import static com.trs.main.Player.SQRT2;
 
 /**
  *
@@ -36,9 +35,12 @@ public class MovingNpc extends Actor{
     
     Vector2 POI;
     
-    public MovingNpc(Rectangle area, float xPos, float yPos){
+    int id;
+    
+    public MovingNpc(Rectangle area, float xPos, float yPos, int id){
         setName("npc");
-        Texture t = new Texture(Gdx.files.internal("player.png"));
+        this.id = id;
+        Texture t = new Texture(Gdx.files.internal("npcs/"+id+"/sprite.png"));
         
         currentlyTalking = false;
 
@@ -51,7 +53,7 @@ public class MovingNpc extends Actor{
         movementX = 0;
         movementY = 0;
         
-        parser = new DialogueParser("dialogues/test.txt");
+        parser = new DialogueParser("npcs/"+id+"/dialogue/test.txt");
         Dialogue nextDialogue = parser.firstDialogue();
         this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
         
@@ -149,7 +151,7 @@ public class MovingNpc extends Actor{
 
                                 if(newDialogue == null) {
                                     currentlyTalking = false;
-                                    parser = new DialogueParser("dialogues/test.txt");
+                                    parser = new DialogueParser("npcs/"+id+"/dialogue/test.txt");
                                     System.out.println("asdfasdf");
                                 }
                                 else {

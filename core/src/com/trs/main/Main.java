@@ -13,8 +13,8 @@ public class Main extends Game{
 	
 	// 0: normal game world, 1: dialogue, 2: fight
 	public static int gamestate = 0;
-        public static float CAMERA_WIDTH = 640f;
-        public static float CAMERA_HEIGHT = 640f;
+        public static float CAMERA_WIDTH = 1280;
+        public static float CAMERA_HEIGHT = 720;
        
     @Override
     public void create () {

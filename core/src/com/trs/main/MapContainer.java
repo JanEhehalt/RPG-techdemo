@@ -16,15 +16,37 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+/**
+ * 
+ * Layer 0: tilelayer under Player 0
+ * Layer 1: tilelayer under Player 1
+ * Layer 2: tilelayer under Player 2
+ * Layer 3: tilelayer above Player 0
+ * Layer 4: tilelayer above Player 1
+ * Layer 5: CollisionRects
+ * Layer 6: DoorRects
+ *          destinationDoor
+ *          destinationMap 
+ *          exit
+ *          id
+ * Layer 7: InteractionObjects
+ * Layer 8: NpcRects
+ * 
+ * @author Jan
+ */
+
 public class MapContainer {
         
 	Stage stage;
 	OrthographicCamera camera;
 	TmxMapLoader maploader;
-    TiledMap map;
-    OrthogonalTiledMapRenderer renderer;
+        TiledMap map;
+        OrthogonalTiledMapRenderer renderer;
 	Door[] doors;
 	public Door collidingDoor;
+        
+        final int[] layersBelowPlayer = {0, 1, 2};
+        final int[] layersAbovePlayer = {3, 4};
 	
         // TODO: Value which shows from which door the player is coming?
     public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor) {
@@ -35,7 +57,6 @@ public class MapContainer {
         stage = new Stage(new FitViewport(CAMERA_WIDTH, CAMERA_HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);
         
-        stage.addActor(new MovingNpc(new Rectangle(320,320,80,80), 340, 340));
         
         //CREATION OF TILEDMAP
         maploader = new TmxMapLoader();
@@ -45,14 +66,14 @@ public class MapContainer {
         stage.getCamera().update();
         
         // adding MapObjects to the Stage
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             stage.addActor(new MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
         }
         
         // adding the door links
         ArrayList<Door> tempDoors = new ArrayList<>();
-    	for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
+    	for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             MapProperties props = object.getProperties();
             
@@ -65,6 +86,16 @@ public class MapContainer {
             tempDoors.add(door);
         }
     	
+        // adding the Npcs
+        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            MapProperties props = object.getProperties();
+            
+            int id = props.get("id", Integer.class);
+            
+            stage.addActor(new MovingNpc(rect, rect.getX() + (float)(Math.random()*rect.getWidth()), rect.getY()+(float)(Math.random()*rect.getHeight()), id));
+        }
+        
     	doors = new Door[tempDoors.size()];
     	for(int i = 0; i < doors.length; i++) {
     		doors[i] = tempDoors.get(i);
@@ -97,7 +128,8 @@ public class MapContainer {
         
     public void render(float f){
         renderer.setView((OrthographicCamera)stage.getCamera());
-        renderer.render();
+        
+        renderer.render(layersBelowPlayer);
         
         Actor[] old = stage.getActors().toArray();
         stage.clear();
@@ -119,6 +151,17 @@ public class MapContainer {
         
         stage.act(f);
         stage.draw();
+        
+        renderer.render(layersAbovePlayer);
+        
+        for(Actor a : stage.getActors()){
+            if(a instanceof Textbox){
+                stage.getBatch().begin();
+                a.draw(stage.getBatch(), f);
+                stage.getBatch().end();
+            }
+        }
+        
         if(Main.gamestate == 1) {
             Textbox t = null;
             for(Actor a : stage.getActors()){

@@ -1,0 +1,21 @@
+Ich bin der zweite
+gut#5
+schlecht#9
+
+Das freut mich
+wie gehts dir#20
+tschüss#-1
+
+Das tut mir leid. Wieso denn?
+Spaß mir gehts gut#5
+tschüss#-1
+Halts Maul#14
+
+Ey es gibt gleich Stress hier
+cool, bin ich dabei#17
+
+KAMPF
+LOS#-1
+
+Ich will Krieg
+KRIEG!#17
