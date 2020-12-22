@@ -29,7 +29,7 @@ public class Player extends Actor{
     float movementX = 0;
     float movementY = 0;
     float speed = 3f;
-    float velocity = 0.2f;
+    float velocity = 0.8f;
     // 0: up, 1: left, 2: down, 3: right
     int facing = 0;
     
@@ -56,7 +56,11 @@ public class Player extends Actor{
     @Override
     public void act(float delta) {
     	if(Main.gamestate == 0) {
-    		if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
+                speed = 9;
+            }
+            else speed = 3;
+            if(Gdx.input.isKeyPressed(Input.Keys.D)){
                 movementX = speed;
                 facing = 3;
             }
@@ -71,6 +75,10 @@ public class Player extends Actor{
             if(Gdx.input.isKeyPressed(Input.Keys.S)){
                 movementY = -speed;
                 facing = 2;
+            }
+            
+            if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)){
+                movementY = -8;
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 Actor a = collidingActor();

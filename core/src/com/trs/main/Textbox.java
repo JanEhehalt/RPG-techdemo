@@ -39,47 +39,63 @@ public class Textbox extends Actor{
     
     String[] ans;
     
-    public Textbox(String toPrint, String[] ans, float xPos, float yPos, float cameraWidth, float cameraHeight) {
+    float textHeight;
+    
+    public Textbox(String toPrint, String[] ans, float xPos, float yPos) {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 21;
+        font = generator.generateFont(parameter);
+        generator.dispose();
+        font.setColor(Color.BLACK);
+        
         renderer = new ShapeRenderer();
+        textHeight = getTextHeight("A");
         printLine = 0;
         printChar = 0;
         this.ans = ans;
         setName("textbox");
         font = new BitmapFont();
-        r = new Rectangle(xPos - cameraWidth/2 + 20, yPos - cameraHeight/2 + 20, cameraWidth - 40, cameraHeight/5);
+        splitted = getSplitted(toPrint, (int)(Main.CAMERA_WIDTH/2));
+        
+        // CALCULATE NEEDED HEIGHT
+        float height = splitted.size() * 1.2f * textHeight + (ans.length+1) * 1.2f * textHeight;
+        
+        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH/2, height);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+        
+        state = 0;
+    }
+    
+    public Textbox(Textbox t, float xPos, float yPos){
+        font = new BitmapFont();
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 21;
         font = generator.generateFont(parameter);
         generator.dispose();
         font.setColor(Color.BLACK);
-        state = 0;
-        splitted = getSplitted(toPrint, (int)getWidth());
-    }
-    
-    public Textbox(Textbox t, float xPos, float yPos){
-        splitted = t.splitted;
-        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH - 40, Main.CAMERA_HEIGHT/5);
+        
+        textHeight = getTextHeight("A");
+        this.splitted = t.splitted;
+        this.ans = t.ans;
+        System.out.println(splitted.size());
+        float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+2) * 1.2f * textHeight;
+        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH - 40, height);
+        setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         
         renderer = new ShapeRenderer();
         printLine = 0;
         printChar = 0;
-        this.ans = t.ans;
         setName("textbox");
         
-        font = new BitmapFont();
-        setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 21;
-        font = generator.generateFont(parameter);
-        generator.dispose();
-        font.setColor(Color.BLACK);
     }
 
     @Override
     public void act(float delta) {
+        
+        
+        
         if(state == 1){
             if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
                 if(selectedAsw < ans.length - 1) {
@@ -111,7 +127,12 @@ public class Textbox extends Actor{
             else{
                 printChar++;
             }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+                state = 1;
+                printLine = splitted.size()-1;
+            }
         }
+
         super.act(delta);
     }
     
@@ -141,16 +162,16 @@ public class Textbox extends Actor{
         if(state == 0){
             for(int i = 0; i < splitted.size(); i++){
                 if(i == printLine){
-                    font.draw(batch, splitted.get(i).substring(0, printChar), getX(), getY() + getHeight()-i*1.2f*getTextHeight("A"));
+                    font.draw(batch, splitted.get(i).substring(0, printChar), getX()+5, getY() + getHeight()-i*1.2f*textHeight - 5);
                 }
                 else if(i < printLine){
-                    font.draw(batch, splitted.get(i), getX(), getY() + getHeight()-i*1.2f*getTextHeight("A"));
+                    font.draw(batch, splitted.get(i), getX()+5, getY() + getHeight()-i*1.2f*textHeight - 5);
                 }
             }
         }
         else{
             for(int i = 0; i <= printLine; i++){
-                    font.draw(batch, splitted.get(i), getX(), getY() + getHeight()-i*1.2f*getTextHeight("A"));
+                    font.draw(batch, splitted.get(i), getX()+5, getY() + getHeight()-i*1.2f*textHeight - 5);
             }
             
             for(int i = 0; i < ans.length; i++) {
@@ -161,7 +182,7 @@ public class Textbox extends Actor{
             		font.setColor(Color.BLACK);
             	}
             	
-            	font.draw(batch, ans[i], getX(), getY() + getHeight() - ((splitted.size() + i + 1) * 1.2f * getTextHeight("A")));
+            	font.draw(batch, ans[i], getX()+5, getY() + getHeight() - ((splitted.size() + i + 1) * 1.2f * textHeight - 5));
             }
         }
         super.draw(batch, parentAlpha);
@@ -182,14 +203,14 @@ public class Textbox extends Actor{
         ArrayList<String> toReturn = new ArrayList<>();
         String string = new String();
         for(String s : words){
-                if(getTextWidth(string)+getTextWidth(s) > maxLength){
-                    toReturn.add(string);
-                    string = new String();
-                    string += s;
-                }
-                else if(getTextWidth(string)+getTextWidth(s) < maxLength){
-                    string += s;
-                }
+            if(getTextWidth(string)+getTextWidth(s) >= maxLength){
+                toReturn.add(string);
+                string = new String();
+                string += s;
+            }
+            else if(getTextWidth(string)+getTextWidth(s) < maxLength){
+                string += s;
+            }
         }
         toReturn.add(string);
         

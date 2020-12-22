@@ -44,8 +44,9 @@ public class MovingNpc extends Actor{
         movementX = 0;
         movementY = 0;
         
-        String[] ans = {"Antwort1", "Antwort2"};
-        this.t = new Textbox("Frage", ans, getX()+getWidth()/2, getY()+getHeight()/2, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT);
+        String[] ans = {"Das ist Wahr", "sehr wahr..."};
+        this.t = new Textbox("Frage ist eine gute Frage, eine sehr gute Frage jaja VoltaicMoth ist ein Noob in r6 jajajajajja jajaja jajaaj ja jajaaj aj aj jaj aja j"
+        + "Frage ist eine gute Frage, eine sehr gute Frage jaja VoltaicMoth ist ein Noob in r6 jajajajajja jajaja jajaaj ja jajaaj aj aj jaj aja j", ans, getX()+getWidth()/2, getY()+getHeight()/2);
         
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
     }
