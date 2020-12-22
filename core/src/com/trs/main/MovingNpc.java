@@ -30,6 +30,8 @@ public class MovingNpc extends Actor{
     float movementX;
     float movementY;
     
+    boolean currentlyTalking;
+    
     DialogueParser parser;
     
     Vector2 POI;
@@ -37,7 +39,9 @@ public class MovingNpc extends Actor{
     public MovingNpc(Rectangle area, float xPos, float yPos){
         setName("npc");
         Texture t = new Texture(Gdx.files.internal("player.png"));
-        parser = new DialogueParser("dialogues/test.txt");
+        
+        currentlyTalking = false;
+
         animatedSprite = new AnimatedSprite(t, 64, 64);
         animatedSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
@@ -47,11 +51,16 @@ public class MovingNpc extends Actor{
         movementX = 0;
         movementY = 0;
         
-        String[] ans = {"Das ist Wahr", "sehr wahr..."};
-        this.t = new Textbox("Frage ist eine gute Frage, eine sehr gute Frage jaja VoltaicMoth ist ein Noob in r6 jajajajajja jajaja jajaaj ja jajaaj aj aj jaj aja j"
-        + "Frage ist eine gute Frage, eine sehr gute Frage jaja VoltaicMoth ist ein Noob in r6 jajajajajja jajaja jajaaj ja jajaaj aj aj jaj aja j", ans, getX()+getWidth()/2, getY()+getHeight()/2);
+        parser = new DialogueParser("dialogues/test.txt");
+        Dialogue nextDialogue = parser.firstDialogue();
+        this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
         
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
+    }
+    
+    public void startDialogue(float xPos, float yPos) {
+    	currentlyTalking = true;
+    	getStage().addActor(new Textbox(t, xPos, yPos));
     }
     
     @Override
@@ -63,71 +72,95 @@ public class MovingNpc extends Actor{
     
     @Override
     public void act(float delta) {
-        
-        if(POI == null || Math.random() < 0.01f){
-            POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
+        if(Main.gamestate == 0) {
+	        if(POI == null || Math.random() < 0.01f){
+	            POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
+	        }
+	        Vector2 movement = new Vector2(speed,0);
+	        movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
+	        
+	        if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
+	        	facing = 0;
+	        }
+	        else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
+	        	facing = 1;
+	        }
+	        else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
+	        	facing = 2;
+	        }
+	        else {
+	        	facing = 3;
+	        }
+	        
+	        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y, movement.angleRad()) < 10f) {
+	        	movementX = 0;
+	        	movementY = 0;
+	        }
+	        else {
+	            movementX = movement.x;
+	            movementY = movement.y;
+	        }
+	        
+	        if(movementX == 0 && movementY == 0){
+	        	
+	        }
+	        else if(movementX == 0 && movementY != 0){
+	            setY(getY()+movementY);
+	            if(collidingWithMapCollisionObject()){
+	                setY(getY()-movementY);
+	            }
+	        }
+	        else if(movementY == 0 && movementX != 0){
+	            setX(getX()+movementX);
+	            if(collidingWithMapCollisionObject()){
+	                setX(getX()-movementX);
+	            }
+	        }
+	        else if(movementX != 0 && movementY != 0){
+	        	setX(getX()+ (movementX));
+	            if(collidingWithMapCollisionObject()){
+	                setX(getX() - (movementX));
+	            }
+	
+	            setY(getY() + (movementY));
+	            if(collidingWithMapCollisionObject()){
+	                setY(getY()- (movementY));
+	            }
+	        }
+	        
+	        int animationRow = 0;
+	        if(movementX != 0 || movementY != 0) {
+	        	animationRow = 8;
+	        }
+	        animatedSprite.setRow(animationRow + facing);
+	        
+	        movementX = 0;
+	        movementY = 0;
         }
-        Vector2 movement = new Vector2(speed,0);
-        movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
-        
-        if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
-        	facing = 0;
-        }
-        else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
-        	facing = 1;
-        }
-        else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
-        	facing = 2;
-        }
-        else {
-        	facing = 3;
-        }
-        
-        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y, movement.angleRad()) < 10f) {
-        	movementX = 0;
-        	movementY = 0;
-        }
-        else {
-            movementX = movement.x;
-            movementY = movement.y;
-        }
-        
-        if(movementX == 0 && movementY == 0){
+        else if(Main.gamestate == 1) {
+        	animatedSprite.setRow(facing);
         	
-        }
-        else if(movementX == 0 && movementY != 0){
-            setY(getY()+movementY);
-            if(collidingWithMapCollisionObject()){
-                setY(getY()-movementY);
-            }
-        }
-        else if(movementY == 0 && movementX != 0){
-            setX(getX()+movementX);
-            if(collidingWithMapCollisionObject()){
-                setX(getX()-movementX);
-            }
-        }
-        else if(movementX != 0 && movementY != 0){
-        	setX(getX()+ (movementX));
-            if(collidingWithMapCollisionObject()){
-                setX(getX() - (movementX));
-            }
-
-            setY(getY() + (movementY));
-            if(collidingWithMapCollisionObject()){
-                setY(getY()- (movementY));
-            }
+        	if(currentlyTalking) {
+        		for(Actor a : getStage().getActors()) {
+        			if(a instanceof Textbox) {
+        				if(((Textbox) a).state == 2) {
+        					int answer = ((Textbox) a).getSelectedAsw();
+        					Dialogue newDialogue = parser.nextDialogue(answer + 1);
+        					
+        					if(newDialogue == null) {
+        						currentlyTalking = false;
+        					}
+        					else {
+        						t.update(newDialogue);
+        					}
+        				}
+        			}
+        		}
+        	}
         }
         
-        int animationRow = 0;
-        if(movementX != 0 || movementY != 0) {
-        	animationRow = 8;
-        }
-        		
-        animatedSprite.setRow(animationRow + facing);
         animatedSprite.updateAnimation(delta);
-        movementX = 0;
-        movementY = 0;
+        
     }
 
     @Override

@@ -90,6 +90,19 @@ public class Textbox extends Actor{
         setName("textbox");
         
     }
+    
+    public void update(Dialogue d) {
+    	this.splitted = getSplitted(d.question, (int) Main.CAMERA_WIDTH / 2);
+    	this.ans = d.ans;
+    	
+		float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+2) * 1.2f * textHeight;
+		r = new Rectangle(getX(), getY(), Main.CAMERA_WIDTH - 40, height);
+		setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+		
+		this.state = 0;
+		printLine = 0;
+		printChar = 0;
+    }
 
     @Override
     public void act(float delta) {

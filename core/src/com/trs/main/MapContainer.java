@@ -126,11 +126,13 @@ public class MapContainer {
                     t = (Textbox)a;
                     if(t.getState() == 2){
                         a.remove();
+                        System.out.println("aösdkjf");
                         Main.gamestate = 0;
                         t.getSelectedAsw(); // DO STUFF NICENICE
                     }
                 }
             }
+            System.out.println();
         }
         
         // center camera
