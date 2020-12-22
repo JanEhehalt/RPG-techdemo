@@ -34,7 +34,8 @@ public class DialogueParser {
 				break;
 			}
 			else {
-				ans.add(tempAns);
+                            String[] split = tempAns.split("#");
+                            ans.add(split[0]);   
 			}
 		}
 		String[] answers = new String[ans.size()];
@@ -52,7 +53,7 @@ public class DialogueParser {
 		String[] newLine = s.split("#");
 		line = Integer.parseInt(newLine[1]) - 1;
 		
-		if(line == -1) {
+		if(line < 0) {
 			return null;
 		}
 		
@@ -64,11 +65,17 @@ public class DialogueParser {
 				break;
 			}
 			else {
-				ans.add(tempAns);
+                            String[] split = tempAns.split("#");
+                            ans.add(split[0]);    
 			}
 		}
-		result.ans = (String[]) ans.toArray();
-		
+                
+                String[] answer = new String[ans.size()];
+                for(int i = 0; i < ans.size(); i++){
+                    answer[i] = ans.get(i);
+                }
+		result.ans = answer;
+                
 		return result;
 	}
 }

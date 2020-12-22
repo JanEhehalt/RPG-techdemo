@@ -138,25 +138,28 @@ public class MovingNpc extends Actor{
 	        movementY = 0;
         }
         else if(Main.gamestate == 1) {
-        	animatedSprite.setRow(facing);
-        	
-        	if(currentlyTalking) {
-        		for(Actor a : getStage().getActors()) {
-        			if(a instanceof Textbox) {
-        				if(((Textbox) a).state == 2) {
-        					int answer = ((Textbox) a).getSelectedAsw();
-        					Dialogue newDialogue = parser.nextDialogue(answer + 1);
-        					
-        					if(newDialogue == null) {
-        						currentlyTalking = false;
-        					}
-        					else {
-        						t.update(newDialogue);
-        					}
-        				}
-        			}
-        		}
-        	}
+            animatedSprite.setRow(facing);
+
+            if(currentlyTalking) {
+                    for(Actor a : getStage().getActors().toArray(Actor.class)) {
+                        if(a instanceof Textbox) {
+                            if(((Textbox) a).getState() == 2) {
+                                int answer = ((Textbox) a).getSelectedAsw();
+                                Dialogue newDialogue = parser.nextDialogue(answer + 1);
+
+                                if(newDialogue == null) {
+                                    currentlyTalking = false;
+                                    parser = new DialogueParser("dialogues/test.txt");
+                                    System.out.println("asdfasdf");
+                                }
+                                else {
+                                    ((Textbox)a).update(newDialogue);
+                                    System.out.println("update nicencie");
+                                }
+                            }
+                        }
+                    }
+            }
         }
         
         animatedSprite.updateAnimation(delta);

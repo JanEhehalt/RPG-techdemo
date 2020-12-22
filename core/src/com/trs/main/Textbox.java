@@ -79,8 +79,8 @@ public class Textbox extends Actor{
         textHeight = getTextHeight("A");
         this.splitted = t.splitted;
         this.ans = t.ans;
-        System.out.println(splitted.size());
-        float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+2) * 1.2f * textHeight;
+        //System.out.println(splitted.size());
+        float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+1) * 1.2f * textHeight;
         r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH - 40, height);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         
@@ -95,13 +95,13 @@ public class Textbox extends Actor{
     	this.splitted = getSplitted(d.question, (int) Main.CAMERA_WIDTH / 2);
     	this.ans = d.ans;
     	
-		float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+2) * 1.2f * textHeight;
-		r = new Rectangle(getX(), getY(), Main.CAMERA_WIDTH - 40, height);
-		setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-		
-		this.state = 0;
-		printLine = 0;
-		printChar = 0;
+        float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+1) * 1.2f * textHeight;
+        r = new Rectangle(getX(), getY(), getWidth(), height);
+        setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+        this.state = 0;
+        printLine = 0;
+        printChar = 0;
+        selectedAsw = 0;
     }
 
     @Override
@@ -126,6 +126,9 @@ public class Textbox extends Actor{
                 state = 2;
                 System.out.println(ans[selectedAsw]);
             }
+        }
+        else if(state == 2){
+            state = 3;
         }
         else{
             if(printChar >= splitted.get(printLine).length()){
@@ -195,7 +198,7 @@ public class Textbox extends Actor{
             		font.setColor(Color.BLACK);
             	}
             	
-            	font.draw(batch, ans[i], getX()+5, getY() + getHeight() - ((splitted.size() + i + 1) * 1.2f * textHeight - 5));
+            	font.draw(batch, ans[i], getX()+20, getY() + getHeight() - ((splitted.size() + i + 1) * 1.2f * textHeight - 5));
             }
         }
         super.draw(batch, parentAlpha);

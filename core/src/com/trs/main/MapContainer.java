@@ -122,22 +122,20 @@ public class MapContainer {
         if(Main.gamestate == 1) {
             Textbox t = null;
             for(Actor a : stage.getActors()){
-                if(a.getName().equals("textbox")){
+                if(a instanceof Textbox){
                     t = (Textbox)a;
-                    if(t.getState() == 2){
+                    if(t.getState() == 3){
                         a.remove();
-                        System.out.println("aösdkjf");
                         Main.gamestate = 0;
                         t.getSelectedAsw(); // DO STUFF NICENICE
                     }
                 }
             }
-            System.out.println();
         }
         
         // center camera
         for(Actor a : stage.getActors()){
-            if(a.getName().equals("player")){
+            if(a instanceof Player){
                 stage.getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
                 stage.getCamera().update();
                 break;

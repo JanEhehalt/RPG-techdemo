@@ -84,8 +84,7 @@ public class Player extends Actor{
                 Actor a = collidingActor();
                 if(a != null && a instanceof MovingNpc){
                     Main.gamestate = 1;
-                    Textbox t = ((MovingNpc)a).getTextbox();
-                    getStage().addActor(new Textbox(t, getX()+32, getY()+32));
+                    ((MovingNpc)a).startDialogue(getX()+32, getY()+32);
                     movementX = 0;
                     movementY = 0;
                 }
