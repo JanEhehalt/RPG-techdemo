@@ -91,7 +91,7 @@ public class MapContainer {
     	
     	p.movementX = 0;
     	p.movementY = 0;
-    	
+   
         stage.addActor(p);
     }
         

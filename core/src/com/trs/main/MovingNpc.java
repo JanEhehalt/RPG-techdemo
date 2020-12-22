@@ -30,11 +30,14 @@ public class MovingNpc extends Actor{
     float movementX;
     float movementY;
     
+    DialogueParser parser;
+    
     Vector2 POI;
     
     public MovingNpc(Rectangle area, float xPos, float yPos){
         setName("npc");
         Texture t = new Texture(Gdx.files.internal("player.png"));
+        parser = new DialogueParser("dialogues/test.txt");
         animatedSprite = new AnimatedSprite(t, 64, 64);
         animatedSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
