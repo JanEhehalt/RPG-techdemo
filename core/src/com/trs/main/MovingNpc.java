@@ -74,8 +74,32 @@ public class MovingNpc extends Actor{
     
     @Override
     public void act(float delta) {
-        if(Main.gamestate == 0) {
-	        if(POI == null || Math.random() < 0.01f){
+        if(Main.gamestate == 1 && currentlyTalking) {
+            animatedSprite.setRow(facing);
+
+            if(currentlyTalking) {
+                for(Actor a : getStage().getActors().toArray(Actor.class)) {
+                    if(a instanceof Textbox) {
+                        if(((Textbox) a).getState() == 2) {
+                            int answer = ((Textbox) a).getSelectedAsw();
+                            Dialogue newDialogue = parser.nextDialogue(answer + 1);
+
+                            if(newDialogue == null) {
+                                currentlyTalking = false;
+                                parser = new DialogueParser("npcs/"+id+"/dialogue/test.txt");
+                                System.out.println("asdfasdf");
+                            }
+                            else {
+                                ((Textbox)a).update(newDialogue);
+                                System.out.println("update nicencie");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+        	if(POI == null || Math.random() < 0.01f){
 	            POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
 	        }
 	        Vector2 movement = new Vector2(speed,0);
@@ -138,30 +162,6 @@ public class MovingNpc extends Actor{
 	        
 	        movementX = 0;
 	        movementY = 0;
-        }
-        else if(Main.gamestate == 1) {
-            animatedSprite.setRow(facing);
-
-            if(currentlyTalking) {
-                    for(Actor a : getStage().getActors().toArray(Actor.class)) {
-                        if(a instanceof Textbox) {
-                            if(((Textbox) a).getState() == 2) {
-                                int answer = ((Textbox) a).getSelectedAsw();
-                                Dialogue newDialogue = parser.nextDialogue(answer + 1);
-
-                                if(newDialogue == null) {
-                                    currentlyTalking = false;
-                                    parser = new DialogueParser("npcs/"+id+"/dialogue/test.txt");
-                                    System.out.println("asdfasdf");
-                                }
-                                else {
-                                    ((Textbox)a).update(newDialogue);
-                                    System.out.println("update nicencie");
-                                }
-                            }
-                        }
-                    }
-            }
         }
         
         animatedSprite.updateAnimation(delta);
