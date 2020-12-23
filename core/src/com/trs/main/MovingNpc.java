@@ -44,7 +44,7 @@ public class MovingNpc extends Actor{
         
         currentlyTalking = false;
 
-        animatedSprite = new AnimatedSprite(t, 64, 64);
+        animatedSprite = new AnimatedSprite(t, 64, 64, true);
         animatedSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
         this.area = area;

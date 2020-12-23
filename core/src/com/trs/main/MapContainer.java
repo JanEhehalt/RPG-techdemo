@@ -40,13 +40,13 @@ public class MapContainer {
 	Stage stage;
 	OrthographicCamera camera;
 	TmxMapLoader maploader;
-        TiledMap map;
-        OrthogonalTiledMapRenderer renderer;
+    TiledMap map;
+    OrthogonalTiledMapRenderer renderer;
 	Door[] doors;
 	public Door collidingDoor;
         
-        final int[] layersBelowPlayer = {0, 1, 2};
-        final int[] layersAbovePlayer = {3, 4};
+    final int[] layersBelowPlayer = {0, 1, 2};
+    final int[] layersAbovePlayer = {3, 4};
 	
         // TODO: Value which shows from which door the player is coming?
     public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor) {
@@ -94,6 +94,18 @@ public class MapContainer {
             int id = props.get("id", Integer.class);
             
             stage.addActor(new MovingNpc(rect, rect.getX() + (float)(Math.random()*rect.getWidth()), rect.getY()+(float)(Math.random()*rect.getHeight()), id));
+        }
+        
+        // adding the InteractionObjects
+        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            MapProperties props = object.getProperties();
+            
+            int id = props.get("id", Integer.class);
+            String texture = props.get("texture", String.class);
+            
+            stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), id, texture));
+            stage.addActor(new MapCollisionObject((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height));
         }
         
     	doors = new Door[tempDoors.size()];

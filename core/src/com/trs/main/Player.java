@@ -35,9 +35,9 @@ public class Player extends Actor{
     public Player(int xPos, int yPos){
         setName("player");
         t = new Texture(Gdx.files.internal("player.png"));
-        playerSprite = new AnimatedSprite(t, 64, 64);
+        playerSprite = new AnimatedSprite(t, 64, 64, true);
         playerSprite.setRow(0);
-        collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
+        collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
         setBounds(xPos, yPos, playerSprite.getSprite().getWidth(), playerSprite.getSprite().getHeight());
     }
 
@@ -82,11 +82,20 @@ public class Player extends Actor{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 Actor a = collidingActor();
-                if(a != null && a instanceof MovingNpc){
-                    Main.gamestate = 1;
-                    ((MovingNpc)a).startDialogue(getX()+32, getY()+32);
-                    movementX = 0;
-                    movementY = 0;
+                if(a != null) {
+                	if(a instanceof MovingNpc){
+                        Main.gamestate = 1;
+                        ((MovingNpc)a).startDialogue(getX()+32, getY()+32);
+                        movementX = 0;
+                        movementY = 0;
+                    }
+                    else if(a instanceof InteractionObject) {
+                    	System.out.println("kfdjfkdjfladjflajdfjadlfj");
+                    	Main.gamestate = 1;
+                        ((InteractionObject)a).startDialogue(getX()+32, getY()+32);
+                        movementX = 0;
+                        movementY = 0;
+                    }
                 }
             }
     	}
@@ -153,7 +162,7 @@ public class Player extends Actor{
     public boolean collidingWithMapCollisionObject(){
         boolean  value = false;
         for(Actor a : getStage().getActors()){
-                if(a.getName().equals("mapobject")){
+                if(a instanceof MapCollisionObject){
                     //Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
                     Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
                     if(Intersector.overlaps(collisionRect, o)){
@@ -195,7 +204,7 @@ public class Player extends Actor{
     
     public Actor collidingActor(){
         for(Actor a : getStage().getActors()){
-            if(a.getName().equals("npc")){
+            if(a instanceof InteractionObject || a instanceof MovingNpc){
                 Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
                 Rectangle npc = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
                 if(Intersector.overlaps(p, npc)){
