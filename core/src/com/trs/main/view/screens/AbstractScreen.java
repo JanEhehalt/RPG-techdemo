@@ -45,4 +45,8 @@ public abstract class AbstractScreen implements Screen{
     @Override
     public abstract void dispose();
     
+    public boolean getPaused(){
+        return paused;
+    }
+    
 }

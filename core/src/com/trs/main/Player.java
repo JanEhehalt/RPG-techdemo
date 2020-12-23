@@ -77,6 +77,9 @@ public class Player extends Actor{
             if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)){
                 movementY = -8;
             }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
+                Main.gamestate = 9;
+            }
             if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 Actor a = collidingActor();
                 if(a != null && a instanceof MovingNpc){

@@ -6,6 +6,11 @@
 package com.trs.main.view.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.trs.main.Main;
 
 /**
  *
@@ -19,6 +24,8 @@ public class InventoryScreen extends AbstractScreen{
      * @param CAMERA_WIDTH
      * @param CAMERA_HEIGHT 
      */
+    
+    
     public InventoryScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
     }
@@ -29,6 +36,9 @@ public class InventoryScreen extends AbstractScreen{
 
     @Override
     public void render(float f) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
+                Main.gamestate = 8;
+            }
     }
 
     @Override

@@ -14,6 +14,7 @@ public class Main extends Game{
      */
 	
 	// 0: normal game world, 1: dialogue, 2: fight
+        // 7: Load MenuScreen 8: Load GameScreen 9: Load InventoryScreen
 	public static int gamestate = 0;
         public static float CAMERA_WIDTH = 1280;
         public static float CAMERA_HEIGHT = 720;
@@ -26,7 +27,11 @@ public class Main extends Game{
        
     @Override
     public void create () {
-        screen = new GameScreen(this, CAMERA_WIDTH, CAMERA_HEIGHT);
+        menuScreen = new MenuScreen(this, CAMERA_WIDTH, CAMERA_HEIGHT);
+        gameScreen = new GameScreen(this, CAMERA_WIDTH, CAMERA_HEIGHT);
+        inventoryScreen = new InventoryScreen(this, CAMERA_WIDTH, CAMERA_HEIGHT);
+        
+        screen = gameScreen;
     }
 
     @Override
@@ -39,11 +44,39 @@ public class Main extends Game{
 
     @Override
     public void render () {
-        //Gdx.gl.glClearColor(1f, (20f/255f), (147f/255f), 1);
         Gdx.gl.glClearColor(0f, (0), (0), 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        switch(gamestate){
+            case 7:
+                if(menuScreen.getPaused()){
+                    //if(screen instanceof GameScreen) gameScreen = (GameScreen)screen;
+                    //if(screen instanceof InventoryScreen) inventoryScreen = (InventoryScreen)screen;
+                    screen = menuScreen;
+                    gamestate = 0;
+                }
+                break;
+            case 8:
+                if(gameScreen.getPaused()){
+                    //if(screen instanceof MenuScreen) menuScreen = (MenuScreen)screen;
+                    //if(screen instanceof InventoryScreen) inventoryScreen = (InventoryScreen)screen;
+                    screen = gameScreen;
+                    gamestate = 0;
+                }
+                break;
+            case 9:
+                if(inventoryScreen.getPaused()){
+                    //if(screen instanceof MenuScreen) menuScreen = (MenuScreen)screen;
+                    //if(screen instanceof GameScreen) gameScreen = (GameScreen)screen;
+                    screen = inventoryScreen;
+                    gamestate = 0;
+                }
+                break;
+            default:
+                break;
+        }
+        
         screen.render(Gdx.graphics.getDeltaTime());
-        //Gdx.app.exit();
     }
 
     @Override
