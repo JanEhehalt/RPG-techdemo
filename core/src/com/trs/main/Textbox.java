@@ -41,7 +41,7 @@ public class Textbox extends Actor{
     float textHeight;
     
     public Textbox(String toPrint, String[] ans, float xPos, float yPos) {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 21;
         font = generator.generateFont(parameter);
@@ -68,7 +68,7 @@ public class Textbox extends Actor{
     
     public Textbox(Textbox t, float xPos, float yPos){
         font = new BitmapFont();
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 21;
         font = generator.generateFont(parameter);

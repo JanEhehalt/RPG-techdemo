@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="20" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="8">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="20" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="10">
  <tileset firstgid="1" source="nice2.tsx"/>
  <tileset firstgid="484" source="tree.tsx"/>
  <layer id="1" name="under0" width="20" height="25">
@@ -164,6 +164,20 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="8" name="InteractionRects"/>
- <objectgroup id="9" name="NpcRects"/>
+ <objectgroup id="8" name="InteractionRects">
+  <object id="8" x="192" y="64" width="32" height="32">
+   <properties>
+    <property name="id" type="int" value="0"/>
+    <property name="texture" value="sign.png"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="NpcRects">
+  <object id="9" x="320" y="384" width="224" height="192">
+   <properties>
+    <property name="id" type="int" value="0"/>
+    <property name="texture" value="sprite.png"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

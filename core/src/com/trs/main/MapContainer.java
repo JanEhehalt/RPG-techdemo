@@ -30,7 +30,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  *          exit
  *          id
  * Layer 7: InteractionObjects
+ *          id
+ *          texture
  * Layer 8: NpcRects
+ *          id
+ *          texture
  * 
  * @author Jan
  */
@@ -49,7 +53,7 @@ public class MapContainer {
     final int[] layersAbovePlayer = {3, 4};
 	
         // TODO: Value which shows from which door the player is coming?
-    public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor) {
+    public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor, int mapId) {
         // CREATION OF STAGE
         camera = new OrthographicCamera();
         camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -92,8 +96,9 @@ public class MapContainer {
             MapProperties props = object.getProperties();
             
             int id = props.get("id", Integer.class);
+            String texture = props.get("texture", String.class);
             
-            stage.addActor(new MovingNpc(rect, rect.getX() + (float)(Math.random()*rect.getWidth()), rect.getY()+(float)(Math.random()*rect.getHeight()), id));
+            stage.addActor(new MovingNpc(rect, rect.getX() + (float)(Math.random()*(rect.getWidth()-64)), rect.getY()+(float)(Math.random()*(rect.getHeight()-64)), id, mapId, texture));
         }
         
         // adding the InteractionObjects
@@ -104,7 +109,7 @@ public class MapContainer {
             int id = props.get("id", Integer.class);
             String texture = props.get("texture", String.class);
             
-            stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), id, texture));
+            stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id, texture));
             stage.addActor(new MapCollisionObject((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height));
         }
         

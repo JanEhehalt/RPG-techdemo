@@ -17,10 +17,12 @@ public class InteractionObject extends Actor{
     
     int id;
     
-    public InteractionObject(Rectangle collisionRect, float xPos, float yPos, int id, String texture){
+    String dialoguePath;
+    
+    public InteractionObject(Rectangle collisionRect, float xPos, float yPos,int mapId, int id, String texture){
         setName("interactive");
         this.id = id;
-        Texture t = new Texture(Gdx.files.internal(texture));
+        Texture t = new Texture(Gdx.files.internal("textureData/sprites/"+texture));
         
         currentlyTalking = false;
 
@@ -28,7 +30,8 @@ public class InteractionObject extends Actor{
         animatedSprite.setRow(0);
         this.collisionRect = collisionRect;
         
-        parser = new DialogueParser("npcs/1/dialogue/test.txt");
+        dialoguePath = "mapData/map"+mapId+"/interactionObjects/"+id+"/dialogue.txt";
+        parser = new DialogueParser(dialoguePath);
         Dialogue nextDialogue = parser.firstDialogue();
         this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
         
@@ -59,8 +62,7 @@ public class InteractionObject extends Actor{
 
                             if(newDialogue == null) {
                                 currentlyTalking = false;
-                                parser = new DialogueParser("npcs/1/dialogue/test.txt");
-                                System.out.println("asdfasdf");
+                                parser = new DialogueParser(dialoguePath);
                             }
                             else {
                                 ((Textbox)a).update(newDialogue);

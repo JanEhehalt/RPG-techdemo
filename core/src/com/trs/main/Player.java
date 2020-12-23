@@ -34,7 +34,7 @@ public class Player extends Actor{
     
     public Player(int xPos, int yPos){
         setName("player");
-        t = new Texture(Gdx.files.internal("player.png"));
+        t = new Texture(Gdx.files.internal("textureData/sprites/player.png"));
         playerSprite = new AnimatedSprite(t, 64, 64, true);
         playerSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
@@ -90,7 +90,6 @@ public class Player extends Actor{
                         movementY = 0;
                     }
                     else if(a instanceof InteractionObject) {
-                    	System.out.println("kfdjfkdjfladjflajdfjadlfj");
                     	Main.gamestate = 1;
                         ((InteractionObject)a).startDialogue(getX()+32, getY()+32);
                         movementX = 0;

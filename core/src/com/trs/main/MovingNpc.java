@@ -36,11 +36,12 @@ public class MovingNpc extends Actor{
     Vector2 POI;
     
     int id;
+    String dialoguePath;
     
-    public MovingNpc(Rectangle area, float xPos, float yPos, int id){
+    public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture){
         setName("npc");
         this.id = id;
-        Texture t = new Texture(Gdx.files.internal("npcs/"+id+"/sprite.png"));
+        Texture t = new Texture(Gdx.files.internal("textureData/sprites/"+texture));
         
         currentlyTalking = false;
 
@@ -53,7 +54,8 @@ public class MovingNpc extends Actor{
         movementX = 0;
         movementY = 0;
         
-        parser = new DialogueParser("npcs/"+id+"/dialogue/test.txt");
+        dialoguePath = "mapData/map"+mapId+"/npcs/"+id+"/dialogue.txt";
+        parser = new DialogueParser(dialoguePath);
         Dialogue nextDialogue = parser.firstDialogue();
         this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
         
@@ -86,12 +88,10 @@ public class MovingNpc extends Actor{
 
                             if(newDialogue == null) {
                                 currentlyTalking = false;
-                                parser = new DialogueParser("npcs/"+id+"/dialogue/test.txt");
-                                System.out.println("asdfasdf");
+                                parser = new DialogueParser(dialoguePath);
                             }
                             else {
                                 ((Textbox)a).update(newDialogue);
-                                System.out.println("update nicencie");
                             }
                         }
                     }
