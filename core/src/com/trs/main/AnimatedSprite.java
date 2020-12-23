@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 
 public class AnimatedSprite {
-	private final static int[] ROWLENGTHS = {7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 6, 6, 6, 12, 12, 12, 12, 6};
+	private int[] rowlengths = {7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 6, 6, 6, 12, 12, 12, 12, 6};
 	
     private Sprite sprite;
     private TextureRegion[][] texture;
@@ -19,12 +19,19 @@ public class AnimatedSprite {
     private int row;
     private float delta;
     
-    public AnimatedSprite(Texture tx, int tileWidth, int tileHeight){
+    public AnimatedSprite(Texture tx, int tileWidth, int tileHeight, boolean isPlayer){
         texture = TextureRegion.split(tx, tileWidth, tileHeight);
         sprite = new Sprite();
         
         row = (int) (Math.random()*texture.length);
         frame = (int) (Math.random()*texture[row].length);
+        
+        if(!isPlayer) {
+            rowlengths = new int[tx.getHeight() / tileHeight];
+        	for(int i = 0; i < rowlengths.length; i++) {
+        		rowlengths[i] = texture[i].length;
+        	}
+        }
         
         sprite = new Sprite(texture[getRow()][getFrame()]);
     }
@@ -34,7 +41,7 @@ public class AnimatedSprite {
     	
     	if(this.delta >= 0.1f) {
     		this.delta = 0;
-    		if(getFrame() >= ROWLENGTHS[getRow()] - 1){
+    		if(getFrame() >= rowlengths[getRow()] - 1){
                 setFrame(0);
             }
             else{
