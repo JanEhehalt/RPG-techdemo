@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.trs.main.view.screens.GameScreen;
+import com.trs.main.view.screens.InventoryScreen;
+import com.trs.main.view.screens.MenuScreen;
 
 public class Main extends Game{
     
@@ -15,6 +17,12 @@ public class Main extends Game{
 	public static int gamestate = 0;
         public static float CAMERA_WIDTH = 1280;
         public static float CAMERA_HEIGHT = 720;
+        
+        MenuScreen menuScreen;
+        GameScreen gameScreen;
+        InventoryScreen inventoryScreen;
+        
+        
        
     @Override
     public void create () {

@@ -99,7 +99,6 @@ public class MapContainer {
     	doors = new Door[tempDoors.size()];
     	for(int i = 0; i < doors.length; i++) {
     		doors[i] = tempDoors.get(i);
-    		
     		if(i == inDoor) {
     			int facing = doors[i].exit;
     			

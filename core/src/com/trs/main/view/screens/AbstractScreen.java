@@ -16,10 +16,12 @@ public abstract class AbstractScreen implements Screen{
     
     
     protected Game game;
+    protected boolean paused;
     
 
     public AbstractScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         this.game = game;
+        this.paused = true;
     }
     
     @Override
