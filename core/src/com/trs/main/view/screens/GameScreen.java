@@ -57,10 +57,12 @@ public class GameScreen extends AbstractScreen{
 
     @Override
     public void pause() {
+        paused = true;
     }
 
     @Override
     public void resume() {
+        paused = false;
     }
 
     @Override
