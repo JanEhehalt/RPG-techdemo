@@ -38,6 +38,22 @@ public class InteractionObject extends Actor{
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
     }
     
+    public InteractionObject(Rectangle collisionRect, float xPos, float yPos,int mapId, int id){
+        setName("interactive");
+        this.id = id;
+        
+        currentlyTalking = false;
+
+        this.collisionRect = collisionRect;
+        
+        dialoguePath = "mapData/map"+mapId+"/interactionObjects/"+id+"/dialogue.txt";
+        parser = new DialogueParser(dialoguePath);
+        Dialogue nextDialogue = parser.firstDialogue();
+        this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
+        
+        setBounds(xPos, yPos, collisionRect.getWidth(), collisionRect.getHeight());
+    }
+    
     public void startDialogue(float xPos, float yPos) {
     	currentlyTalking = true;
     	getStage().addActor(new Textbox(t, xPos, yPos));
@@ -45,7 +61,9 @@ public class InteractionObject extends Actor{
     
     @Override
     protected void positionChanged() {
-        animatedSprite.setSpritePosition((int)getX(), (int)getY());
+        
+        if(animatedSprite != null)animatedSprite.setSpritePosition((int)getX(), (int)getY());
+        
         collisionRect = new Rectangle(getX() + 16, getY(), 32, 48);
         super.positionChanged();
     }
@@ -74,13 +92,13 @@ public class InteractionObject extends Actor{
             }
         }
         
-        animatedSprite.updateAnimation(delta);
+        if(animatedSprite != null)animatedSprite.updateAnimation(delta);
         
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        animatedSprite.draw(batch);
+        if(animatedSprite != null)animatedSprite.draw(batch);
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
     }
     

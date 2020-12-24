@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="20">
+ <tileset firstgid="1" source="../tilesets/village.tsx"/>
+ <tileset firstgid="1801" source="../tilesets/worldborder.tsx"/>
+ <tileset firstgid="1809" source="../tilesets/furniture.tsx"/>
+ <layer id="1" name="under0" width="12" height="10">
+  <data encoding="csv">
+1803,1801,1801,1801,1801,1801,1801,1801,1801,983,0,1804,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983,
+983,983,983,983,983,983,983,983,983,983,983,983
+</data>
+ </layer>
+ <layer id="3" name="under1" width="12" height="10">
+  <data encoding="csv">
+0,1830,1831,1832,1833,1834,0,0,0,0,0,0,
+0,1862,1863,1864,1865,1866,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="4" name="under2" width="12" height="10">
+  <data encoding="csv">
+0,2501,0,0,0,0,0,2531,2532,0,0,0,
+0,0,0,0,0,0,0,2563,2564,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,1996,1996,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,2021,2022,2023,0,0,0,0,0,0,0,
+0,0,2053,2054,2055,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,2691,2692,2693,0,
+0,0,0,0,0,0,0,0,2723,2724,2725,0,
+0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="5" name="above0" width="12" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,1801,1801,0,
+1805,0,0,0,0,0,0,0,0,1837,1869,1802,
+1805,0,0,0,0,0,0,0,0,1964,1964,1802,
+1805,0,0,0,0,0,0,0,0,0,0,1802,
+1805,0,1989,2317,1991,0,0,0,0,0,0,0,
+1805,0,0,0,0,0,0,0,0,0,0,0,
+1805,0,0,0,0,0,0,0,2659,2660,2661,1802,
+1805,0,0,0,0,0,0,0,0,0,0,1802,
+1805,0,0,0,0,0,0,0,0,0,0,1802,
+1807,1806,1806,1806,1806,0,0,1806,1806,1806,1806,1808
+</data>
+ </layer>
+ <layer id="6" name="above1" width="12" height="10" visible="0">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,1990,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="2" name="CollisionRects">
+  <object id="1" x="64" y="160" width="96" height="64"/>
+  <object id="3" x="96.5" y="140.5" width="31" height="18"/>
+  <object id="4" x="293" y="257" width="24" height="16"/>
+  <object id="5" x="276" y="224.5" width="58" height="31"/>
+  <object id="6" x="288.5" y="97.5" width="62" height="26"/>
+  <object id="7" x="224" y="0" width="64" height="64"/>
+  <object id="8" x="32" y="19.5" width="160" height="32"/>
+  <object id="9" x="0" y="0" width="12.5" height="320"/>
+  <object id="10" x="12.5" y="312" width="147.5" height="8.5"/>
+  <object id="11" x="224" y="311" width="160" height="9"/>
+  <object id="12" x="371.5" y="193" width="12.5" height="118"/>
+  <object id="13" x="376" y="0.5" width="8" height="127.5"/>
+  <object id="14" x="12.5" y="1" width="363.5" height="7"/>
+ </objectgroup>
+ <objectgroup id="7" name="DoorRects">
+  <object id="15" x="375.5" y="129" width="8" height="63.5">
+   <properties>
+    <property name="destinationDoor" type="int" value="0"/>
+    <property name="destinationMap" type="int" value="6"/>
+    <property name="exit" type="int" value="1"/>
+    <property name="id" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="16" x="160" y="311.5" width="64" height="9">
+   <properties>
+    <property name="destinationDoor" type="int" value="1"/>
+    <property name="destinationMap" type="int" value="1"/>
+    <property name="exit" type="int" value="0"/>
+    <property name="id" type="int" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="InteractionRects">
+  <object id="17" x="288" y="96" width="32" height="32">
+   <properties>
+    <property name="id" type="int" value="0"/>
+    <property name="texture" value="-"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="NpcRects">
+  <object id="19" x="32" y="64" width="160" height="64">
+   <properties>
+    <property name="id" type="int" value="0"/>
+    <property name="texture" value="sprite.png"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

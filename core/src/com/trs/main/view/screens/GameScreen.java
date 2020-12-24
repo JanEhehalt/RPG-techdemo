@@ -22,11 +22,11 @@ public class GameScreen extends AbstractScreen{
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
         //setTextbox(new Textbox("How are you doing my friend How are you doing my friend How are you doing my friend How are you doing my friend", "good", "bad"));
         
-        map = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, new Player(200, 200), "tiledmapData/map2.tmx", 0, 2);
+        map = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, new Player(200, 200), "tiledmapData/maps/map1.tmx", 2, 1);
     }
     
     public void loadNewMap(int map, int doorId){
-    	String filename = "tiledmapData/map" + map + ".tmx";
+    	String filename = "tiledmapData/maps/map" + map + ".tmx";
         this.map = new MapContainer(Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT, this.map.getPlayer(), filename, doorId, map);
     }
 

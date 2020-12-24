@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="40" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="84">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="40" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="103">
  <tileset firstgid="1" source="../tilesets/terrain.tsx"/>
  <tileset firstgid="2049" source="../tilesets/village.tsx"/>
  <tileset firstgid="3849" source="../tilesets/crops.tsx"/>
@@ -170,7 +170,7 @@
 3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3623,3624,0,0,0,0,0,0,0,0,0,2067,2068,2309,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="4" name="above0" width="40" height="50" visible="0">
+ <layer id="4" name="above0" width="40" height="50">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -224,7 +224,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="5" name="above1" width="40" height="50" visible="0">
+ <layer id="5" name="above1" width="40" height="50">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -348,8 +348,77 @@
   <object id="81" x="1024" y="992" width="32" height="32"/>
   <object id="82" x="1056" y="1024" width="32" height="32"/>
   <object id="83" x="1056" y="1056" width="32" height="544"/>
+  <object id="84" x="128" y="896" width="32" height="32"/>
+  <object id="85" x="32" y="640" width="64" height="32"/>
+  <object id="86" x="96" y="672" width="64" height="32"/>
+  <object id="96" x="832" y="256" width="128" height="32"/>
  </objectgroup>
- <objectgroup id="7" name="DoorRects"/>
- <objectgroup id="8" name="InteractionRects"/>
- <objectgroup id="9" name="NpcRects"/>
+ <objectgroup id="7" name="DoorRects">
+  <object id="88" x="150.875" y="191.75" width="52.625" height="43.625">
+   <properties>
+    <property name="destinationDoor" type="int" value="0"/>
+    <property name="destinationMap" type="int" value="3"/>
+    <property name="exit" type="int" value="2"/>
+    <property name="id" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="89" x="655" y="191.625" width="64.5" height="31.375">
+   <properties>
+    <property name="destinationDoor" type="int" value="0"/>
+    <property name="destinationMap" type="int" value="2"/>
+    <property name="exit" type="int" value="2"/>
+    <property name="id" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="90" x="0" y="1056" width="21.5" height="288">
+   <properties>
+    <property name="destinationDoor" type="int" value="0"/>
+    <property name="destinationMap" type="int" value="4"/>
+    <property name="exit" type="int" value="3"/>
+    <property name="id" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="91" x="672" y="1586.5" width="300.5" height="13.5">
+   <properties>
+    <property name="destinationDoor" type="int" value="0"/>
+    <property name="destinationMap" type="int" value="5"/>
+    <property name="exit" type="int" value="0"/>
+    <property name="id" type="int" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="InteractionRects">
+  <object id="92" x="608" y="960" width="32" height="32">
+   <properties>
+    <property name="id" type="int" value="1"/>
+    <property name="texture" value="sign.png"/>
+   </properties>
+  </object>
+  <object id="93" x="128" y="1024" width="32" height="32">
+   <properties>
+    <property name="id" type="int" value="0"/>
+    <property name="texture" value="sign.png"/>
+   </properties>
+  </object>
+  <object id="95" x="672" y="1472" width="32" height="32">
+   <properties>
+    <property name="id" type="int" value="2"/>
+    <property name="texture" value="sign.png"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="NpcRects">
+  <object id="98" x="896" y="288" width="64" height="64">
+   <properties>
+    <property name="id" type="int" value="0"/>
+    <property name="texture" value="sprite.png"/>
+   </properties>
+  </object>
+  <object id="102" x="544" y="128" width="32" height="32">
+   <properties>
+    <property name="id" type="int" value="1"/>
+    <property name="texture" value="sprite.png"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

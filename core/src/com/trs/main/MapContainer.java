@@ -109,7 +109,13 @@ public class MapContainer {
             int id = props.get("id", Integer.class);
             String texture = props.get("texture", String.class);
             
-            stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id, texture));
+            if(texture.equals("-")){
+                stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id));
+            }
+            else{
+                stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id, texture));
+            }
+            
             stage.addActor(new MapCollisionObject((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height));
         }
         
