@@ -12,6 +12,7 @@ public class Main extends Game{
     /**
      * TODO: set final Value for World
      */
+	// TEST
 	
 	// 0: normal game world, 1: dialogue, 2: fight
         // 7: Load MenuScreen 8: Load GameScreen 9: Load InventoryScreen
