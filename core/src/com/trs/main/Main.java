@@ -10,19 +10,19 @@ import com.trs.main.view.screens.MenuScreen;
 public class Main extends Game{
     
     /**
-     * TODO: set final Value for World
+    * TODO: set final Value for World
      */
 	// TEST
 	
 	// 0: normal game world, 1: dialogue, 2: fight
         // 7: Load MenuScreen 8: Load GameScreen 9: Load InventoryScreen
-	public static int gamestate = 0;
-        public static float CAMERA_WIDTH = 1280;
-        public static float CAMERA_HEIGHT = 720;
-        
-        MenuScreen menuScreen;
-        GameScreen gameScreen;
-        InventoryScreen inventoryScreen;
+    public static int gamestate = 0;
+    public static float CAMERA_WIDTH = 854;
+    public static float CAMERA_HEIGHT = 480;
+
+    MenuScreen menuScreen;
+    GameScreen gameScreen;
+    InventoryScreen inventoryScreen;
         
         
        
@@ -32,7 +32,7 @@ public class Main extends Game{
         gameScreen = new GameScreen(this, CAMERA_WIDTH, CAMERA_HEIGHT);
         inventoryScreen = new InventoryScreen(this, CAMERA_WIDTH, CAMERA_HEIGHT);
         
-        screen = gameScreen;
+          screen = gameScreen;
     }
 
     @Override

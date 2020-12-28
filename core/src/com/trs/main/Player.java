@@ -30,6 +30,8 @@ public class Player extends Actor{
     // 0: up, 1: left, 2: down, 3: right
     int facing = 0;
     
+    InformationQuest quest;
+    
     Rectangle collisionRect;
     
     public Player(int xPos, int yPos){
@@ -39,6 +41,11 @@ public class Player extends Actor{
         playerSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
         setBounds(xPos, yPos, playerSprite.getSprite().getWidth(), playerSprite.getSprite().getHeight());
+        
+        
+        int[] n = {1, 1};        
+        int[] m = {1, 0};
+        quest = new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true);
     }
 
     @Override
@@ -145,6 +152,13 @@ public class Player extends Actor{
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
 
+        System.out.println("--");
+        System.out.println(quest.questText);
+        quest.updateQuest(getStage().getActors());
+        quest.print();
+        System.out.println(quest.finished);
+        System.out.println("--");
+        
     }
 
     @Override

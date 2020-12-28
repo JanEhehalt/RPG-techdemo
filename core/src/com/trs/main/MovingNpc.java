@@ -19,6 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class MovingNpc extends Actor{
     
+    public final int mapId;
+    public final int id;
+    
     public static final float SQRT2 = 1.414f;
     Textbox t;
     Rectangle area;
@@ -35,12 +38,12 @@ public class MovingNpc extends Actor{
     
     Vector2 POI;
     
-    int id;
     String dialoguePath;
     
     public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture){
         setName("npc");
         this.id = id;
+        this.mapId = mapId;
         Texture t = new Texture(Gdx.files.internal("textureData/sprites/"+texture));
         
         currentlyTalking = false;

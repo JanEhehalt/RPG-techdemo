@@ -124,7 +124,7 @@ public class MapContainer {
     		doors[i] = tempDoors.get(i);
     		if(i == inDoor) {
     			int facing = doors[i].exit;
-    			
+    			System.out.println(i + " " + inDoor);
     			switch(facing) {
     			case 0:
     				p.setPosition(doors[i].rect.x, doors[i].rect.y + doors[i].rect.height);
@@ -160,13 +160,13 @@ public class MapContainer {
         }
         for(Actor a : stage.getActors()) {
             if(a instanceof Player) {
-            	Rectangle rect = ((Player) a).collisionRect;
-            	
-            	for(Door d : doors) {
-            		if(Intersector.overlaps(rect, d.rect)) {
-            			collidingDoor = d;
-            			break;
-            		}
+                Rectangle rect = ((Player) a).collisionRect;
+                
+                for(Door d : doors) {
+                    if(Intersector.overlaps(rect, d.rect)) {
+                        collidingDoor = d;
+                        break;
+                    }
             	}
             }
         }
