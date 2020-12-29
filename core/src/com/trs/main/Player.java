@@ -45,13 +45,13 @@ public class Player extends Actor{
         
         int[] n = {1, 1};        
         int[] m = {1, 0};
-        quest = new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true);
+        quest = new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, false);
     }
 
     @Override
     protected void positionChanged() {
         playerSprite.setSpritePosition((int)getX(), (int)getY());
-        collisionRect = new Rectangle(getX() + 16, getY(), 32, 48);
+        collisionRect = new Rectangle(getX() + 16, getY(), 32, 16);
         super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -90,9 +90,16 @@ public class Player extends Actor{
             if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 Actor a = collidingActor();
                 if(a != null) {
-                	if(a instanceof MovingNpc){
+                    if(a instanceof MovingNpc){
                         Main.gamestate = 1;
-                        ((MovingNpc)a).startDialogue(getX()+32, getY()+32);
+                        if(quest instanceof InformationQuest){
+                            if(((InformationQuest)quest).hasSpecialDialogue(((MovingNpc) a).id, ((MovingNpc) a).mapId)){
+                                ((MovingNpc) a).startSpecialDialogue(((InformationQuest)quest).getDialoguePath(((MovingNpc) a).id, ((MovingNpc) a).mapId), getX()+32, getY()+32);
+                            }   
+                            else{
+                            ((MovingNpc)a).startDialogue(getX()+32, getY()+32);
+                        }
+                        }
                         movementX = 0;
                         movementY = 0;
                     }
@@ -173,18 +180,16 @@ public class Player extends Actor{
     }
     
     public boolean collidingWithMapCollisionObject(){
-        boolean  value = false;
         for(Actor a : getStage().getActors()){
                 if(a instanceof MapCollisionObject){
                     //Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
                     Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
                     if(Intersector.overlaps(collisionRect, o)){
-                        value = true;
-                        break;
+                        return true;
                     }
                 }
         }
-        return value;
+        return false;
     }   
     
     public void velocity(float velocity){

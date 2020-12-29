@@ -34,7 +34,10 @@ public class MovingNpc extends Actor{
     
     boolean currentlyTalking;
     
+    boolean specialDialogue;
+    
     DialogueParser parser;
+    DialogueParser tempSpecialDialogueParser;
     
     Vector2 POI;
     
@@ -47,7 +50,7 @@ public class MovingNpc extends Actor{
         Texture t = new Texture(Gdx.files.internal("textureData/sprites/"+texture));
         
         currentlyTalking = false;
-
+        specialDialogue = false;
         animatedSprite = new AnimatedSprite(t, 64, 64, true);
         animatedSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 48);
@@ -62,6 +65,8 @@ public class MovingNpc extends Actor{
         Dialogue nextDialogue = parser.firstDialogue();
         this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
         
+        collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
+        
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
     }
     
@@ -70,10 +75,19 @@ public class MovingNpc extends Actor{
     	getStage().addActor(new Textbox(t, xPos, yPos));
     }
     
+    public void startSpecialDialogue(String path, float xPos, float yPos){
+        tempSpecialDialogueParser = new DialogueParser(path);
+    	currentlyTalking = true;
+        specialDialogue = true;
+        Dialogue nextDialogue = tempSpecialDialogueParser.firstDialogue();
+        this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
+    	getStage().addActor(new Textbox(t, xPos, yPos));
+    }
+    
     @Override
     protected void positionChanged() {
         animatedSprite.setSpritePosition((int)getX(), (int)getY());
-        collisionRect = new Rectangle(getX() + 16, getY(), 32, 48);
+        collisionRect = new Rectangle(getX() + 16, getY(), 32, 16);
         super.positionChanged();
     }
     
@@ -83,18 +97,36 @@ public class MovingNpc extends Actor{
             animatedSprite.setRow(facing);
 
             if(currentlyTalking) {
-                for(Actor a : getStage().getActors().toArray(Actor.class)) {
+                for(Actor a : getStage().getActors()) {
                     if(a instanceof Textbox) {
                         if(((Textbox) a).getState() == 2) {
-                            int answer = ((Textbox) a).getSelectedAsw();
-                            Dialogue newDialogue = parser.nextDialogue(answer + 1);
+                            if(!specialDialogue){
+                                int answer = ((Textbox) a).getSelectedAsw();
+                                Dialogue newDialogue = parser.nextDialogue(answer + 1);
 
-                            if(newDialogue == null) {
-                                currentlyTalking = false;
-                                parser = new DialogueParser(dialoguePath);
+                                if(newDialogue == null) {
+                                    currentlyTalking = false;
+                                    parser = new DialogueParser(dialoguePath);
+                                }
+                                else {
+                                    ((Textbox)a).update(newDialogue);
+                                }
                             }
-                            else {
-                                ((Textbox)a).update(newDialogue);
+                            else{
+                                int answer = ((Textbox) a).getSelectedAsw();
+                                Dialogue newDialogue = tempSpecialDialogueParser.nextDialogue(answer + 1);
+
+                                if(newDialogue == null) {
+                                    currentlyTalking = false;
+                                    specialDialogue = false;
+                                    parser = new DialogueParser(dialoguePath);
+                                    Dialogue nextDialogue = parser.firstDialogue();
+                                    this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
+                                    tempSpecialDialogueParser = null;
+                                }
+                                else {
+                                    ((Textbox)a).update(newDialogue);
+                                }
                             }
                         }
                     }
@@ -177,20 +209,17 @@ public class MovingNpc extends Actor{
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public boolean collidingWithMapCollisionObject(){
-        boolean  value = false;
+     public boolean collidingWithMapCollisionObject(){
         for(Actor a : getStage().getActors()){
-                if(a.getName().equals("mapobject")){
-                    //Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
+                if(a instanceof MapCollisionObject){
                     Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
                     if(Intersector.overlaps(collisionRect, o)){
-                        value = true;
-                        break;
+                        return true;
                     }
                 }
         }
-        return value;
-    }  
+        return false;
+    } 
     
     public Textbox getTextbox(){
         return t;

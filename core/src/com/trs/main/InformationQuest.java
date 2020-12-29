@@ -53,6 +53,34 @@ public class InformationQuest extends Quest{
         */
     }
     
+    
+    boolean hasSpecialDialogue(int NpcId, int mapId){
+        if(!rightOrderRequired){
+            for(int i = 0; i < talked.length; i++){
+                if(informationNpcId[i] == NpcId && informationNpcMapId[i] == mapId && !talked[i]){
+                    return true;
+                }
+            }
+        }
+        else{
+            int nextToTalk = 0;
+            for(int i = 0; i < talked.length; i++){
+                if(!talked[i]){
+                    nextToTalk = i;
+                    break;
+                }
+            }
+            if(informationNpcId[nextToTalk] == NpcId && informationNpcMapId[nextToTalk] == mapId){
+                return true;
+            } 
+        }
+        return false;
+    }
+            
+    String getDialoguePath(int NpcId, int mapId){
+        return "quests/informationQuests/"+questId+"/dialogues/map"+mapId+"/npc"+NpcId+"/dialogue.txt";
+    }
+    
     @Override
     void updateQuest(Array<Actor> actors) {
         if(!finished){
