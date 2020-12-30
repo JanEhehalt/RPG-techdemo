@@ -28,6 +28,7 @@ public class GameScreen extends AbstractScreen{
     public void loadNewMap(int map, int doorId){
     	String filename = "tiledmapData/maps/map" + map + ".tmx";
         this.map = new MapContainer(Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT, this.map.getPlayer(), filename, doorId, map);
+        System.out.println("Doorid: " + doorId);
     }
 
     @Override
@@ -37,14 +38,7 @@ public class GameScreen extends AbstractScreen{
     @Override
     public void render(float f) {
         map.render(f);
-        /*
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
-            loadNewMap("map.tmx");
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
-            loadNewMap("map2.tmx");
-        }
-        */
+        
         if(map.collidingDoor != null) {
         	loadNewMap(map.collidingDoor.destinationMap, map.collidingDoor.destinationDoor);
         }

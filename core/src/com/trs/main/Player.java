@@ -159,12 +159,14 @@ public class Player extends Actor{
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
 
+        /*
         System.out.println("--");
         System.out.println(quest.questText);
         quest.updateQuest(getStage().getActors());
         quest.print();
         System.out.println(quest.finished);
         System.out.println("--");
+        */
         
     }
 

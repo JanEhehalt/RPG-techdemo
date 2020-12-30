@@ -122,7 +122,7 @@ public class MapContainer {
     	doors = new Door[tempDoors.size()];
     	for(int i = 0; i < doors.length; i++) {
     		doors[i] = tempDoors.get(i);
-    		if(i == inDoor) {
+    		if(doors[i].id == inDoor) {
     			int facing = doors[i].exit;
     			System.out.println(i + " " + inDoor);
     			switch(facing) {
