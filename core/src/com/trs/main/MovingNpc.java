@@ -217,6 +217,16 @@ public class MovingNpc extends Actor{
                         return true;
                     }
                 }
+                else if(a instanceof MovingNpc && a != this){
+                    if(Intersector.overlaps(collisionRect, ((MovingNpc)a).collisionRect)){
+                        return true;
+                    }
+                }
+                else if(a instanceof Player){
+                    if(Intersector.overlaps(collisionRect, ((Player)a).collisionRect)){
+                        return true;
+                    }
+                }
         }
         return false;
     } 

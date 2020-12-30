@@ -45,7 +45,7 @@ public class Player extends Actor{
         
         int[] n = {1, 1};        
         int[] m = {1, 0};
-        quest = new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, false);
+        quest = new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true);
     }
 
     @Override
@@ -182,9 +182,13 @@ public class Player extends Actor{
     public boolean collidingWithMapCollisionObject(){
         for(Actor a : getStage().getActors()){
                 if(a instanceof MapCollisionObject){
-                    //Rectangle p = new Rectangle(getX(), getY(), getWidth(), getHeight());
                     Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
                     if(Intersector.overlaps(collisionRect, o)){
+                        return true;
+                    }
+                }
+                else if(a instanceof MovingNpc){
+                    if(Intersector.overlaps(collisionRect, ((MovingNpc)a).collisionRect)){
                         return true;
                     }
                 }
