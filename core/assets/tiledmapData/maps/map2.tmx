@@ -89,7 +89,7 @@
   <object id="14" x="12.5" y="1" width="363.5" height="7"/>
  </objectgroup>
  <objectgroup id="7" name="DoorRects">
- <object id="16" x="160" y="311.5" width="64" height="9">
+  <object id="16" x="160" y="311.5" width="64" height="9">
    <properties>
     <property name="destinationDoor" type="int" value="1"/>
     <property name="destinationMap" type="int" value="1"/>
