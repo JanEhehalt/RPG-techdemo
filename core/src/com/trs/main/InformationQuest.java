@@ -26,7 +26,7 @@ public class InformationQuest extends Quest{
     
     boolean rightOrderRequired;
     
-    InformationQuest(int questId, String questText/*, Quest[] followingQuest*/, int[] informationNpcId, int[] informationNpcMapId, boolean rightOrderRequired){
+    InformationQuest(int questId, String questText, int[] informationNpcId, int[] informationNpcMapId, boolean rightOrderRequired){
         
         this.questId = questId;
         
@@ -41,50 +41,28 @@ public class InformationQuest extends Quest{
         
         this.questText = questText;
         
-        /* TODO: More quest inside on Quest-string
-        
-        if(followingQuest.length > 1){
-            Quest[] nextQuests = new Quest[followingQuest.length-1];
-            for(int i = 1; i < followingQuest.length; i++){
-                nextQuests[i-1] = followingQuest[i];
+    }
+    
+    void talk(MovingNpc a){
+        for(int i = 0; i < talked.length; i++){
+            if(informationNpcId[i] == a.id && informationNpcMapId[i] == a.mapId){
+                talked[i] = true;
+                break;
             }
-            this.followingQuest = new InformationQuest();
         }
-        */
     }
     
     
     boolean hasSpecialDialogue(int NpcId, int mapId){
-        if(!rightOrderRequired){
-            for(int i = 0; i < talked.length; i++){
-                if(informationNpcId[i] == NpcId && informationNpcMapId[i] == mapId && !talked[i]){
-                    return true;
-                }
-            }
-        }
-        else{
-            int nextToTalk = 0;
-            for(int i = 0; i < talked.length; i++){
-                if(!talked[i]){
-                    nextToTalk = i;
-                    break;
-                }
-            }
-            if(informationNpcId[nextToTalk] == NpcId && informationNpcMapId[nextToTalk] == mapId){
-                return true;
-            } 
-        }
-        return false;
-    }
-            
-    String getDialoguePath(int NpcId, int mapId){
-        return "quests/informationQuests/"+questId+"/dialogues/map"+mapId+"/npc"+NpcId+"/dialogue.txt";
-    }
-    
-    @Override
-    void updateQuest(Array<Actor> actors) {
         if(!finished){
-            if(rightOrderRequired){
+            if(!rightOrderRequired){
+                for(int i = 0; i < talked.length; i++){
+                    if(informationNpcId[i] == NpcId && informationNpcMapId[i] == mapId && !talked[i]){
+                        return true;
+                    }
+                }
+            }
+            else{
                 int nextToTalk = 0;
                 for(int i = 0; i < talked.length; i++){
                     if(!talked[i]){
@@ -92,40 +70,29 @@ public class InformationQuest extends Quest{
                         break;
                     }
                 }
-                for(Actor a : actors){
-                    if(a instanceof MovingNpc){
-                        if(((MovingNpc)a).id == informationNpcId[nextToTalk] && ((MovingNpc)a).mapId == informationNpcMapId[nextToTalk]){
-                            if(((MovingNpc)a).currentlyTalking){
-                                talked[nextToTalk] = true;
-                                break;
-                            }
-                        }
-                    }
-                }
+                if(informationNpcId[nextToTalk] == NpcId && informationNpcMapId[nextToTalk] == mapId){
+                    return true;
+                } 
             }
-            else{
-                for(Actor a : actors){
-                    if(a instanceof MovingNpc){
-                        for(int i = 0; i < informationNpcId.length; i++){
-                            if(((MovingNpc)a).id == informationNpcId[i] && ((MovingNpc)a).mapId == informationNpcMapId[i]){
-                                if(((MovingNpc)a).currentlyTalking){
-                                    talked[i] = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            boolean finished = true;
+            return false;
+        }
+        else return false;
+    }
+            
+    String getDialoguePath(int NpcId, int mapId){
+        return "quests/informationQuests/"+questId+"/dialogues/map"+mapId+"/npc"+NpcId+"/dialogue.txt";
+    }
+    
+    @Override
+    void updateQuest() {
+        if(!finished){
+            finished = true;
             for(int i = 0; i < talked.length; i++){
                 if(!talked[i]){ 
                     finished = false;
                     break;
                 }
             }
-            this.finished = finished;
         }
     }
 

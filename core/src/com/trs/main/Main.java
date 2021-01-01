@@ -51,7 +51,7 @@ public class Main extends Game{
         }
         Gdx.gl.glClearColor(0f, (0), (0), 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
+
         switch(gamestate){
             case 7:
                 if(menuScreen.getPaused()){

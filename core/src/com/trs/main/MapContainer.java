@@ -41,13 +41,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MapContainer {
         
-	Stage stage;
-	OrthographicCamera camera;
-	TmxMapLoader maploader;
+    Stage stage;
+    OrthographicCamera camera;
+    TmxMapLoader maploader;
     TiledMap map;
     OrthogonalTiledMapRenderer renderer;
-	Door[] doors;
-	public Door collidingDoor;
+    Door[] doors;
+    public Door collidingDoor;
+    
+    TransitionScreen  t;
         
     final int[] layersBelowPlayer = {0, 1, 2};
     final int[] layersAbovePlayer = {3, 4};
@@ -60,6 +62,9 @@ public class MapContainer {
         camera.update();
         stage = new Stage(new FitViewport(CAMERA_WIDTH, CAMERA_HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);
+        
+        //TRANSITION SCREEN
+        t = new TransitionScreen();
         
         
         //CREATION OF TILEDMAP
@@ -204,6 +209,12 @@ public class MapContainer {
                 stage.getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
                 stage.getCamera().update();
                 break;
+            }
+        }
+        if(t != null){
+            t.draw(stage.getBatch(), stage.getCamera().position.x, stage.getCamera().position.y, stage.getCamera().combined);
+            if(t.opacity == 0){
+                t = null;
             }
         }
     }

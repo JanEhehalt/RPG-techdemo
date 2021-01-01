@@ -20,6 +20,7 @@ public abstract class Quest {
     
     
     
-    abstract void updateQuest(Array<Actor> actors);
+    abstract void updateQuest();
     abstract boolean finished();
+    abstract void print();
 }

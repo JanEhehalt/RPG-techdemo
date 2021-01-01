@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Array;
+import java.util.ArrayList;
 /**
  * 
  *
@@ -30,9 +33,11 @@ public class Player extends Actor{
     // 0: up, 1: left, 2: down, 3: right
     int facing = 0;
     
-    InformationQuest quest;
+    ArrayList<Quest> quests;
     
     Rectangle collisionRect;
+    
+    Group questGroup;
     
     public Player(int xPos, int yPos){
         setName("player");
@@ -41,11 +46,12 @@ public class Player extends Actor{
         playerSprite.setRow(0);
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
         setBounds(xPos, yPos, playerSprite.getSprite().getWidth(), playerSprite.getSprite().getHeight());
-        
+        quests = new ArrayList<>();
         
         int[] n = {1, 1};        
         int[] m = {1, 0};
-        quest = new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true);
+        quests.add(new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true));
+        quests.add(new InformationQuest(1, "jajajaj nicenicenice", m, n, true));
     }
 
     @Override
@@ -59,6 +65,13 @@ public class Player extends Actor{
 
     @Override
     public void act(float delta) {
+        
+        for(Quest quest : quests){
+            quest.print();
+            System.out.println();
+        }
+            System.out.println();
+        
     	if(Main.gamestate == 0) {
             if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
                 speed = 9;
@@ -92,14 +105,21 @@ public class Player extends Actor{
                 if(a != null) {
                     if(a instanceof MovingNpc){
                         Main.gamestate = 1;
-                        if(quest instanceof InformationQuest){
-                            if(((InformationQuest)quest).hasSpecialDialogue(((MovingNpc) a).id, ((MovingNpc) a).mapId)){
-                                ((MovingNpc) a).startSpecialDialogue(((InformationQuest)quest).getDialoguePath(((MovingNpc) a).id, ((MovingNpc) a).mapId), getX()+32, getY()+32);
-                            }   
-                            else{
+                        boolean dialogueStarted = false;
+                        for(Quest quest : quests){
+                            if(quest instanceof InformationQuest){
+                                if(((InformationQuest)quest).hasSpecialDialogue(((MovingNpc) a).id, ((MovingNpc) a).mapId)){
+                                    ((MovingNpc) a).startSpecialDialogue(((InformationQuest)quest).getDialoguePath(((MovingNpc) a).id, ((MovingNpc) a).mapId), getX()+32, getY()+32);
+                                    ((InformationQuest) quest).talk((MovingNpc)a);
+                                    dialogueStarted = true;
+                                    break;
+                                }   
+                            }
+                        }
+                        if(!dialogueStarted){
                             ((MovingNpc)a).startDialogue(getX()+32, getY()+32);
                         }
-                        }
+                        
                         movementX = 0;
                         movementY = 0;
                     }
@@ -159,14 +179,14 @@ public class Player extends Actor{
         playerSprite.updateAnimation(delta);
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
 
-        /*
         System.out.println("--");
-        System.out.println(quest.questText);
-        quest.updateQuest(getStage().getActors());
-        quest.print();
-        System.out.println(quest.finished);
+        for(Quest quest : quests){
+            quest.updateQuest();
+            quest.print();
         System.out.println("--");
-        */
+        }
+        System.out.println("--");
+        
         
     }
 
