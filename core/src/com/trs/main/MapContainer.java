@@ -158,26 +158,28 @@ public class MapContainer {
         
         renderer.render(layersBelowPlayer);
         
-        Actor[] old = stage.getActors().toArray();
-        stage.clear();
-        for(Actor a : sort(old)){
-            stage.addActor(a);
-        }
-        for(Actor a : stage.getActors()) {
-            if(a instanceof Player) {
-                Rectangle rect = ((Player) a).collisionRect;
-                
-                for(Door d : doors) {
-                    if(Intersector.overlaps(rect, d.rect)) {
-                        collidingDoor = d;
-                        break;
-                    }
-            	}
+        if(Main.gamestate == 0) {
+        	Actor[] old = stage.getActors().toArray();
+            stage.clear();
+            for(Actor a : sort(old)){
+                stage.addActor(a);
             }
+            for(Actor a : stage.getActors()) {
+                if(a instanceof Player) {
+                    Rectangle rect = ((Player) a).collisionRect;
+                    
+                    for(Door d : doors) {
+                        if(Intersector.overlaps(rect, d.rect)) {
+                            collidingDoor = d;
+                            break;
+                        }
+                	}
+                }
+            }
+            
+            stage.act(f);
+            stage.draw();
         }
-        
-        stage.act(f);
-        stage.draw();
         
         renderer.render(layersAbovePlayer);
         
