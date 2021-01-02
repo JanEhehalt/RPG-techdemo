@@ -73,10 +73,10 @@ public class Player extends Actor{
         
         // TEST QUESTS
         for(Quest quest : quests){
-            quest.print();
-            System.out.println();
+            //quest.print();
+            //System.out.println();
         }
-        System.out.println();
+        //System.out.println();
         
         // QUEST HANDLING
         for(Quest quest : quests){

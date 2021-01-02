@@ -176,7 +176,7 @@ public class MapContainer {
 
                 // CREATING FightObject Array
                 // Temporarily only Player
-                FightObject[] fightObjects = {new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0, true)};
+                FightObject[] fightObjects = {new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0)};
 
                 fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
             }
@@ -190,8 +190,8 @@ public class MapContainer {
         
         renderer.render(layersBelowPlayer);
         
-        if(Main.gamestate == 0) {
-        	Actor[] old = stage.getActors().toArray();
+        if(Main.gamestate == 0 || Main.gamestate == 1) {
+            Actor[] old = stage.getActors().toArray();
             stage.clear();
             for(Actor a : sort(old)){
                 stage.addActor(a);
@@ -216,10 +216,12 @@ public class MapContainer {
         if(Main.gamestate == 2){
             if(fs.state == 3){
                 for(FightObject object : fs.objects){
-                    if(object.isPlayer){
+                    if(object instanceof FightPlayer){
+                        
                         getPlayer().setX(object.x);
                         getPlayer().setY(object.y);
                         getPlayer().stats = object.stats;
+                        
                     }
                     else{
                         /*
