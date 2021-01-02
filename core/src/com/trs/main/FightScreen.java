@@ -54,7 +54,14 @@ public class FightScreen {
                     boolean finished = true;
                     for(FightObject object : objects){
                         Vector2 POI = new Vector2((int)(Math.ceil((double)(object.x)/32.0) * 32.0) - 16, (int)(Math.ceil((double)(object.y)/32.0) * 32.0));
-                        Vector2 movement = new Vector2(3,0);
+                        float speed = 3;
+                        
+                        if(Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y)) < 3f && Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y)) != 0) {
+                            speed = Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y));
+                        } 
+                        
+                        
+                        Vector2 movement = new Vector2(speed,0);
                         movement.setAngleRad(StaticMath.calculateAngle(object.x, object.y, POI.x, POI.y));
                         int facing;
                         if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {

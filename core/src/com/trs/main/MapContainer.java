@@ -176,7 +176,7 @@ public class MapContainer {
 
                 // CREATING FightObject Array
                 // Temporarily only Player
-                FightObject[] fightObjects = {new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0)};
+                FightObject[] fightObjects = {new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0, true)};
 
                 fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
             }
@@ -214,10 +214,39 @@ public class MapContainer {
         }
         
         if(Main.gamestate == 2){
-            
-            
-            fs.act(f);
-            fs.draw();
+            if(fs.state == 3){
+                for(FightObject object : fs.objects){
+                    if(object.isPlayer){
+                        getPlayer().setX(object.x);
+                        getPlayer().setY(object.y);
+                        getPlayer().stats = object.stats;
+                    }
+                    else{
+                        /*
+                        for(int i = stage.getActors().size-1; i >= 0; i--){
+                            if(stage.getActors().get(i) instanceof EnemyNpc){
+                                if(((EnemyNpc)stage.getActors().get(i)).id == object.id){
+                                    if(object.stats.getHp() <= 0){
+                                        stage.getActors().removeIndex(i);
+                                    }
+                                    else{
+                                        stage.getActors().get(i).setPosition(object.x, object.y);
+                                        ((EnemyNpc)stage.getActors().get(i)).stats = object.stats;
+                                    }
+                                }
+                            }
+                        }
+                        */
+                    }
+                }
+                
+                fs = null;
+                Main.gamestate = 0;
+            }
+            else{
+                fs.act(f);
+                fs.draw();
+            }
         }
         
         renderer.render(layersAbovePlayer);

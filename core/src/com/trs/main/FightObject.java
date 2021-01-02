@@ -6,13 +6,15 @@ public abstract class FightObject {
 	protected int id;
         protected float x;
         protected float y;
+        protected boolean isPlayer;
 	
-	public FightObject(float x, float y, AnimatedSprite sprite, Stats stats, int id) {
+	public FightObject(float x, float y, AnimatedSprite sprite, Stats stats, int id, boolean isPlayer) {
 		this.sprite = sprite;
 		this.stats = stats;
 		this.id = id;
                 this.x = x;
                 this.y = y;
+                this.isPlayer = isPlayer;
 	}
         
         void setX(float x) {
