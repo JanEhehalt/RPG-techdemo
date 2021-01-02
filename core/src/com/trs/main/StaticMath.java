@@ -12,11 +12,11 @@ public class StaticMath {
 
         double alpha;
         if(deltaY == 0){
-            if(deltaX < 0){
-                alpha = Math.PI;
+            if(deltaX > 0){
+                alpha = 0;
             }
             else{
-                alpha = 0;
+                alpha = Math.PI;
             }
         }
         else if(deltaX == 0 && deltaY >= 0){
@@ -47,6 +47,14 @@ public class StaticMath {
         float deltaY = yPos2 - yPos1;
         
         double distance = Math.abs((deltaY / Math.sin(angle)));
+        return (float) distance;
+    }
+    
+    public static float calculateDistance(float xPos1, float yPos1, float xPos2, float yPos2){
+        float deltaX = xPos2 - xPos1;
+        float deltaY = yPos2 - yPos1;
+        
+        double distance = Math.abs((deltaY / Math.sin(calculateAngle(xPos1, yPos1, xPos2, yPos2))));
         return (float) distance;
     }
 }

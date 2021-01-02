@@ -1,6 +1,7 @@
 package com.trs.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,6 +18,8 @@ public class FightScreen {
         ShapeRenderer renderer;
 	FightObject[] objects;
 	Rectangle[] collisionRects;
+        
+        FightDialogue fightDialogue;
 	
         Vector2 gridPos;
         
@@ -28,6 +31,7 @@ public class FightScreen {
 		this.objects = objects;
 		this.collisionRects = collisionRects;
                 this.renderer = new ShapeRenderer();
+                this.fightDialogue = new FightDialogue(camX, camY);
                 
                 gridPos = new Vector2();
                 
@@ -54,7 +58,7 @@ public class FightScreen {
                     boolean finished = true;
                     for(FightObject object : objects){
                         Vector2 POI = new Vector2((int)(Math.ceil((double)(object.x)/32.0) * 32.0) - 16, (int)(Math.ceil((double)(object.y)/32.0) * 32.0));
-                        float speed = 3;
+                        float speed = 2.5f;
                         
                         if(Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y)) < 3f && Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y)) != 0) {
                             speed = Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y));
@@ -77,7 +81,7 @@ public class FightScreen {
                                 facing = 3;
                         }
                         
-                        if(StaticMath.calculateDistance(object.x, object.y, POI.x, POI.y, movement.angleRad()) < 1f) {
+                        if(StaticMath.calculateDistance(object.x, object.y, POI.x, POI.y, movement.angleRad()) == 0) {
                             movement.x = 0;
                             movement.y = 0;
                         }       
@@ -99,7 +103,34 @@ public class FightScreen {
                         state = 1;
                     }
                 }
-            
+                else if(state == 1){
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.W)){
+                        if(getPlayer().POI == null){
+                            getPlayer().POI = new Vector2(getPlayer().x, getPlayer().y + 32);
+                            System.out.println("W");
+                        }
+                    }
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.A)){
+                        if(getPlayer().POI == null){
+                            getPlayer().POI = new Vector2(getPlayer().x-32, getPlayer().y);
+                            System.out.println("A");
+                        }
+                    }
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.S)){
+                        if(getPlayer().POI == null){
+                            getPlayer().POI = new Vector2(getPlayer().x, getPlayer().y - 32);
+                            System.out.println("S");
+                        }
+                    }
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.D)){
+                        if(getPlayer().POI == null){
+                            getPlayer().POI = new Vector2(getPlayer().x + 32, getPlayer().y);
+                            System.out.println("D");
+                        }
+                    }
+                    
+                }
+                gotoPOI();
 		for(FightObject object : objects) {
 			object.sprite.updateAnimation(deltatime);
 		}
@@ -123,6 +154,7 @@ public class FightScreen {
                 }
                 
                 renderer.end();
+                fightDialogue.draw(batch);
                 Gdx.gl.glDisable(GL20.GL_BLEND);
 		
 		batch.begin();
@@ -149,6 +181,63 @@ public class FightScreen {
     			object.stats.setHp(-5);
     		}
     	}
+    }
+    
+    public FightPlayer getPlayer(){
+        for(FightObject object : objects){
+            if(object instanceof FightPlayer){
+                return (FightPlayer) object;
+            }
+        }
+        System.out.println("großes Problem hahgaeu9ihgbidesrufhgred");
+        return null;
+    }
+    
+    public void gotoPOI(){
+        for(FightObject object : objects){
+            if(object.POI != null){
+                //object.POI = new Vector2((int)(Math.ceil((double)(object.x)/32.0) * 32.0) - 16, (int)(Math.ceil((double)(object.y)/32.0) * 32.0));
+                float speed = 3f;
+
+                if(StaticMath.calculateDistance(object.x, object.y, object.POI.x, object.POI.y) < 3f && StaticMath.calculateDistance(object.x, object.y, object.POI.x, object.POI.y) != 0) {
+                    speed = Math.abs(Vector2.dst(object.x, object.y, object.POI.x, object.POI.y));
+                } 
+
+
+                Vector2 movement = new Vector2(speed,0);
+                movement.setAngleRad(StaticMath.calculateAngle(object.x, object.y, object.POI.x, object.POI.y));
+                int facing;
+                if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
+                        facing = 0;
+                }
+                else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
+                        facing = 1;
+                }
+                else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
+                        facing = 2;
+                }
+                else {
+                        facing = 3;
+                }
+
+                if((int)object.x == (int)object.POI.x && (int)object.y == (int)object.POI.y) {
+                    movement.x = 0;
+                    movement.y = 0;
+                }       
+
+                object.setX(object.x + movement.x);
+                object.setY(object.y + movement.y);
+
+                int animationRow = 0;
+                if(movement.x != 0 || movement.y != 0) {
+                        animationRow = 8;
+                }
+                else{
+                    object.POI = null;
+                }
+                object.sprite.setRow(animationRow + facing);
+            }
+        }
     }
 	
 }

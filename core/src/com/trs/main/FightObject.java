@@ -1,11 +1,14 @@
 package com.trs.main;
 
+import com.badlogic.gdx.math.Vector2;
+
 public abstract class FightObject {
 	protected AnimatedSprite sprite;
 	protected Stats stats;
 	protected int id;
         protected float x;
         protected float y;
+        protected Vector2 POI;
 	
 	public FightObject(float x, float y, AnimatedSprite sprite, Stats stats, int id) {
 		this.sprite = sprite;
