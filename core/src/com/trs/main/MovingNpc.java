@@ -191,7 +191,7 @@ public class MovingNpc extends Actor{
 	        
 	        int animationRow = 0;
 	        if(movementX != 0 || movementY != 0) {
-	        	animationRow = 8;
+                    animationRow = 8;
 	        }
 	        animatedSprite.setRow(animationRow + facing);
 	        

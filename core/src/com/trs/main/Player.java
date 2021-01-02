@@ -25,7 +25,7 @@ public class Player extends Actor{
     public static final float SQRT2 = 1.414f;
     
     Texture t;
-    private AnimatedSprite playerSprite;
+    AnimatedSprite playerSprite;
     float movementX = 0;
     float movementY = 0;
     float speed = 3f;
@@ -39,6 +39,8 @@ public class Player extends Actor{
     
     Group questGroup;
     
+    Stats stats;
+    
     public Player(int xPos, int yPos){
         setName("player");
         t = new Texture(Gdx.files.internal("textureData/sprites/player.png"));
@@ -47,6 +49,8 @@ public class Player extends Actor{
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
         setBounds(xPos, yPos, playerSprite.getSprite().getWidth(), playerSprite.getSprite().getHeight());
         quests = new ArrayList<>();
+        
+        stats = new Stats();
         
         //TEST QUESTS
         int[] n = {1, 1};        

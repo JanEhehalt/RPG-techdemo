@@ -158,19 +158,32 @@ public class MapContainer {
     }
         
     public void render(float f){
-        
         if(Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
-            ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
-            for(Actor a : stage.getActors()){
-                if(a instanceof MapCollisionObject){
-                    mapRectsTemp.add(((MapCollisionObject)a).r);
+            if(Main.gamestate == 0){
+                Main.gamestate = 2;
+
+                // CREATING MAP COLLISION OBJECTS
+                ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
+                for(Actor a : stage.getActors()){
+                    if(a instanceof MapCollisionObject){
+                        mapRectsTemp.add(((MapCollisionObject)a).r);
+                    }
                 }
+                Rectangle[] rects = new Rectangle[mapRectsTemp.size()];
+                for(int i = 0; i< mapRectsTemp.size(); i++){
+                    rects[i] = mapRectsTemp.get(i);
+                }
+
+                // CREATING FightObject Array
+                // Temporarily only Player
+                FightObject[] fightObjects = {new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0)};
+
+                fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
             }
-            Rectangle[] rects = new Rectangle[mapRectsTemp.size()];
-            for(int i = 0; i< mapRectsTemp.size(); i++){
-                rects[i] = mapRectsTemp.get(i);
+            else if(Main.gamestate == 2){
+                Main.gamestate = 0;
+                fs = null;
             }
-            fs = new FightScreen(stage.getBatch(), null, rects, getPlayer().getX()+32, getPlayer().getY()+32);
         }
         
         renderer.setView((OrthographicCamera)stage.getCamera());
@@ -195,12 +208,16 @@ public class MapContainer {
                 	}
                 }
             }
-            if(fs != null){
-                fs.draw();
-            }
             
             stage.act(f);
             stage.draw();
+        }
+        
+        if(Main.gamestate == 2){
+            
+            
+            fs.act(f);
+            fs.draw();
         }
         
         renderer.render(layersAbovePlayer);
