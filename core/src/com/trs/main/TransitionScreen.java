@@ -23,17 +23,19 @@ public class TransitionScreen{
     
     ShapeRenderer renderer;
     float opacity = 1f;
+    float speed;
 
-    public TransitionScreen() {
+    public TransitionScreen(float speed) {
         super();
+        this.speed = speed;
         renderer = new ShapeRenderer();
     }
     
 
     public void draw(Batch batch, float x, float y, Matrix4 m) {
         renderer.setProjectionMatrix(m);
-        if(opacity - 0.05f > 0){
-            opacity -= 0.05f;
+        if(opacity - speed > 0){
+            opacity -= speed;
         }
         else opacity = 0;
         renderer.setColor(0, 0, 0, opacity);

@@ -29,7 +29,7 @@ public class Player extends Actor{
     float movementX = 0;
     float movementY = 0;
     float speed = 3f;
-    float velocity = 0.8f;
+    float velocity = 0.5f;
     // 0: up, 1: left, 2: down, 3: right
     int facing = 0;
     
@@ -48,10 +48,11 @@ public class Player extends Actor{
         setBounds(xPos, yPos, playerSprite.getSprite().getWidth(), playerSprite.getSprite().getHeight());
         quests = new ArrayList<>();
         
+        //TEST QUESTS
         int[] n = {1, 1};        
         int[] m = {1, 0};
         quests.add(new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true));
-        quests.add(new InformationQuest(1, "jajajaj nicenicenice", m, n, true));
+        quests.add(new InformationQuest(1, "jajajaj nicenicenice", m, n, false));
     }
 
     @Override
@@ -66,12 +67,19 @@ public class Player extends Actor{
     @Override
     public void act(float delta) {
         
+        // TEST QUESTS
         for(Quest quest : quests){
             quest.print();
             System.out.println();
         }
-            System.out.println();
+        System.out.println();
         
+        // QUEST HANDLING
+        for(Quest quest : quests){
+            quest.updateQuest();
+        }
+        
+        // PLAYER ACTING
     	if(Main.gamestate == 0) {
             if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
                 speed = 9;
@@ -135,13 +143,8 @@ public class Player extends Actor{
     	else if(Main.gamestate == 1) {
     		// Input handled by invoked textbox
     	}
-        /**
-        *   return
-        *   0:  only vertical movement available
-        *   1:  only horizontal movement available
-        *   2:  full movement available
-        *   3:  no movement available
-        */
+        
+        // MOVEMENT HANDLING
         if(movementX == 0 && movementY == 0){
         	
         }
@@ -168,24 +171,18 @@ public class Player extends Actor{
                 setY(getY()- (movementY / SQRT2));
             }
         }
+        velocity(velocity);
         
+        // ANIMATION HANDLING
         int animationRow = 0;
         if(movementX != 0 || movementY != 0) {
         	animationRow = 8;
-        }
-        		
+        }		
         playerSprite.setRow(animationRow + facing);
-        velocity(velocity);
         playerSprite.updateAnimation(delta);
+        
         super.act(delta); //To change body of generated methods, choose Tools | Templates.
 
-        System.out.println("--");
-        for(Quest quest : quests){
-            quest.updateQuest();
-            quest.print();
-        System.out.println("--");
-        }
-        System.out.println("--");
         
         
     }
@@ -218,6 +215,7 @@ public class Player extends Actor{
         return false;
     }   
     
+    // Slowing the players movement by velocity
     public void velocity(float velocity){
         if(movementX > 0){
             movementX -= velocity;

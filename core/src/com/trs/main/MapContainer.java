@@ -64,7 +64,7 @@ public class MapContainer {
         Gdx.input.setInputProcessor(stage);
         
         //TRANSITION SCREEN
-        t = new TransitionScreen();
+        t = new TransitionScreen(0.01f);
         
         
         //CREATION OF TILEDMAP
