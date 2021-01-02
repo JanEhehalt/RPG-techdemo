@@ -155,6 +155,9 @@ public class MapContainer {
     	p.movementY = 0;
    
         stage.addActor(p);
+        
+        stage.addActor(new Hostile(200, 200, 0, new Stats(), "sprite.png"));
+        stage.addActor(new Hostile(265, 200, 0, new Stats(), "sprite.png"));
     }
         
     public void render(float f){
@@ -176,7 +179,20 @@ public class MapContainer {
 
                 // CREATING FightObject Array
                 // Temporarily only Player
-                FightObject[] fightObjects = {new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0)};
+                ArrayList<FightObject> tempObjects = new ArrayList<>();
+                tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0));
+                
+                for(Actor a : stage.getActors()) {
+                	if(a instanceof Hostile) {
+                		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id);
+                		tempObjects.add(e);
+                	}
+                }
+                
+                FightObject[] fightObjects = new FightObject[tempObjects.size()];
+                for(int i = 0; i< tempObjects.size(); i++){
+                    fightObjects[i] = tempObjects.get(i);
+                }
 
                 fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
             }
@@ -224,21 +240,21 @@ public class MapContainer {
                         
                     }
                     else{
-                        /*
+                        
                         for(int i = stage.getActors().size-1; i >= 0; i--){
-                            if(stage.getActors().get(i) instanceof EnemyNpc){
-                                if(((EnemyNpc)stage.getActors().get(i)).id == object.id){
+                            if(stage.getActors().get(i) instanceof Hostile){
+                                if(((Hostile)stage.getActors().get(i)).id == object.id){
                                     if(object.stats.getHp() <= 0){
                                         stage.getActors().removeIndex(i);
                                     }
                                     else{
                                         stage.getActors().get(i).setPosition(object.x, object.y);
-                                        ((EnemyNpc)stage.getActors().get(i)).stats = object.stats;
+                                        ((Hostile)stage.getActors().get(i)).stats = object.stats;
                                     }
                                 }
                             }
                         }
-                        */
+                        
                     }
                 }
                 
@@ -297,7 +313,7 @@ public class MapContainer {
     
     public Player getPlayer(){
         for(Actor a : stage.getActors()){
-            if(a.getName().equals("player")){
+            if(a instanceof Player){
                 return (Player)a;
             }
         }
