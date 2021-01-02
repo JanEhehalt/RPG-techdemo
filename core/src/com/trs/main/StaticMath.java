@@ -46,15 +46,32 @@ public class StaticMath {
         float deltaX = xPos2 - xPos1;
         float deltaY = yPos2 - yPos1;
         
-        double distance = Math.abs((deltaY / Math.sin(angle)));
+        double distance;
+        
+        if(angle == 0) {
+        	distance = deltaX;
+        }
+        else {
+        	distance = Math.abs((deltaY / Math.sin(angle)));
+        }
+        
         return (float) distance;
     }
     
     public static float calculateDistance(float xPos1, float yPos1, float xPos2, float yPos2){
-        float deltaX = xPos2 - xPos1;
+    	float deltaX = xPos2 - xPos1;
         float deltaY = yPos2 - yPos1;
         
-        double distance = Math.abs((deltaY / Math.sin(calculateAngle(xPos1, yPos1, xPos2, yPos2))));
+        double distance;
+        double angle = calculateAngle(xPos1, yPos1, xPos2, yPos2);
+        
+        if(angle == 0) {
+        	distance = deltaX;
+        }
+        else {
+        	distance = Math.abs((deltaY / Math.sin(angle)));
+        }
+        
         return (float) distance;
     }
 }
