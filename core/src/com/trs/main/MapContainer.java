@@ -157,7 +157,7 @@ public class MapContainer {
         stage.addActor(p);
         
         stage.addActor(new Hostile(200, 200, 0, new Stats(), "sprite.png"));
-        stage.addActor(new Hostile(265, 200, 0, new Stats(), "sprite.png"));
+        stage.addActor(new Hostile(265, 200, 1, new Stats(), "sprite.png"));
     }
         
     public void render(float f){
@@ -184,8 +184,11 @@ public class MapContainer {
                 
                 for(Actor a : stage.getActors()) {
                 	if(a instanceof Hostile) {
-                		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id);
-                		tempObjects.add(e);
+                		if(((Hostile) a).movementState > 0) {
+                			((Hostile) a).movementState = 2;
+                			Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id);
+                    		tempObjects.add(e);
+                		}
                 	}
                 }
                 
@@ -198,7 +201,8 @@ public class MapContainer {
             }
             else if(Main.gamestate == 2){
                 Main.gamestate = 0;
-                fs = null;
+                fs.nuke();
+                fs.state = 3;
             }
         }
         
@@ -230,6 +234,39 @@ public class MapContainer {
         }
         
         if(Main.gamestate == 2){
+        	if(fs == null) {
+        		// CREATING MAP COLLISION OBJECTS
+                ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
+                for(Actor a : stage.getActors()){
+                    if(a instanceof MapCollisionObject){
+                        mapRectsTemp.add(((MapCollisionObject)a).r);
+                    }
+                }
+                Rectangle[] rects = new Rectangle[mapRectsTemp.size()];
+                for(int i = 0; i< mapRectsTemp.size(); i++){
+                    rects[i] = mapRectsTemp.get(i);
+                }
+
+                // CREATING FightObject Array
+                // Temporarily only Player
+                ArrayList<FightObject> tempObjects = new ArrayList<>();
+                tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0));
+                
+                for(Actor a : stage.getActors()) {
+                	if(a instanceof Hostile) {
+                		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id);
+                		tempObjects.add(e);
+                	}
+                }
+                
+                FightObject[] fightObjects = new FightObject[tempObjects.size()];
+                for(int i = 0; i< tempObjects.size(); i++){
+                    fightObjects[i] = tempObjects.get(i);
+                }
+
+                fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
+        	}
+        	
             if(fs.state == 3){
                 for(FightObject object : fs.objects){
                     if(object instanceof FightPlayer){
@@ -240,7 +277,6 @@ public class MapContainer {
                         
                     }
                     else{
-                        
                         for(int i = stage.getActors().size-1; i >= 0; i--){
                             if(stage.getActors().get(i) instanceof Hostile){
                                 if(((Hostile)stage.getActors().get(i)).id == object.id){

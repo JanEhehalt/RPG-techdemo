@@ -134,13 +134,21 @@ public class FightScreen {
 		batch.end();
 	}
         
-        public boolean collidingMapObject(Rectangle r){
-            for(Rectangle rect : collisionRects){
-                if(Intersector.overlaps(r, rect)){
-                    return true;
-                }
+    public boolean collidingMapObject(Rectangle r){
+        for(Rectangle rect : collisionRects){
+            if(Intersector.overlaps(r, rect)){
+                return true;
             }
-            return false;
         }
+        return false;
+    }
+    
+    public void nuke() {
+    	for(FightObject object : objects) {
+    		if(object instanceof Enemy) {
+    			object.stats.setHp(-5);
+    		}
+    	}
+    }
 	
 }
