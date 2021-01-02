@@ -1,6 +1,7 @@
 package com.trs.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -49,6 +50,8 @@ public class MapContainer {
     Door[] doors;
     public Door collidingDoor;
     
+    FightScreen fs;
+    
     TransitionScreen  t;
         
     final int[] layersBelowPlayer = {0, 1, 2};
@@ -65,6 +68,7 @@ public class MapContainer {
         
         //TRANSITION SCREEN
         t = new TransitionScreen(0.01f);
+        
         
         
         //CREATION OF TILEDMAP
@@ -154,29 +158,50 @@ public class MapContainer {
     }
         
     public void render(float f){
+        
+        if(Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
+            ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
+            for(Actor a : stage.getActors()){
+                if(a instanceof MapCollisionObject){
+                    mapRectsTemp.add(((MapCollisionObject)a).r);
+                }
+            }
+            Rectangle[] rects = new Rectangle[mapRectsTemp.size()];
+            for(int i = 0; i< mapRectsTemp.size(); i++){
+                rects[i] = mapRectsTemp.get(i);
+            }
+            fs = new FightScreen(stage.getBatch(), null, rects, getPlayer().getX()+32, getPlayer().getY()+32);
+        }
+        
         renderer.setView((OrthographicCamera)stage.getCamera());
         
         renderer.render(layersBelowPlayer);
         
-        Actor[] old = stage.getActors().toArray();
-        stage.clear();
-        for(Actor a : sort(old)){
-            stage.addActor(a);
-        }
-        for(Actor a : stage.getActors()) {
-            if(a instanceof Player) {
-                Rectangle rect = ((Player) a).collisionRect;
-                
-                for(Door d : doors) {
-                    if(Intersector.overlaps(rect, d.rect)) {
-                        collidingDoor = d;
-                        break;
-                    }
-            	}
+        if(Main.gamestate == 0) {
+        	Actor[] old = stage.getActors().toArray();
+            stage.clear();
+            for(Actor a : sort(old)){
+                stage.addActor(a);
             }
+            for(Actor a : stage.getActors()) {
+                if(a instanceof Player) {
+                    Rectangle rect = ((Player) a).collisionRect;
+                    
+                    for(Door d : doors) {
+                        if(Intersector.overlaps(rect, d.rect)) {
+                            collidingDoor = d;
+                            break;
+                        }
+                	}
+                }
+            }
+            if(fs != null){
+                fs.draw();
+            }
+            
+            stage.act(f);
+            stage.draw();
         }
-        stage.act(f);
-        stage.draw();
         
         renderer.render(layersAbovePlayer);
         
