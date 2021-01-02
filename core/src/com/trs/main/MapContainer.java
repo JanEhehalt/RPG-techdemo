@@ -175,7 +175,6 @@ public class MapContainer {
             	}
             }
         }
-        
         stage.act(f);
         stage.draw();
         
