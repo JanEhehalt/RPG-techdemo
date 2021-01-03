@@ -40,7 +40,7 @@ public class FightScreen {
                 
                 
                // SORTING OBJECTS BY INITIATIVE STAT
-                /*
+                
 		for(int j = 0; j < objects.length-1; j++){
                     for(int i = objects.length-1; i >= 0; i--){
                         if(i > 0 && objects[i].stats.getInit() > objects[i-1].stats.getInit()){
@@ -50,53 +50,23 @@ public class FightScreen {
                         }
                     }
                 }
-               */
+                objects[0].state = 1;
 	}
 	
 	public void act(float deltatime) {
+            System.out.println(getPlayer().state);
                 if(state == 0){
                     boolean finished = true;
                     for(FightObject object : objects){
-                        Vector2 POI = new Vector2((int)(Math.ceil((double)(object.x)/32.0) * 32.0) - 16, (int)(Math.ceil((double)(object.y)/32.0) * 32.0));
-                        float speed = 2.5f;
-                        
-                        if(Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y)) < 3f && Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y)) != 0) {
-                            speed = Math.abs(Vector2.dst(object.x, object.y, POI.x, POI.y));
-                        } 
-                        
-                        
-                        Vector2 movement = new Vector2(speed,0);
-                        movement.setAngleRad(StaticMath.calculateAngle(object.x, object.y, POI.x, POI.y));
-                        int facing;
-                        if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
-                                facing = 0;
+                        if(object.x % 32 != 0 || object.y % 32 != 0){
+                            object.POI = new Vector2((int)(Math.ceil((double)(object.x)/32.0) * 32.0) - 16, (int)(Math.ceil((double)(object.y)/32.0) * 32.0));
                         }
-                        else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
-                                facing = 1;
-                        }
-                        else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
-                                facing = 2;
-                        }
-                        else {
-                                facing = 3;
-                        }
-                        
-                        if(StaticMath.calculateDistance(object.x, object.y, POI.x, POI.y, movement.angleRad()) == 0) {
-                            movement.x = 0;
-                            movement.y = 0;
-                        }       
-                        
-                        object.setX(object.x + movement.x);
-                        object.setY(object.y + movement.y);
-                        
-                        int animationRow = 0;
-                        if(movement.x != 0 || movement.y != 0) {
-                                animationRow = 8;
-                        }
-                        object.sprite.setRow(animationRow + facing);
-                        
-                        if(movement.x != 0 || movement.y != 0){
+                    }
+                    gotoPOI();
+                    for(FightObject object : objects){
+                        if(object.POI != null){
                             finished = false;
+                            break;
                         }
                     }
                     if(finished){
@@ -104,31 +74,58 @@ public class FightScreen {
                     }
                 }
                 else if(state == 1){
-                    if(Gdx.input.isKeyJustPressed(Input.Keys.W)){
-                        if(getPlayer().POI == null){
-                            getPlayer().POI = new Vector2(getPlayer().x, getPlayer().y + 32);
-                            System.out.println("W");
+                    for(int i = 0; i < objects.length; i++){
+                        if(objects[i].state == 1){
+                            if(objects[i] instanceof FightPlayer){
+                                if(Gdx.input.isKeyJustPressed(Input.Keys.W)){
+                                    if(objects[i].POI == null){
+                                        objects[i].POI = new Vector2(objects[i].x, objects[i].y + 32);
+                                        System.out.println("W");
+                                    }
+                                }
+                                if(Gdx.input.isKeyJustPressed(Input.Keys.A)){
+                                    if(objects[i].POI == null){
+                                        objects[i].POI = new Vector2(objects[i].x-32, objects[i].y);
+                                        System.out.println("A");
+                                    }
+                                }
+                                if(Gdx.input.isKeyJustPressed(Input.Keys.S)){
+                                    if(objects[i].POI == null){
+                                        objects[i].POI = new Vector2(objects[i].x, objects[i].y - 32);
+                                        System.out.println("S");
+                                    }
+                                }
+                                if(Gdx.input.isKeyJustPressed(Input.Keys.D)){
+                                    if(objects[i].POI == null){
+                                        objects[i].POI = new Vector2(objects[i].x + 32, objects[i].y);
+                                        System.out.println("D");
+                                    }
+                                }
+                                if(Gdx.input.isKeyJustPressed(Input.Keys.F)){
+                                        System.out.println("F");
+                                    objects[i].state = 2;
+                                }
+                            }
+                            else if(objects[i] instanceof Enemy){
+                                ((Enemy)objects[i]).act();
+                            }
                         }
-                    }
-                    if(Gdx.input.isKeyJustPressed(Input.Keys.A)){
-                        if(getPlayer().POI == null){
-                            getPlayer().POI = new Vector2(getPlayer().x-32, getPlayer().y);
-                            System.out.println("A");
-                        }
-                    }
-                    if(Gdx.input.isKeyJustPressed(Input.Keys.S)){
-                        if(getPlayer().POI == null){
-                            getPlayer().POI = new Vector2(getPlayer().x, getPlayer().y - 32);
-                            System.out.println("S");
-                        }
-                    }
-                    if(Gdx.input.isKeyJustPressed(Input.Keys.D)){
-                        if(getPlayer().POI == null){
-                            getPlayer().POI = new Vector2(getPlayer().x + 32, getPlayer().y);
-                            System.out.println("D");
+                        else if(objects[i].state == 2){
+                            objects[i].state = 0;
+                            if(i == objects.length-1){
+                                objects[0].state = 1;
+                            }
+                            else{
+                                objects[i+1].state = 1;
+                            }
                         }
                     }
                     
+                    
+                    
+                }
+                else if(state == 2){
+                
                 }
                 gotoPOI();
 		for(FightObject object : objects) {
@@ -208,16 +205,16 @@ public class FightScreen {
                 movement.setAngleRad(StaticMath.calculateAngle(object.x, object.y, object.POI.x, object.POI.y));
                 int facing;
                 if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
-                        facing = 0;
+                    facing = 0;
                 }
                 else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
-                        facing = 1;
+                    facing = 1;
                 }
                 else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
-                        facing = 2;
+                    facing = 2;
                 }
                 else {
-                        facing = 3;
+                    facing = 3;
                 }
 
                 if((int)object.x == (int)object.POI.x && (int)object.y == (int)object.POI.y) {

@@ -9,6 +9,9 @@ public abstract class FightObject {
         protected float x;
         protected float y;
         protected Vector2 POI;
+        
+        // 0: waiting 1: doing action 2: finished action
+        protected int state = 0;
 	
 	public FightObject(float x, float y, AnimatedSprite sprite, Stats stats, int id) {
 		this.sprite = sprite;
