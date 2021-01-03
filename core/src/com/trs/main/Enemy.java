@@ -15,6 +15,9 @@ public class Enemy extends FightObject{
     public void act(FightPlayer player){
         if(POI == null && !move){
         	double distance = StaticMath.calculateDistance(x, y, player.x, player.y);
+        	System.out.println("PLayer pos " + player.x + " " + player.y);
+        	System.out.println("Meine pos " + x + " " + y);
+        	System.out.println("ich bin " + isMelee + "mit Distanz " + distance);
         	
         	if(isMelee) {
         		if(distance <= 32f) {
@@ -59,10 +62,10 @@ public class Enemy extends FightObject{
             		float deltaY = player.y - y;
             		
             		if(Math.abs(deltaX) >= Math.abs(deltaY)) {
-            			tempX += -(deltaX / Math.abs(deltaX)) * 32;
+            			tempX -= (deltaX / Math.abs(deltaX)) * 32;
             		}
             		else {
-            			tempY += -(deltaY / Math.abs(deltaY)) * 32;
+            			tempY -= (deltaY / Math.abs(deltaY)) * 32;
             		}
             		
                     POI = new Vector2(tempX, tempY);

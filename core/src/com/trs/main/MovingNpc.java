@@ -153,7 +153,7 @@ public class MovingNpc extends Actor{
 	        	facing = 3;
 	        }
 	        
-	        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y, movement.angleRad()) < 10f) {
+	        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y) < 10f) {
 	        	movementX = 0;
 	        	movementY = 0;
 	        }

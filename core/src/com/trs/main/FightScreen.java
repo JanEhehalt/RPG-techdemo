@@ -15,14 +15,14 @@ public class FightScreen {
         final int gridHeight = 12;
     
 	Batch batch;
-        ShapeRenderer renderer;
+    ShapeRenderer renderer;
 	FightObject[] objects;
 	Rectangle[] collisionRects;
         
-        FightDialogue fightDialogue;
-	
-        Vector2 gridPos;
-        
+    FightDialogue fightDialogue;
+
+    Vector2 gridPos;
+    
 	// 0: positioning all Objects on the grid 1: player turn, 2: enemy turn, 3: fight ends
 	int state = 0;
 	
@@ -30,14 +30,14 @@ public class FightScreen {
 		this.batch = batch;
 		this.objects = objects;
 		this.collisionRects = collisionRects;
-                this.renderer = new ShapeRenderer();
-                this.fightDialogue = new FightDialogue(camX, camY);
-                
-                gridPos = new Vector2();
-                
-                gridPos.x = (float)(Math.ceil((double)(camX-Main.CAMERA_WIDTH/2)/32.0) * 32.0) + 64;
-                gridPos.y = (float)(Math.ceil((double)(camY-Main.CAMERA_HEIGHT/2)/32.0) * 32.0) + 32;
-                
+        this.renderer = new ShapeRenderer();
+        this.fightDialogue = new FightDialogue(camX, camY);
+        
+        gridPos = new Vector2();
+        
+        gridPos.x = (float)(Math.ceil((double)(camX-Main.CAMERA_WIDTH/2)/32.0) * 32.0) + 64;
+        gridPos.y = (float)(Math.ceil((double)(camY-Main.CAMERA_HEIGHT/2)/32.0) * 32.0) + 32;
+        
                 
                // SORTING OBJECTS BY INITIATIVE STAT
                 

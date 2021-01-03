@@ -42,36 +42,21 @@ public class StaticMath {
         return (float) alpha;
     }
     
-    public static float calculateDistance(float xPos1, float yPos1, float xPos2, float yPos2, float angle){
-        float deltaX = xPos2 - xPos1;
-        float deltaY = yPos2 - yPos1;
-        
-        double distance;
-        
-        if(angle == 0) {
-        	distance = deltaX;
-        }
-        else {
-        	distance = Math.abs((deltaY / Math.sin(angle)));
-        }
-        
-        return (float) distance;
-    }
-    
     public static float calculateDistance(float xPos1, float yPos1, float xPos2, float yPos2){
     	float deltaX = xPos2 - xPos1;
         float deltaY = yPos2 - yPos1;
         
-        double distance;
+        float distance;
         double angle = calculateAngle(xPos1, yPos1, xPos2, yPos2);
         
-        if(angle == 0) {
+        if(angle == 0 || angle == Math.PI) {
         	distance = deltaX;
         }
         else {
-        	distance = Math.abs((deltaY / Math.sin(angle)));
+        	distance = Math.abs(deltaX / (float) Math.cos(angle));
         }
         
-        return (float) distance;
+        return (float) Math.sqrt((float) Math.pow(deltaX, 2) + (float) Math.pow(deltaY, 2));
+        //return distance;
     }
 }

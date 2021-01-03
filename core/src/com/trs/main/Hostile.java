@@ -85,7 +85,7 @@ public class Hostile extends Actor {
 		                    facing = 3;
 		            }
 		            
-		            if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y, movement.angleRad()) < 1f) {
+		            if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y) < 1f) {
 		                movement.x = 0;
 		                movement.y = 0;
 		            }       
