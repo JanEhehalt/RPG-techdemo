@@ -156,8 +156,8 @@ public class MapContainer {
    
         stage.addActor(p);
         
-        stage.addActor(new Hostile(200, 200, 0, new Stats(), "sprite.png"));
-        stage.addActor(new Hostile(265, 200, 1, new Stats(), "sprite.png"));
+        stage.addActor(new Hostile(200, 200, 0, new Stats(), "sprite.png", false));
+        stage.addActor(new Hostile(265, 200, 1, new Stats(), "sprite.png", true));
     }
         
     public void render(float f){
@@ -186,7 +186,7 @@ public class MapContainer {
                 	if(a instanceof Hostile) {
                 		if(((Hostile) a).movementState > 0) {
                 			((Hostile) a).movementState = 2;
-                			Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id);
+                			Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id, ((Hostile) a).isMelee);
                     		tempObjects.add(e);
                 		}
                 	}
@@ -254,7 +254,7 @@ public class MapContainer {
                 
                 for(Actor a : stage.getActors()) {
                 	if(a instanceof Hostile) {
-                		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id);
+                		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id, ((Hostile) a).isMelee);
                 		tempObjects.add(e);
                 	}
                 }

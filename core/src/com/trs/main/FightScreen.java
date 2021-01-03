@@ -50,7 +50,7 @@ public class FightScreen {
                         }
                     }
                 }
-                objects[0].state = 1;
+                objects[0].startAction();
 	}
 	
 	public void act(float deltatime) {
@@ -107,16 +107,21 @@ public class FightScreen {
                                 }
                             }
                             else if(objects[i] instanceof Enemy){
-                                ((Enemy)objects[i]).act();
+                            	for(FightObject player : objects) {
+                            		if(player instanceof FightPlayer) {
+                            			((Enemy)objects[i]).act((FightPlayer) player);
+                            			break;
+                            		}
+                            	}
                             }
                         }
                         else if(objects[i].state == 2){
                             objects[i].state = 0;
                             if(i == objects.length-1){
-                                objects[0].state = 1;
+                                objects[0].startAction();
                             }
                             else{
-                                objects[i+1].state = 1;
+                                objects[i+1].startAction();
                             }
                         }
                     }
@@ -186,7 +191,7 @@ public class FightScreen {
                 return (FightPlayer) object;
             }
         }
-        System.out.println("großes Problem hahgaeu9ihgbidesrufhgred");
+        System.out.println("groï¿½es Problem hahgaeu9ihgbidesrufhgred");
         return null;
     }
     

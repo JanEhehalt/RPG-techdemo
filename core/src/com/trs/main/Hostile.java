@@ -17,14 +17,16 @@ public class Hostile extends Actor {
 	Rectangle collisionRect;
 	Circle attackCircle;
 	Circle attentionCircle;
+	boolean isMelee;
 	
 	// 0: normal movement, 1: locked onto Player, 2: attacking
 	int movementState;
 	
-	public Hostile(float xPos, float yPos, int id, Stats stats, String texture) {
+	public Hostile(float xPos, float yPos, int id, Stats stats, String texture, boolean isMelee) {
 		
 		this.id = id;
 		this.stats = stats;
+		this.isMelee = isMelee;
 		
 		Texture tx = new Texture(Gdx.files.internal("textureData/sprites/" + texture));
 		sprite = new AnimatedSprite(tx, 64, 64, true);
