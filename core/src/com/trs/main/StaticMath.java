@@ -53,10 +53,15 @@ public class StaticMath {
         	distance = deltaX;
         }
         else {
-        	distance = Math.abs(deltaX / (float) Math.cos(angle));
+        	if(Math.abs(deltaX) >= Math.abs(deltaY)) {
+            	distance = Math.abs(deltaX / (float) Math.cos(angle));
+        	}
+        	else {
+            	distance = Math.abs(deltaY / (float) Math.sin(angle));
+        	}
         }
         
-        return (float) Math.sqrt((float) Math.pow(deltaX, 2) + (float) Math.pow(deltaY, 2));
-        //return distance;
+        //return (float) Math.sqrt((float) Math.pow(deltaX, 2) + (float) Math.pow(deltaY, 2));
+        return distance;
     }
 }
