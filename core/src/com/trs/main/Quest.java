@@ -20,7 +20,7 @@ public abstract class Quest {
     
     
     
-    abstract void updateQuest();
-    abstract boolean finished();
-    abstract void print();
+    abstract public void updateQuest();
+    public abstract boolean finished();
+    public abstract void print();
 }

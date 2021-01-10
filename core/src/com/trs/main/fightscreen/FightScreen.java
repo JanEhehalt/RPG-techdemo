@@ -1,4 +1,4 @@
-package com.trs.main;
+package com.trs.main.fightscreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.trs.main.Main;
+import com.trs.main.StaticMath;
 
 public class FightScreen {
 	
@@ -37,34 +39,34 @@ public class FightScreen {
         
         gridPos.x = (float)(Math.ceil((double)(camX-Main.CAMERA_WIDTH/2)/32.0) * 32.0) + 64;
         gridPos.y = (float)(Math.ceil((double)(camY-Main.CAMERA_HEIGHT/2)/32.0) * 32.0) + 32;
-        
-                
-               // SORTING OBJECTS BY INITIATIVE STAT
-                
-		for(int j = 0; j < objects.length-1; j++){
-                    for(int i = objects.length-1; i >= 0; i--){
-                        if(i > 0 && objects[i].stats.getInit() > objects[i-1].stats.getInit()){
-                            FightObject temp = objects[i-1];
-                            objects[i-1] = objects[i];
-                            objects[i] = temp;
-                        }
+
+
+        // SORTING OBJECTS BY INITIATIVE STAT
+
+        for(int j = 0; j < objects.length-1; j++){
+                for(int i = objects.length-1; i >= 0; i--){
+                    if(i > 0 && objects[i].getStats().getInit() > objects[i-1].getStats().getInit()){
+                        FightObject temp = objects[i-1];
+                        objects[i-1] = objects[i];
+                        objects[i] = temp;
                     }
                 }
-                objects[0].startAction();
+            }
+            objects[0].startAction();
 	}
 	
 	public void act(float deltatime) {
-            System.out.println(getPlayer().state);
+            System.out.println(getPlayer().getState());
                 if(state == 0){
                     boolean finished = true;
                     for(FightObject object : objects){
-                        if(object.x % 32 != 0 || object.y % 32 != 0){
-                            object.POI = new Vector2((int)(Math.ceil((double)(object.x)/32.0) * 32.0) - 16, (int)(Math.ceil((double)(object.y)/32.0) * 32.0));
+                        if(object.getX() % 32 != 0 || object.getY() % 32 != 0){
+                            object.setPOI(getNearestGridTile(object.getX(), object.getY()));
                         }
                     }
                     gotoPOI();
                     for(FightObject object : objects){
-                        if(object.POI != null){
+                        if(object.getPOI() != null){
                             finished = false;
                             break;
                         }
@@ -75,35 +77,35 @@ public class FightScreen {
                 }
                 else if(state == 1){
                     for(int i = 0; i < objects.length; i++){
-                        if(objects[i].state == 1){
+                        if(objects[i].getState() == 1){
                             if(objects[i] instanceof FightPlayer){
                                 if(Gdx.input.isKeyJustPressed(Input.Keys.W)){
-                                    if(objects[i].POI == null){
-                                        objects[i].POI = new Vector2(objects[i].x, objects[i].y + 32);
+                                    if(objects[i].getPOI() == null){
+                                        objects[i].setPOI(new Vector2(objects[i].getX(), objects[i].getY() + 32));
                                         System.out.println("W");
                                     }
                                 }
                                 if(Gdx.input.isKeyJustPressed(Input.Keys.A)){
-                                    if(objects[i].POI == null){
-                                        objects[i].POI = new Vector2(objects[i].x-32, objects[i].y);
+                                    if(objects[i].getPOI() == null){
+                                        objects[i].setPOI(new Vector2(objects[i].getX() - 32, objects[i].getY()));
                                         System.out.println("A");
                                     }
                                 }
                                 if(Gdx.input.isKeyJustPressed(Input.Keys.S)){
-                                    if(objects[i].POI == null){
-                                        objects[i].POI = new Vector2(objects[i].x, objects[i].y - 32);
+                                    if(objects[i].getPOI() == null){
+                                        objects[i].setPOI(new Vector2(objects[i].getX(), objects[i].getY() - 32));
                                         System.out.println("S");
                                     }
                                 }
                                 if(Gdx.input.isKeyJustPressed(Input.Keys.D)){
-                                    if(objects[i].POI == null){
-                                        objects[i].POI = new Vector2(objects[i].x + 32, objects[i].y);
+                                    if(objects[i].getPOI() == null){
+                                        objects[i].setPOI(new Vector2(objects[i].getX() + 32, objects[i].getY()));
                                         System.out.println("D");
                                     }
                                 }
                                 if(Gdx.input.isKeyJustPressed(Input.Keys.F)){
                                         System.out.println("F");
-                                    objects[i].state = 2;
+                                        objects[i].setState(2);
                                 }
                             }
                             else if(objects[i] instanceof Enemy){
@@ -115,8 +117,8 @@ public class FightScreen {
                             	}
                             }
                         }
-                        else if(objects[i].state == 2){
-                            objects[i].state = 0;
+                        else if(objects[i].getState() == 2){
+                            objects[i].setState(0);
                             if(i == objects.length-1){
                                 objects[0].startAction();
                             }
@@ -134,7 +136,7 @@ public class FightScreen {
                 }
                 gotoPOI();
 		for(FightObject object : objects) {
-			object.sprite.updateAnimation(deltatime);
+			object.getSprite().updateAnimation(deltatime);
 		}
 	}
 	
@@ -162,7 +164,7 @@ public class FightScreen {
 		batch.begin();
                 
 		for(FightObject object : objects) {
-                    object.sprite.draw(batch);
+                    object.getSprite().draw(batch);
 		}
 		
 		batch.end();
@@ -180,7 +182,7 @@ public class FightScreen {
     public void nuke() {
     	for(FightObject object : objects) {
     		if(object instanceof Enemy) {
-    			object.stats.setHp(-5);
+    			object.getStats().setHp(-5);
     		}
     	}
     }
@@ -195,19 +197,32 @@ public class FightScreen {
         return null;
     }
     
+    public void setState(int state){
+        this.state = state;
+    }
+    public int getState(){
+        return state;
+    }
+    
+    public FightObject[] getObjects(){
+        return objects;
+    }
+    
+    
+    
     public void gotoPOI(){
         for(FightObject object : objects){
-            if(object.POI != null){
+            if(object.getPOI() != null){
                 //object.POI = new Vector2((int)(Math.ceil((double)(object.x)/32.0) * 32.0) - 16, (int)(Math.ceil((double)(object.y)/32.0) * 32.0));
                 float speed = 3f;
 
-                if(StaticMath.calculateDistance(object.x, object.y, object.POI.x, object.POI.y) < 3f && StaticMath.calculateDistance(object.x, object.y, object.POI.x, object.POI.y) != 0) {
-                    speed = Math.abs(Vector2.dst(object.x, object.y, object.POI.x, object.POI.y));
+                if(StaticMath.calculateDistance(object.getX(), object.getY(), object.getPOI().x, object.getPOI().y) < 3f && StaticMath.calculateDistance(object.getX(), object.getY(), object.getPOI().x, object.getPOI().y) != 0) {
+                    speed = Math.abs(Vector2.dst(object.getX(), object.getY(), object.getPOI().x, object.getPOI().y));
                 } 
 
 
                 Vector2 movement = new Vector2(speed,0);
-                movement.setAngleRad(StaticMath.calculateAngle(object.x, object.y, object.POI.x, object.POI.y));
+                movement.setAngleRad(StaticMath.calculateAngle(object.getX(), object.getY(), object.getPOI().x, object.getPOI().y));
                 int facing;
                 if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
                     facing = 0;
@@ -222,24 +237,82 @@ public class FightScreen {
                     facing = 3;
                 }
 
-                if((int)object.x == (int)object.POI.x && (int)object.y == (int)object.POI.y) {
+                if((int)object.getX() == (int)object.getPOI().x && (int)object.getY() == (int)object.getPOI().y) {
                     movement.x = 0;
                     movement.y = 0;
                 }       
 
-                object.setX(object.x + movement.x);
-                object.setY(object.y + movement.y);
+                object.setX(object.getX() + movement.x);
+                object.setY(object.getY() + movement.y);
 
                 int animationRow = 0;
                 if(movement.x != 0 || movement.y != 0) {
                         animationRow = 8;
                 }
                 else{
-                    object.POI = null;
+                    object.setPOI(null);
                 }
-                object.sprite.setRow(animationRow + facing);
+                object.getSprite().setRow(animationRow + facing);
             }
         }
     }
-	
+    
+    public Vector2 getNearestGridTile(float x, float y){
+        
+        //o o o
+        //o + o
+        //x o o
+        if(x <= gridPos.x && y <= gridPos.y){
+            return new Vector2(gridPos.x -16, gridPos.y);
+        }
+        //o o o
+        //x + o
+        //o o o
+        else if(x < gridPos.x && y > gridPos.y && y < gridPos.y + gridHeight*32){
+            return new Vector2(gridPos.x -16, (int) (Math.ceil((double) (y) / 32.0) * 32.0));
+        }
+        //x o o
+        //o + o
+        //o o o
+        else if(x <= gridPos.x && y >= gridPos.y + gridHeight*32){
+            return new Vector2(gridPos.x -16, gridPos.y + gridHeight*32);
+        }
+        //o x o
+        //o + o
+        //o o o
+        else if(x > gridPos.x && x < gridPos.x + gridWidth*32 && y > gridPos.y + gridHeight*32){
+            return new Vector2((int) (Math.ceil((double) (x) / 32.0) * 32.0) -16, gridPos.y + gridHeight*32);
+        }
+        //o o x
+        //o + o
+        //o o o
+        else if(x >= gridPos.x + gridWidth*32 && y >= gridPos.y + gridHeight*32){
+            return new Vector2(gridPos.x + gridWidth*32 -16, gridPos.y + gridHeight*32);
+        }
+        //o o o
+        //o + x
+        //o o o
+        else if(x > gridPos.x + gridWidth*32 && y < gridPos.y + gridHeight*32 && y > gridPos.y){
+            return new Vector2(gridPos.x + (gridWidth-1)*32 -16, (int) (Math.ceil((double) (y) / 32.0) * 32.0));
+        }
+        //o o o
+        //o + o
+        //o o x
+        else if(x >= gridPos.x + gridWidth*32 && y <= gridPos.y){
+            return new Vector2(gridPos.x + gridWidth*32 -16, gridPos.y);
+        }
+        //o o o
+        //o + o
+        //o x o
+        else if(x > gridPos.x && x < gridPos.x + gridWidth*32 && y < gridPos.y){
+            return new Vector2((int) (Math.ceil((double) (x) / 32.0) * 32.0) -16, gridPos.y);
+        }
+        //o o o
+        //o x o
+        //o o o
+        else{
+            return new Vector2((int) (Math.ceil((double) (x) / 32.0) * 32.0) - 16, (int) (Math.ceil((double) (y) / 32.0) * 32.0));
+        }
+    }
+       
 }

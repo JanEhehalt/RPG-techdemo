@@ -1,4 +1,7 @@
-package com.trs.main;
+package com.trs.main.fightscreen;
+
+import com.trs.main.worldobjects.AnimatedSprite;
+import com.trs.main.Stats;
 
 public class FightPlayer extends FightObject{
 	

@@ -1,6 +1,6 @@
 package com.trs.main;
 
 public class Dialogue {
-	String question;
-	String[] ans;
+    public String question;
+    public String[] ans;
 }

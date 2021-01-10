@@ -5,6 +5,7 @@
  */
 package com.trs.main;
 
+import com.trs.main.worldobjects.MovingNpc;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
@@ -26,7 +27,7 @@ public class InformationQuest extends Quest{
     
     boolean rightOrderRequired;
     
-    InformationQuest(int questId, String questText, int[] informationNpcId, int[] informationNpcMapId, boolean rightOrderRequired){
+    public InformationQuest(int questId, String questText, int[] informationNpcId, int[] informationNpcMapId, boolean rightOrderRequired){
         
         this.questId = questId;
         
@@ -43,7 +44,7 @@ public class InformationQuest extends Quest{
         
     }
     
-    void talk(MovingNpc a){
+    public void talk(MovingNpc a){
         for(int i = 0; i < talked.length; i++){
             if(informationNpcId[i] == a.id && informationNpcMapId[i] == a.mapId){
                 talked[i] = true;
@@ -53,7 +54,7 @@ public class InformationQuest extends Quest{
     }
     
     
-    boolean hasSpecialDialogue(int NpcId, int mapId){
+    public boolean hasSpecialDialogue(int NpcId, int mapId){
         if(!finished){
             if(!rightOrderRequired){
                 for(int i = 0; i < talked.length; i++){
@@ -79,12 +80,12 @@ public class InformationQuest extends Quest{
         else return false;
     }
             
-    String getDialoguePath(int NpcId, int mapId){
+    public String getDialoguePath(int NpcId, int mapId){
         return "quests/informationQuests/"+questId+"/dialogues/map"+mapId+"/npc"+NpcId+"/dialogue.txt";
     }
     
     @Override
-    void updateQuest() {
+    public void updateQuest() {
         if(!finished){
             finished = true;
             for(int i = 0; i < talked.length; i++){
@@ -106,7 +107,7 @@ public class InformationQuest extends Quest{
     }
     
     @Override
-    boolean finished() {
+    public boolean finished() {
         return finished;
     }
 

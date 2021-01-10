@@ -8,7 +8,7 @@ package com.trs.main.view.screens;
 import com.badlogic.gdx.Game;
 import com.trs.main.Main;
 import com.trs.main.MapContainer;
-import com.trs.main.Player;
+import com.trs.main.worldobjects.Player;
 
 /**
  *

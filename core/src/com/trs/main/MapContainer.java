@@ -1,5 +1,14 @@
 package com.trs.main;
 
+import com.trs.main.worldobjects.MapCollisionObject;
+import com.trs.main.worldobjects.Player;
+import com.trs.main.worldobjects.Hostile;
+import com.trs.main.worldobjects.InteractionObject;
+import com.trs.main.worldobjects.MovingNpc;
+import com.trs.main.fightscreen.Enemy;
+import com.trs.main.fightscreen.FightPlayer;
+import com.trs.main.fightscreen.FightObject;
+import com.trs.main.fightscreen.FightScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import java.util.ArrayList;
@@ -151,8 +160,8 @@ public class MapContainer {
     		}
     	}
     	
-    	p.movementX = 0;
-    	p.movementY = 0;
+    	p.setMovementX(0);
+    	p.setMovementY(0);
    
         stage.addActor(p);
         
@@ -169,7 +178,7 @@ public class MapContainer {
                 ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
                 for(Actor a : stage.getActors()){
                     if(a instanceof MapCollisionObject){
-                        mapRectsTemp.add(((MapCollisionObject)a).r);
+                        mapRectsTemp.add(((MapCollisionObject)a).getR());
                     }
                 }
                 Rectangle[] rects = new Rectangle[mapRectsTemp.size()];
@@ -180,13 +189,13 @@ public class MapContainer {
                 // CREATING FightObject Array
                 // Temporarily only Player
                 ArrayList<FightObject> tempObjects = new ArrayList<>();
-                tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0));
+                tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(), getPlayer().getPlayerSprite(), getPlayer().getStats(), 0));
                 
                 for(Actor a : stage.getActors()) {
                 	if(a instanceof Hostile) {
-                		if(((Hostile) a).movementState > 0) {
-                			((Hostile) a).movementState = 2;
-                			Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id, ((Hostile) a).isMelee);
+                		if(((Hostile) a).getMovementState() > 0) {
+                			((Hostile) a).setMovementState(2);
+                			Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).getSprite(), ((Hostile) a).getStats(), ((Hostile) a).getId(), ((Hostile) a).isIsMelee());
                     		tempObjects.add(e);
                 		}
                 	}
@@ -202,7 +211,7 @@ public class MapContainer {
             else if(Main.gamestate == 2){
                 Main.gamestate = 0;
                 fs.nuke();
-                fs.state = 3;
+                fs.setState(3);
             }
         }
         
@@ -218,7 +227,7 @@ public class MapContainer {
             }
             for(Actor a : stage.getActors()) {
                 if(a instanceof Player) {
-                    Rectangle rect = ((Player) a).collisionRect;
+                    Rectangle rect = ((Player) a).getCollisionRect();
                     
                     for(Door d : doors) {
                         if(Intersector.overlaps(rect, d.rect)) {
@@ -239,7 +248,7 @@ public class MapContainer {
                 ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
                 for(Actor a : stage.getActors()){
                     if(a instanceof MapCollisionObject){
-                        mapRectsTemp.add(((MapCollisionObject)a).r);
+                        mapRectsTemp.add(((MapCollisionObject)a).getR());
                     }
                 }
                 Rectangle[] rects = new Rectangle[mapRectsTemp.size()];
@@ -250,11 +259,11 @@ public class MapContainer {
                 // CREATING FightObject Array
                 // Temporarily only Player
                 ArrayList<FightObject> tempObjects = new ArrayList<>();
-                tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(),getPlayer().playerSprite, getPlayer().stats, 0));
+                tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(), getPlayer().getPlayerSprite(), getPlayer().getStats(), 0));
                 
                 for(Actor a : stage.getActors()) {
                 	if(a instanceof Hostile) {
-                		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).sprite, ((Hostile) a).stats, ((Hostile) a).id, ((Hostile) a).isMelee);
+                		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).getSprite(), ((Hostile) a).getStats(), ((Hostile) a).getId(), ((Hostile) a).isIsMelee());
                 		tempObjects.add(e);
                 	}
                 }
@@ -267,25 +276,25 @@ public class MapContainer {
                 fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
         	}
         	
-            if(fs.state == 3){
-                for(FightObject object : fs.objects){
+            if(fs.getState() == 3){
+                for(FightObject object : fs.getObjects()){
                     if(object instanceof FightPlayer){
                         
-                        getPlayer().setX(object.x);
-                        getPlayer().setY(object.y);
-                        getPlayer().stats = object.stats;
+                        getPlayer().setX(object.getX());
+                        getPlayer().setY(object.getY());
+                        getPlayer().setStats(object.getStats());
                         
                     }
                     else{
                         for(int i = stage.getActors().size-1; i >= 0; i--){
                             if(stage.getActors().get(i) instanceof Hostile){
-                                if(((Hostile)stage.getActors().get(i)).id == object.id){
-                                    if(object.stats.getHp() <= 0){
+                                if(((Hostile)stage.getActors().get(i)).getId() == object.getId()){
+                                    if(object.getStats().getHp() <= 0){
                                         stage.getActors().removeIndex(i);
                                     }
                                     else{
-                                        stage.getActors().get(i).setPosition(object.x, object.y);
-                                        ((Hostile)stage.getActors().get(i)).stats = object.stats;
+                                        stage.getActors().get(i).setPosition(object.getX(), object.getY());
+                                        ((Hostile)stage.getActors().get(i)).setStats(object.getStats());
                                     }
                                 }
                             }

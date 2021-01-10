@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trs.main;
+package com.trs.main.worldobjects;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class MapCollisionObject extends Actor{
     
-    Rectangle r;
+    private Rectangle r;
     
     public MapCollisionObject(int x, int y, int width, int height){
         setName("mapobject");
@@ -32,5 +32,21 @@ public class MapCollisionObject extends Actor{
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
     }
+
+    /**
+     * @return the r
+     */
+    public Rectangle getR() {
+        return r;
+    }
+
+    /**
+     * @param r the r to set
+     */
+    public void setR(Rectangle r) {
+        this.r = r;
+    }
+    
+    
     
 }

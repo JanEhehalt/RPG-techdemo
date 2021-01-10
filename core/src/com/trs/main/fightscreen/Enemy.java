@@ -1,6 +1,9 @@
-package com.trs.main;
+package com.trs.main.fightscreen;
 
 import com.badlogic.gdx.math.Vector2;
+import com.trs.main.worldobjects.AnimatedSprite;
+import com.trs.main.StaticMath;
+import com.trs.main.Stats;
 
 public class Enemy extends FightObject{
 	
@@ -13,26 +16,26 @@ public class Enemy extends FightObject{
     }
     
     public void act(FightPlayer player){
-        if(POI == null && !move){
-        	double distance = StaticMath.calculateDistance(x, y, player.x, player.y);
-        	System.out.println("PLayer pos " + player.x + " " + player.y);
-        	System.out.println("Meine pos " + x + " " + y);
+        if(getPOI() == null && !move){
+        	double distance = StaticMath.calculateDistance(getX(), getY(), player.getX(), player.getY());
+        	System.out.println("PLayer pos " + player.getX() + " " + player.getY());
+        	System.out.println("Meine pos " + getX() + " " + getY());
         	System.out.println("ich bin " + isMelee + "mit Distanz " + distance);
         	
         	if(isMelee) {
         		if(distance <= 32f) {
             		System.out.println("Jetzt stirbst du *kawumm*");
             		attack(player);
-            		moves--;
-            		state = 2;
+            		    setMoves(getMoves() - 1);
+            		    setState(2);
             	}
             	else {
             		
-            		float tempX = x;
-            		float tempY = y;
+            		float tempX = getX();
+            		float tempY = getY();
             		
-            		float deltaX = player.x - x;
-            		float deltaY = player.y - y;
+            		float deltaX = player.getX() - getX();
+            		float deltaY = player.getY() - getY();
             		
             		if(Math.abs(deltaX) >= Math.abs(deltaY)) {
             			tempX += (deltaX / Math.abs(deltaX)) * 32;
@@ -41,8 +44,8 @@ public class Enemy extends FightObject{
             			tempY += (deltaY / Math.abs(deltaY)) * 32;
             		}
             		
-                    POI = new Vector2(tempX, tempY);
-                    moves--;
+                            setPOI(new Vector2(tempX, tempY));
+                            setMoves(getMoves() - 1);
                     move = true;
             	}
         	}
@@ -50,16 +53,16 @@ public class Enemy extends FightObject{
         		if(distance >= 96f && distance <= 150f) {
             		System.out.println("Wilhelm Tell is ein Scheiß gegen mich *surr*");
             		attack(player);
-            		moves--;
-            		state = 2;
+            		    setMoves(getMoves() - 1);
+            		    setState(2);
             	}
             	else if(distance < 96f){
             		
-            		float tempX = x;
-            		float tempY = y;
+            		float tempX = getX();
+            		float tempY = getY();
             		
-            		float deltaX = player.x - x;
-            		float deltaY = player.y - y;
+            		float deltaX = player.getX() - getX();
+            		float deltaY = player.getY() - getY();
             		
             		if(Math.abs(deltaX) >= Math.abs(deltaY)) {
             			tempX -= (deltaX / Math.abs(deltaX)) * 32;
@@ -68,16 +71,16 @@ public class Enemy extends FightObject{
             			tempY -= (deltaY / Math.abs(deltaY)) * 32;
             		}
             		
-                    POI = new Vector2(tempX, tempY);
-                    moves--;
+                            setPOI(new Vector2(tempX, tempY));
+                            setMoves(getMoves() - 1);
                     move = true;
             	}
             	else {
-            		float tempX = x;
-            		float tempY = y;
+            		float tempX = getX();
+            		float tempY = getY();
             		
-            		float deltaX = player.x - x;
-            		float deltaY = player.y - y;
+            		float deltaX = player.getX() - getX();
+            		float deltaY = player.getY() - getY();
             		
             		if(Math.abs(deltaX) >= Math.abs(deltaY)) {
             			tempX += (deltaX / Math.abs(deltaX)) * 32;
@@ -86,14 +89,14 @@ public class Enemy extends FightObject{
             			tempY += (deltaY / Math.abs(deltaY)) * 32;
             		}
             		
-                    POI = new Vector2(tempX, tempY);
-                    moves--;
+                            setPOI(new Vector2(tempX, tempY));
+                            setMoves(getMoves() - 1);
                     move = true;
             	}
         	}
         }
-        else if(move && POI == null){
-            state = 2;
+        else if(move && getPOI() == null){
+            setState(2);
             move = false;
         }
     }

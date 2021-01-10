@@ -1,4 +1,4 @@
-package com.trs.main;
+package com.trs.main.worldobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.trs.main.Dialogue;
+import com.trs.main.DialogueParser;
+import com.trs.main.Main;
+import com.trs.main.Textbox;
 
 public class InteractionObject extends Actor{
     Textbox t;
