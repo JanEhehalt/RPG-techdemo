@@ -59,8 +59,8 @@ public class Player extends Actor{
         //TEST QUESTS
         int[] n = {1, 1};        
         int[] m = {1, 0};
-        quests.add(new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true));
-        quests.add(new InformationQuest(1, "jajajaj nicenicenice", m, n, false));
+        quests.add(new InformationQuest(0, "Sprich mit Folgenden NPCs: (Id, mapId, schonGereded?) !Reihenfolge wichtig!", m, n, true, "gute Quest"));
+        quests.add(new InformationQuest(1, "jajajaj nicenicenice", m, n, false, "jojo"));
     }
 
     @Override

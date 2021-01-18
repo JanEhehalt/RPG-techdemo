@@ -51,20 +51,20 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MapContainer {
         
-    Stage stage;
-    OrthographicCamera camera;
-    TmxMapLoader maploader;
-    TiledMap map;
-    OrthogonalTiledMapRenderer renderer;
-    Door[] doors;
-    public Door collidingDoor;
+    private Stage stage;
+    private OrthographicCamera camera;
+    private TmxMapLoader maploader;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+    private Door[] doors;
+    private Door collidingDoor;
     
-    FightScreen fs;
+    private FightScreen fs;
     
-    TransitionScreen  t;
+    private TransitionScreen  t;
         
-    final int[] layersBelowPlayer = {0, 1, 2};
-    final int[] layersAbovePlayer = {3, 4};
+    private int[] layersBelowPlayer = {0, 1, 2};
+    private int[] layersAbovePlayer = {3, 4};
 	
         // TODO: Value which shows from which door the player is coming?
     public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor, int mapId) {
@@ -72,7 +72,7 @@ public class MapContainer {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT);
         camera.update();
-        stage = new Stage(new FitViewport(CAMERA_WIDTH, CAMERA_HEIGHT, camera));
+        stage = new Stage(new FitViewport(CAMERA_WIDTH, CAMERA_HEIGHT, getCamera()));
         Gdx.input.setInputProcessor(stage);
         
         //TRANSITION SCREEN
@@ -83,7 +83,7 @@ public class MapContainer {
         //CREATION OF TILEDMAP
         maploader = new TmxMapLoader();
         map = maploader.load(mapString);
-        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(getMap());
         renderer.setView((OrthographicCamera)stage.getCamera());
         stage.getCamera().update();
         
@@ -176,7 +176,7 @@ public class MapContainer {
 
                 // CREATING MAP COLLISION OBJECTS
                 ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
-                for(Actor a : stage.getActors()){
+                for(Actor a : getStage().getActors()){
                     if(a instanceof MapCollisionObject){
                         mapRectsTemp.add(((MapCollisionObject)a).getR());
                     }
@@ -191,7 +191,7 @@ public class MapContainer {
                 ArrayList<FightObject> tempObjects = new ArrayList<>();
                 tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(), getPlayer().getPlayerSprite(), getPlayer().getStats(), 0));
                 
-                for(Actor a : stage.getActors()) {
+                for(Actor a : getStage().getActors()) {
                 	if(a instanceof Hostile) {
                 		if(((Hostile) a).getMovementState() > 0) {
                 			((Hostile) a).setMovementState(2);
@@ -206,47 +206,47 @@ public class MapContainer {
                     fightObjects[i] = tempObjects.get(i);
                 }
 
-                fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
+                setFs(new FightScreen(getStage().getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32));
             }
             else if(Main.gamestate == 2){
                 Main.gamestate = 0;
-                fs.nuke();
-                fs.setState(3);
+                getFs().nuke();
+                getFs().setState(3);
             }
         }
         
-        renderer.setView((OrthographicCamera)stage.getCamera());
+        getRenderer().setView((OrthographicCamera)getStage().getCamera());
         
-        renderer.render(layersBelowPlayer);
+        getRenderer().render(getLayersBelowPlayer());
         
         if(Main.gamestate == 0 || Main.gamestate == 1) {
-            Actor[] old = stage.getActors().toArray();
-            stage.clear();
+            Actor[] old = getStage().getActors().toArray();
+            getStage().clear();
             for(Actor a : sort(old)){
-                stage.addActor(a);
+                getStage().addActor(a);
             }
-            for(Actor a : stage.getActors()) {
+            for(Actor a : getStage().getActors()) {
                 if(a instanceof Player) {
                     Rectangle rect = ((Player) a).getCollisionRect();
                     
-                    for(Door d : doors) {
+                    for(Door d : getDoors()) {
                         if(Intersector.overlaps(rect, d.rect)) {
-                            collidingDoor = d;
+                            setCollidingDoor(d);
                             break;
                         }
                 	}
                 }
             }
             
-            stage.act(f);
-            stage.draw();
+            getStage().act(f);
+            getStage().draw();
         }
         
         if(Main.gamestate == 2){
-        	if(fs == null) {
+        	if(getFs() == null) {
         		// CREATING MAP COLLISION OBJECTS
                 ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
-                for(Actor a : stage.getActors()){
+                for(Actor a : getStage().getActors()){
                     if(a instanceof MapCollisionObject){
                         mapRectsTemp.add(((MapCollisionObject)a).getR());
                     }
@@ -261,7 +261,7 @@ public class MapContainer {
                 ArrayList<FightObject> tempObjects = new ArrayList<>();
                 tempObjects.add(new FightPlayer(getPlayer().getX(),getPlayer().getY(), getPlayer().getPlayerSprite(), getPlayer().getStats(), 0));
                 
-                for(Actor a : stage.getActors()) {
+                for(Actor a : getStage().getActors()) {
                 	if(a instanceof Hostile) {
                 		Enemy e = new Enemy(a.getX(), a.getY(), ((Hostile) a).getSprite(), ((Hostile) a).getStats(), ((Hostile) a).getId(), ((Hostile) a).isIsMelee());
                 		tempObjects.add(e);
@@ -273,11 +273,11 @@ public class MapContainer {
                     fightObjects[i] = tempObjects.get(i);
                 }
 
-                fs = new FightScreen(stage.getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32);
+                setFs(new FightScreen(getStage().getBatch(), fightObjects, rects, getPlayer().getX()+32, getPlayer().getY()+32));
         	}
         	
-            if(fs.getState() == 3){
-                for(FightObject object : fs.getObjects()){
+            if(getFs().getState() == 3){
+                for(FightObject object : getFs().getObjects()){
                     if(object instanceof FightPlayer){
                         
                         getPlayer().setX(object.getX());
@@ -286,15 +286,15 @@ public class MapContainer {
                         
                     }
                     else{
-                        for(int i = stage.getActors().size-1; i >= 0; i--){
-                            if(stage.getActors().get(i) instanceof Hostile){
-                                if(((Hostile)stage.getActors().get(i)).getId() == object.getId()){
+                        for(int i = getStage().getActors().size-1; i >= 0; i--){
+                            if(getStage().getActors().get(i) instanceof Hostile){
+                                if(((Hostile)getStage().getActors().get(i)).getId() == object.getId()){
                                     if(object.getStats().getHp() <= 0){
-                                        stage.getActors().removeIndex(i);
+                                        getStage().getActors().removeIndex(i);
                                     }
                                     else{
-                                        stage.getActors().get(i).setPosition(object.getX(), object.getY());
-                                        ((Hostile)stage.getActors().get(i)).setStats(object.getStats());
+                                        getStage().getActors().get(i).setPosition(object.getX(), object.getY());
+                                        ((Hostile)getStage().getActors().get(i)).setStats(object.getStats());
                                     }
                                 }
                             }
@@ -303,28 +303,28 @@ public class MapContainer {
                     }
                 }
                 
-                fs = null;
+                setFs(null);
                 Main.gamestate = 0;
             }
             else{
-                fs.act(f);
-                fs.draw();
+                getFs().act(f);
+                getFs().draw();
             }
         }
         
-        renderer.render(layersAbovePlayer);
+        getRenderer().render(getLayersAbovePlayer());
         
-        for(Actor a : stage.getActors()){
+        for(Actor a : getStage().getActors()){
             if(a instanceof Textbox){
-                stage.getBatch().begin();
-                a.draw(stage.getBatch(), f);
-                stage.getBatch().end();
+                getStage().getBatch().begin();
+                a.draw(getStage().getBatch(), f);
+                getStage().getBatch().end();
             }
         }
         
         if(Main.gamestate == 1) {
             Textbox t = null;
-            for(Actor a : stage.getActors()){
+            for(Actor a : getStage().getActors()){
                 if(a instanceof Textbox){
                     t = (Textbox)a;
                     if(t.getState() == 3){
@@ -337,27 +337,27 @@ public class MapContainer {
         }
         
         // center camera
-        for(Actor a : stage.getActors()){
+        for(Actor a : getStage().getActors()){
             if(a instanceof Player){
-                stage.getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
-                stage.getCamera().update();
+                getStage().getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
+                getStage().getCamera().update();
                 break;
             }
         }
-        if(t != null){
-            t.draw(stage.getBatch(), stage.getCamera().position.x, stage.getCamera().position.y, stage.getCamera().combined);
-            if(t.opacity == 0){
-                t = null;
+        if(getT() != null){
+            getT().draw(getStage().getBatch(), getStage().getCamera().position.x, getStage().getCamera().position.y, getStage().getCamera().combined);
+            if(getT().opacity == 0){
+                setT(null);
             }
         }
     }
     
     public void resize(int width, int height){
-        stage.getViewport().update(width, height, false);
+        getStage().getViewport().update(width, height, false);
     }
     
     public Player getPlayer(){
-        for(Actor a : stage.getActors()){
+        for(Actor a : getStage().getActors()){
             if(a instanceof Player){
                 return (Player)a;
             }
@@ -380,6 +380,162 @@ public class MapContainer {
         
         return unsorted;
     }
+
+    /**
+     * @return the stage
+     */
+    public Stage getStage() {
+        return stage;
+    }
+
+    /**
+     * @param stage the stage to set
+     */
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    /**
+     * @return the camera
+     */
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    /**
+     * @param camera the camera to set
+     */
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    /**
+     * @return the maploader
+     */
+    public TmxMapLoader getMaploader() {
+        return maploader;
+    }
+
+    /**
+     * @param maploader the maploader to set
+     */
+    public void setMaploader(TmxMapLoader maploader) {
+        this.maploader = maploader;
+    }
+
+    /**
+     * @return the map
+     */
+    public TiledMap getMap() {
+        return map;
+    }
+
+    /**
+     * @param map the map to set
+     */
+    public void setMap(TiledMap map) {
+        this.map = map;
+    }
+
+    /**
+     * @return the renderer
+     */
+    public OrthogonalTiledMapRenderer getRenderer() {
+        return renderer;
+    }
+
+    /**
+     * @param renderer the renderer to set
+     */
+    public void setRenderer(OrthogonalTiledMapRenderer renderer) {
+        this.renderer = renderer;
+    }
+
+    /**
+     * @return the doors
+     */
+    public Door[] getDoors() {
+        return doors;
+    }
+
+    /**
+     * @param doors the doors to set
+     */
+    public void setDoors(Door[] doors) {
+        this.doors = doors;
+    }
+
+    /**
+     * @return the collidingDoor
+     */
+    public Door getCollidingDoor() {
+        return collidingDoor;
+    }
+
+    /**
+     * @param collidingDoor the collidingDoor to set
+     */
+    public void setCollidingDoor(Door collidingDoor) {
+        this.collidingDoor = collidingDoor;
+    }
+
+    /**
+     * @return the fs
+     */
+    public FightScreen getFs() {
+        return fs;
+    }
+
+    /**
+     * @param fs the fs to set
+     */
+    public void setFs(FightScreen fs) {
+        this.fs = fs;
+    }
+
+    /**
+     * @return the t
+     */
+    public TransitionScreen getT() {
+        return t;
+    }
+
+    /**
+     * @param t the t to set
+     */
+    public void setT(TransitionScreen t) {
+        this.t = t;
+    }
+
+    /**
+     * @return the layersBelowPlayer
+     */
+    public int[] getLayersBelowPlayer() {
+        return layersBelowPlayer;
+    }
+
+    /**
+     * @param layersBelowPlayer the layersBelowPlayer to set
+     */
+    public void setLayersBelowPlayer(int[] layersBelowPlayer) {
+        this.layersBelowPlayer = layersBelowPlayer;
+    }
+
+    /**
+     * @return the layersAbovePlayer
+     */
+    public int[] getLayersAbovePlayer() {
+        return layersAbovePlayer;
+    }
+
+    /**
+     * @param layersAbovePlayer the layersAbovePlayer to set
+     */
+    public void setLayersAbovePlayer(int[] layersAbovePlayer) {
+        this.layersAbovePlayer = layersAbovePlayer;
+    }
+    
+    
 	
     
 }
