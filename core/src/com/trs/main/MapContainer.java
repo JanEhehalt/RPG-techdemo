@@ -336,14 +336,6 @@ public class MapContainer {
             }
         }
         
-        // center camera
-        for(Actor a : getStage().getActors()){
-            if(a instanceof Player){
-                getStage().getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
-                getStage().getCamera().update();
-                break;
-            }
-        }
         if(getT() != null){
             getT().draw(getStage().getBatch(), getStage().getCamera().position.x, getStage().getCamera().position.y, getStage().getCamera().combined);
             if(getT().opacity == 0){

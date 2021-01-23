@@ -12,12 +12,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.sun.tools.javac.util.Abort;
 
 /**
  *
  * @author janeh
  */
 public class UIDrawer {
+    
     
     static Sprite box32 = new Sprite(new Texture(Gdx.files.internal("textureData/UI/box.png")));
     static Texture questbook = new Texture(Gdx.files.internal("textureData/UI/questbook.png"));
@@ -27,8 +29,7 @@ public class UIDrawer {
         font.setColor(Color.WHITE);
         switch(size){
             case 16:
-                font.draw(batch, ""+character, x + 16 - getTextWidth(font, character)/2, y + 16 - getTextHeight(font, character)/2);
-                break;
+                throw new OutOfMemoryError("nice");
             case 32:
                 box32.setPosition(x, y);
                 box32.draw(batch);
@@ -36,6 +37,8 @@ public class UIDrawer {
                 font.draw(batch, ""+character, x + 16 - getTextWidth(font, character)/2, y + 16 + (getTextHeight(font, character)/2) - 2);
                 font.getData().setScale(1);
                 break;
+            default:
+                throw new OutOfMemoryError("nice");
         }
         
         batch.end();
@@ -47,6 +50,8 @@ public class UIDrawer {
             case 0:
                 batch.draw(questbook, x - questbook.getWidth()/2, y - questbook.getHeight()/2);
                 break;
+            default:
+                throw new Abort();
         }
         
         batch.end();

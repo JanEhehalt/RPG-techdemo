@@ -41,14 +41,23 @@ public class GameScreen extends AbstractScreen{
     @Override
     public void render(float f) {
         map.render(f);
+        
         Quest[] rects = new Quest[map.getPlayer().getQuests().size()];
         for(int i = 0; i< map.getPlayer().getQuests().size(); i++){
             rects[i] = map.getPlayer().getQuests().get(i);
         }
-        qw.draw(rects, map.getStage().getBatch(), map.getPlayer().getX()+32, map.getPlayer().getY()+32);
+        
+        //qw.draw(rects, map.getStage().getBatch(), map.getPlayer().getX()+32, map.getPlayer().getY()+32);
+        qw.draw(rects, map.getStage().getBatch(), map.getStage().getCamera().position.x, map.getStage().getCamera().position.y );
+        
         if(map.getCollidingDoor() != null) {
         	loadNewMap(map.getCollidingDoor().destinationMap, map.getCollidingDoor().destinationDoor);
         }
+        
+        
+        Player a = map.getPlayer();
+        map.getStage().getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
+        map.getStage().getCamera().update();
     }
 
     @Override

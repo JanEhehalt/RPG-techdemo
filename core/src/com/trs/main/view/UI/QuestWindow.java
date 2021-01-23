@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -26,6 +26,8 @@ import com.trs.main.Quest;
  */
 
 public class QuestWindow {
+    
+    final double animationSpeed = 0.05;
     
     BitmapFont font;
     ShapeRenderer renderer;
@@ -61,7 +63,7 @@ public class QuestWindow {
         }
         
         
-        float boxX = playerX + Main.CAMERA_WIDTH/2 - 0.2f*Main.CAMERA_WIDTH - 30;
+        float boxX = playerX + Main.CAMERA_WIDTH/2 - 200;
         float boxY = playerY + Main.CAMERA_HEIGHT/2 - 0.4f*Main.CAMERA_HEIGHT - 30;
         float boxWidth = 0.2f*Main.CAMERA_WIDTH;
         float boxHeight = 0.4f*Main.CAMERA_HEIGHT;
@@ -70,7 +72,7 @@ public class QuestWindow {
         
         if(visible && Main.gamestate != 2){
             if(visiblePerc < 1){
-                visiblePerc += 0.2;
+                visiblePerc += animationSpeed;
                 Gdx.gl.glEnable(GL20.GL_BLEND);
                 Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
                 renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -110,14 +112,13 @@ public class QuestWindow {
                 batch.end();
 
                 if(selectedQuest > 0){
-                UIDrawer.drawCharBox(batch, font, boxX - 16              , boxY + boxHeight/2 - 16, 32, "<");
+                    UIDrawer.drawCharBox(batch, font, boxX - 16              , boxY + boxHeight/2 - 16, 32, "<");
                 }
                 if(selectedQuest < quests.length-1){
-                UIDrawer.drawCharBox(batch, font, boxX + boxWidth - 16   , boxY + boxHeight/2 - 16, 32, ">");
+                    UIDrawer.drawCharBox(batch, font, boxX + boxWidth - 16   , boxY + boxHeight/2 - 16, 32, ">");
                 }
 
                 UIDrawer.drawCharBox(batch, font, boxX + boxWidth - 16   , boxY + boxHeight - 16, 32, "^");
-
                 UIDrawer.drawIcon(batch, boxX + boxWidth/2, boxY + boxHeight, 0);
 
                 Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -130,7 +131,7 @@ public class QuestWindow {
         }
         else{
              if(visiblePerc > 0){
-                visiblePerc -= 0.2;
+                visiblePerc -= animationSpeed;
                 Gdx.gl.glEnable(GL20.GL_BLEND);
                 Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
                 renderer.begin(ShapeRenderer.ShapeType.Filled);
