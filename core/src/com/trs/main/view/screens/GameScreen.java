@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.trs.main.Main;
 import com.trs.main.MapContainer;
 import com.trs.main.Quest;
-import com.trs.main.view.QuestWindow;
+import com.trs.main.view.UI.QuestWindow;
 import com.trs.main.worldobjects.Player;
 
 /**
