@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.sun.tools.javac.util.Abort;
 
 /**
  *
@@ -51,7 +50,7 @@ public class UIDrawer {
                 batch.draw(questbook, x - questbook.getWidth()/2, y - questbook.getHeight()/2);
                 break;
             default:
-                throw new Abort();
+                //throw new Abort();
         }
         
         batch.end();
