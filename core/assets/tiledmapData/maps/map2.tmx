@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="20">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="20">
  <tileset firstgid="1" source="../tilesets/village.tsx"/>
  <tileset firstgid="1801" source="../tilesets/worldborder.tsx"/>
  <tileset firstgid="1809" source="../tilesets/furniture.tsx"/>
@@ -122,4 +122,5 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup id="10" name="EnemyRects"/>
 </map>

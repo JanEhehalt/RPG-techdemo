@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.trs.main.view.screens.GameScreen;
 import com.trs.main.view.screens.InventoryScreen;
 import com.trs.main.view.screens.MenuScreen;
@@ -82,6 +83,16 @@ public class Main extends Game{
         }
         
         screen.render(Gdx.graphics.getDeltaTime());
+        /*
+        ShapeRenderer renderer = new ShapeRenderer();
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setColor(51f/255f, 26f/255f, 0f/255f, 0.3f);
+        renderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        renderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        */
     }
 
     @Override

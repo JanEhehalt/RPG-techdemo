@@ -18,18 +18,25 @@ public class Hostile extends Actor {
 	private Stats stats;
 	private AnimatedSprite sprite;
 	private Rectangle collisionRect;
+        private Rectangle area;
 	private Circle attackCircle;
 	private Circle attentionCircle;
 	private boolean isMelee;
-	
+        private Vector2 POI;
+        private int facing;
+        private float speed = 2;
+        float movementX;
+        float movementY;
+
 	// 0: normal movement, 1: locked onto Player, 2: attacking
 	private int movementState;
 	
-	public Hostile(float xPos, float yPos, int id, Stats stats, String texture, boolean isMelee) {
+	public Hostile(Rectangle movementRect, float xPos, float yPos, int id, Stats stats, String texture, boolean isMelee) {
 		
 		this.id = id;
 		this.stats = stats;
 		this.isMelee = isMelee;
+                this.area = movementRect;
 		
 		Texture tx = new Texture(Gdx.files.internal("textureData/sprites/" + texture));
 		sprite = new AnimatedSprite(tx, 64, 64, true);
@@ -56,9 +63,72 @@ public class Hostile extends Actor {
 					}
 				}
 			}
-		}
+                        if(POI == null || Math.random() < 0.01f){
+                            POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
+                        }
+                        Vector2 movement = new Vector2(speed,0);
+                        movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
+
+                        if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
+                                facing = 0;
+                        }
+                        else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
+                                facing = 1;
+                        }
+                        else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
+                                facing = 2;
+                        }
+                        else {
+                                facing = 3;
+                        }
+
+                        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y) < 10f) {
+                                movementX = 0;
+                                movementY = 0;
+                        }
+                        else {
+                            movementX = movement.x;
+                            movementY = movement.y;
+                        }
+
+                        if(movementX == 0 && movementY == 0){
+
+                        }
+                        else if(movementX == 0 && movementY != 0){
+                            setY(getY()+movementY);
+                            if(collidingWithMapCollisionObject()){
+                                setY(getY()-movementY);
+                            }
+                        }
+                        else if(movementY == 0 && movementX != 0){
+                            setX(getX()+movementX);
+                            if(collidingWithMapCollisionObject()){
+                                setX(getX()-movementX);
+                            }
+                        }
+                        else if(movementX != 0 && movementY != 0){
+                                setX(getX()+ (movementX));
+                            if(collidingWithMapCollisionObject()){
+                                setX(getX() - (movementX));
+                            }
+
+                            setY(getY() + (movementY));
+                            if(collidingWithMapCollisionObject()){
+                                setY(getY()- (movementY));
+                            }
+                        }
+
+                        int animationRow = 0;
+                        if(movementX != 0 || movementY != 0) {
+                            animationRow = 8;
+                        }
+                        sprite.setRow(animationRow + facing);
+
+                        movementX = 0;
+                        movementY = 0;
+                        }
 		
-		if(getMovementState() == 1) {
+		if(getMovementState() == 1 && Main.gamestate != 1) {
 			for(Actor a : getStage().getActors()) {
 				if(a instanceof Player) {
 					if(Intersector.overlaps(getAttackCircle(), ((Player) a).getCollisionRect())) {
@@ -69,12 +139,10 @@ public class Hostile extends Actor {
 					}
 					
 
-					Vector2 POI = new Vector2(a.getX(), a.getY());
-		            float speed = 2;
+					POI = new Vector2(a.getX(), a.getY());
 		            
 		            Vector2 movement = new Vector2(speed,0);
 		            movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
-		            int facing;
 		            if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
 		                    facing = 0;
 		            }
@@ -126,6 +194,28 @@ public class Hostile extends Actor {
         super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public boolean collidingWithMapCollisionObject(){
+        for(Actor a : getStage().getActors()){
+                if(a instanceof MapCollisionObject){
+                    Rectangle o = new Rectangle(a.getX(), a.getY(), a.getWidth(), a.getHeight());
+                    if(Intersector.overlaps(collisionRect, o)){
+                        return true;
+                    }
+                }
+                else if(a instanceof MovingNpc && a != this){
+                    if(Intersector.overlaps(collisionRect, ((MovingNpc)a).collisionRect)){
+                        return true;
+                    }
+                }
+                else if(a instanceof Player){
+                    if(Intersector.overlaps(collisionRect, ((Player)a).getCollisionRect())){
+                        return true;
+                    }
+                }
+        }
+        return false;
+    } 
+    
     /**
      * @return the id
      */

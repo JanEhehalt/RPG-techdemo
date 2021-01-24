@@ -45,6 +45,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * Layer 8: NpcRects
  *          id
  *          texture
+ * Layer 9: EnemyRects
+ *          id
+ *          texture
+ *          isMelee
+ *          level
+ *          hp 
+ *          def 
+ *          atk
+ *          init
  * 
  * @author Jan
  */
@@ -137,6 +146,27 @@ public class MapContainer {
             stage.addActor(new MapCollisionObject((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height));
         }
         
+        // adding the InteractionObjects
+        for(MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            MapProperties props = object.getProperties();
+            
+            int id = props.get("id", Integer.class);
+            String texture = props.get("texture", String.class);
+            
+            Stats stats = new Stats();
+            stats.setLevel(props.get("level", Integer.class));
+            stats.setHp(props.get("hp", Integer.class));
+            stats.setDef(props.get("def", Integer.class));
+            stats.setAtk(props.get("atk", Integer.class));
+            stats.setInit(props.get("init", Integer.class));
+            
+            boolean isMelee = props.get("isMelee", Boolean.class);
+            
+            Hostile h = new Hostile(rect, rect.getX() + (float)(Math.random()*(rect.getWidth()-64)), rect.getY()+(float)(Math.random()*(rect.getHeight()-64)), id, stats, texture, isMelee);
+            stage.addActor(h);
+        }
+        
     	doors = new Door[tempDoors.size()];
     	for(int i = 0; i < doors.length; i++) {
     		doors[i] = tempDoors.get(i);
@@ -165,8 +195,6 @@ public class MapContainer {
    
         stage.addActor(p);
         
-        stage.addActor(new Hostile(200, 200, 0, new Stats(), "sprite.png", false));
-        stage.addActor(new Hostile(265, 200, 1, new Stats(), "sprite.png", true));
     }
         
     public void render(float f){
