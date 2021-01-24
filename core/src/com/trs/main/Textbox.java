@@ -25,8 +25,9 @@ public class Textbox extends Actor{
     
     BitmapFont font;
     Rectangle r;
-    int printLine;
-    int printChar;
+    float printChar;
+    
+    float textSpeed = 0.8f;
     //ArrayList<String> splitted;
     
     ShapeRenderer renderer;
@@ -51,7 +52,6 @@ public class Textbox extends Actor{
         
         renderer = new ShapeRenderer();
         textHeight = getTextHeight(font,"A");
-        printLine = 0;
         printChar = 0;
         this.ans = ans;
         setName("textbox");
@@ -86,7 +86,6 @@ public class Textbox extends Actor{
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         
         renderer = new ShapeRenderer();
-        printLine = 0;
         printChar = 0;
         setName("textbox");
         this.toPrint = t.toPrint;
@@ -102,7 +101,6 @@ public class Textbox extends Actor{
         r = new Rectangle(getX(), getY(), getWidth(), 0);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         this.state = 0;
-        printLine = 0;
         printChar = 0;
         selectedAsw = 0;
     }
@@ -136,7 +134,7 @@ public class Textbox extends Actor{
                 state = 1;
             }
             else{
-                printChar++;
+                printChar+=textSpeed;
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 state = 1;
@@ -161,7 +159,7 @@ public class Textbox extends Actor{
         int alignment = -1;
         
         font.setColor(Color.CLEAR);
-        float height = font.draw(batch, toPrint.substring(0, printChar), getX()+2, getY(), getWidth(), alignment, true).height+5;
+        float height = font.draw(batch, toPrint.substring(0, (int)printChar), getX()+2, getY(), getWidth(), alignment, true).height+5;
         float textHeight = height;
             for(String s : ans){
                 height += getTextHeight(font, "A") + 10;
@@ -182,7 +180,7 @@ public class Textbox extends Actor{
         batch.begin();
         
         
-        font.draw(batch, toPrint.substring(0, printChar), getX()+2, getY()+getHeight()-3, getWidth(), alignment, true);
+        font.draw(batch, toPrint.substring(0, (int)printChar), getX()+2, getY()+getHeight()-3, getWidth(), alignment, true);
         
         if(state == 1){
             for(int i = 0; i < ans.length; i++){
