@@ -138,6 +138,7 @@ public class Textbox extends Actor{
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 state = 1;
+                printChar = toPrint.length();
             }
         }
 
