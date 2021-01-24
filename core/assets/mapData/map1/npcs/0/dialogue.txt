@@ -1,21 +1,22 @@
-Wie gehts
-gut#5
-schlecht#9
+Wie gehts. Das hier ist ein extra langer Text, mit dem ich testenasdfasdf will, ob die Textbox die Texte sinnvoll splittet, und auch die komplette potentielle Breite füllt.
+gut#6
+schlecht#10
+abbrechen#-1
 
 Das freut mich
-wie gehts dir#20
+wie gehts dir#21
 tschüss#-1
 
 Das tut mir leid. Wieso denn?
-Spaß mir gehts gut#5
+Spaß mir gehts gut#6
 tschüss#-1
-Halts Maul#14
+Halts Maul#15
 
 Ey es gibt gleich Stress hier
-cool, bin ich dabei#17
+cool, bin ich dabei#18
 
 KAMPF
 LOS#-1
 
 Ich will Krieg
-KRIEG!#17
+KRIEG!#18

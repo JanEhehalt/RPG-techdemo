@@ -70,7 +70,7 @@ public class QuestWindow {
         
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         
-        if(visible && Main.gamestate != 2){
+        if(visible && Main.gamestate != 2 && Main.gamestate != 1){
             if(visiblePerc < 1){
                 visiblePerc += animationSpeed;
                 Gdx.gl.glEnable(GL20.GL_BLEND);

@@ -27,8 +27,7 @@ public class Textbox extends Actor{
     Rectangle r;
     int printLine;
     int printChar;
-    ArrayList<String> splitted;
-    String toPring;
+    //ArrayList<String> splitted;
     
     ShapeRenderer renderer;
     
@@ -40,6 +39,8 @@ public class Textbox extends Actor{
     
     float textHeight;
     
+    String toPrint;
+    
     public Textbox(String toPrint, String[] ans, float xPos, float yPos) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -49,20 +50,23 @@ public class Textbox extends Actor{
         font.setColor(Color.BLACK);
         
         renderer = new ShapeRenderer();
-        textHeight = getTextHeight("A");
+        textHeight = getTextHeight(font,"A");
         printLine = 0;
         printChar = 0;
         this.ans = ans;
         setName("textbox");
         font = new BitmapFont();
-        splitted = getSplitted(toPrint, (int)(Main.CAMERA_WIDTH/2));
+        
+        setWidth(Main.CAMERA_WIDTH - 40);
+        //splitted = getSplitted(toPrint, (int)(Main.CAMERA_WIDTH - 40));
         
         // CALCULATE NEEDED HEIGHT
-        float height = splitted.size() * 1.2f * textHeight + (ans.length+1) * 1.2f * textHeight;
+        //float height = splitted.size() * 1.2f * textHeight + (ans.length+1) * 1.2f * textHeight;
         
-        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH/2, height);
+        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH - 40, 0);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         
+        this.toPrint = toPrint;
         state = 0;
     }
     
@@ -75,27 +79,27 @@ public class Textbox extends Actor{
         generator.dispose();
         font.setColor(Color.BLACK);
         
-        textHeight = getTextHeight("A");
-        this.splitted = t.splitted;
+        textHeight = getTextHeight(font,"A");
         this.ans = t.ans;
-        //System.out.println(splitted.size());
-        float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+1) * 1.2f * textHeight;
-        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH - 40, height);
+        this.r = t.r;
+        this.r.setPosition(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         
         renderer = new ShapeRenderer();
         printLine = 0;
         printChar = 0;
         setName("textbox");
+        this.toPrint = t.toPrint;
         
     }
     
     public void update(Dialogue d) {
-    	this.splitted = getSplitted(d.question, (int) Main.CAMERA_WIDTH / 2);
+    	//this.splitted = getSplitted(d.question, (int) Main.CAMERA_WIDTH / 2);
+        this.toPrint = d.question;
     	this.ans = d.ans;
     	
-        float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+1) * 1.2f * textHeight;
-        r = new Rectangle(getX(), getY(), getWidth(), height);
+        //float height = this.splitted.size() * 1.2f * textHeight + (this.ans.length+1) * 1.2f * textHeight;
+        r = new Rectangle(getX(), getY(), getWidth(), 0);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         this.state = 0;
         printLine = 0;
@@ -105,8 +109,6 @@ public class Textbox extends Actor{
 
     @Override
     public void act(float delta) {
-        
-        
         
         if(state == 1){
             if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
@@ -130,21 +132,14 @@ public class Textbox extends Actor{
             state = 3;
         }
         else{
-            if(printChar >= splitted.get(printLine).length()){
-                if(splitted.size()-1 <= printLine){
-                    state = 1;
-                }
-                else{
-                    printLine++;
-                    printChar = 0;
-                }
+            if(printChar >= toPrint.length()){
+                state = 1;
             }
             else{
                 printChar++;
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
                 state = 1;
-                printLine = splitted.size()-1;
             }
         }
 
@@ -162,7 +157,18 @@ public class Textbox extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-    	font.setColor(Color.BLACK);
+        
+        int alignment = -1;
+        
+        font.setColor(Color.CLEAR);
+        float height = font.draw(batch, toPrint.substring(0, printChar), getX()+2, getY(), getWidth(), alignment, true).height+5;
+        float textHeight = height;
+            for(String s : ans){
+                height += getTextHeight(font, "A") + 10;
+            }
+        setHeight(height);
+        font.setColor(Color.BLACK);
+        
         batch.end();
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -174,35 +180,23 @@ public class Textbox extends Actor{
     	renderer.rect(getX(), getY(), getWidth(), getHeight());
         renderer.end();
         batch.begin();
-        if(state == 0){
-            for(int i = 0; i < splitted.size(); i++){
-                if(i == printLine){
-                    font.draw(batch, splitted.get(i).substring(0, printChar), getX()+5, getY() + getHeight()-i*1.2f*textHeight - 5);
+        
+        
+        font.draw(batch, toPrint.substring(0, printChar), getX()+2, getY()+getHeight()-3, getWidth(), alignment, true);
+        
+        if(state == 1){
+            for(int i = 0; i < ans.length; i++){
+                if(selectedAsw == i){
+                    font.setColor(Color.RED);
                 }
-                else if(i < printLine){
-                    font.draw(batch, splitted.get(i), getX()+5, getY() + getHeight()-i*1.2f*textHeight - 5);
-                }
+                font.draw(batch, ans[i], getX()+20, (getY()+getHeight()-5) - (textHeight + i*(getTextHeight(font, "A")+5)) - 3, getWidth(), alignment, true);
+                font.setColor(Color.BLACK);
             }
         }
-        else{
-            for(int i = 0; i <= printLine; i++){
-                    font.draw(batch, splitted.get(i), getX()+5, getY() + getHeight()-i*1.2f*textHeight - 5);
-            }
-            
-            for(int i = 0; i < ans.length; i++) {
-            	if(selectedAsw == i) {
-            		font.setColor(Color.RED);
-            	}
-            	else {
-            		font.setColor(Color.BLACK);
-            	}
-            	
-            	font.draw(batch, ans[i], getX()+20, getY() + getHeight() - ((splitted.size() + i + 1) * 1.2f * textHeight - 5));
-            }
-        }
+        
         super.draw(batch, parentAlpha);
     }
-    
+    /*
     public ArrayList<String> getSplitted(String toSplit, int maxLength){
         ArrayList<String> words = new ArrayList<>();
         int tail = 0;
@@ -218,31 +212,33 @@ public class Textbox extends Actor{
         ArrayList<String> toReturn = new ArrayList<>();
         String string = new String();
         for(String s : words){
-            if(getTextWidth(string)+getTextWidth(s) >= maxLength){
+            if(getTextWidth(font,string)+getTextWidth(font,s) >= getWidth()){
                 toReturn.add(string);
                 string = new String();
                 string += s;
             }
-            else if(getTextWidth(string)+getTextWidth(s) < maxLength){
+            else if(getTextWidth(font,string)+getTextWidth(font,s) < getWidth()){
                 string += s;
             }
         }
         toReturn.add(string);
         
+            System.out.println(getWidth());
+            System.out.println(maxLength);
         for(String s : toReturn){
-            //System.out.println("-"+s+"-");
+            System.out.println("-"+s+"-"+getTextWidth(font,s));
         }
         
         return toReturn;
     }
-
+*/
     
-    public float getTextWidth(String text){
+    public float getTextWidth(BitmapFont font, String text){
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font,text);
         return glyphLayout.width;
     }
-    public float getTextHeight(String text){
+    public float getTextHeight(BitmapFont font,String text){
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font,text);
         return glyphLayout.height;
