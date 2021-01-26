@@ -8,13 +8,16 @@ package com.trs.main.worldobjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.trs.main.Dialogue;
 import com.trs.main.DialogueParser;
+import com.trs.main.InformationQuest;
 import com.trs.main.Main;
+import com.trs.main.Quest;
 import com.trs.main.StaticMath;
 import com.trs.main.Textbox;
 
@@ -48,11 +51,15 @@ public class MovingNpc extends Actor{
     
     String dialoguePath;
     
+    Texture questBubble;//= new Texture("textureData/sprites/questbubble.png");
+    
     public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture){
         setName("npc");
         this.id = id;
         this.mapId = mapId;
         Texture t = new Texture(Gdx.files.internal("textureData/sprites/"+texture));
+        
+        questBubble = new Texture("textureData/sprites/questbubble.png");
         
         currentlyTalking = false;
         specialDialogue = false;
@@ -211,6 +218,23 @@ public class MovingNpc extends Actor{
     @Override
     public void draw(Batch batch, float parentAlpha) {
         animatedSprite.draw(batch);
+        
+        for(Actor a : getStage().getActors()){
+            if(a instanceof Player){
+                for(Quest quest : ((Player)a).getQuests()){
+                    if(quest instanceof InformationQuest){
+                        if(((InformationQuest)quest).hasSpecialDialogue(id, mapId)){
+                            batch.draw(questBubble, getX()-8, getY() + getHeight() - 16);
+                            break;
+                        }   
+                    }
+                }
+                break;
+            }
+        }
+        
+        
+        
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -239,5 +263,6 @@ public class MovingNpc extends Actor{
     public Textbox getTextbox(){
         return t;
     }
+    
     
 }
