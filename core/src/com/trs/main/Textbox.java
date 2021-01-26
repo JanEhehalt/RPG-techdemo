@@ -181,7 +181,7 @@ public class Textbox extends Actor{
         batch.begin();
         
         
-        font.draw(batch, toPrint.substring(0, (int)printChar), getX()+2, getY()+getHeight()-3, getWidth(), alignment, true);
+        font.draw(batch, toPrint.substring(0, (int)printChar), getX()+6, getY()+getHeight()-3, getWidth()-8, alignment, true);
         
         if(state == 1){
             for(int i = 0; i < ans.length; i++){

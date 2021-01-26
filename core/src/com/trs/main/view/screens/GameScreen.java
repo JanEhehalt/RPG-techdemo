@@ -57,7 +57,7 @@ public class GameScreen extends AbstractScreen{
         
         Player a = map.getPlayer();
         map.getStage().getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
-        map.getStage().getCamera().update();
+        //map.getStage().getCamera().update();
     }
 
     @Override

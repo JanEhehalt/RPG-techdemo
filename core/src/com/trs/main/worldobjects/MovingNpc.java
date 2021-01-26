@@ -51,7 +51,7 @@ public class MovingNpc extends Actor{
     
     String dialoguePath;
     
-    Texture questBubble;//= new Texture("textureData/sprites/questbubble.png");
+    private AnimatedSprite questBubble;
     
     public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture){
         setName("npc");
@@ -59,7 +59,8 @@ public class MovingNpc extends Actor{
         this.mapId = mapId;
         Texture t = new Texture(Gdx.files.internal("textureData/sprites/"+texture));
         
-        questBubble = new Texture("textureData/sprites/questbubble.png");
+        questBubble = new AnimatedSprite(new Texture("textureData/sprites/questbubble.png"), 32, 32, false);
+        questBubble.setRow(0);
         
         currentlyTalking = false;
         specialDialogue = false;
@@ -174,6 +175,7 @@ public class MovingNpc extends Actor{
 	            movementY = movement.y;
 	        }
 	        
+                
 	        if(movementX == 0 && movementY == 0){
 	        	
 	        }
@@ -181,23 +183,27 @@ public class MovingNpc extends Actor{
 	            setY(getY()+movementY);
 	            if(collidingWithMapCollisionObject()){
 	                setY(getY()-movementY);
+                        POI = null;
 	            }
 	        }
 	        else if(movementY == 0 && movementX != 0){
 	            setX(getX()+movementX);
 	            if(collidingWithMapCollisionObject()){
 	                setX(getX()-movementX);
+                        POI = null;
 	            }
 	        }
 	        else if(movementX != 0 && movementY != 0){
 	        	setX(getX()+ (movementX));
 	            if(collidingWithMapCollisionObject()){
 	                setX(getX() - (movementX));
+                        POI = null;
 	            }
 	
 	            setY(getY() + (movementY));
 	            if(collidingWithMapCollisionObject()){
 	                setY(getY()- (movementY));
+                        POI = null;
 	            }
 	        }
 	        
@@ -216,7 +222,7 @@ public class MovingNpc extends Actor{
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float delta) {
         animatedSprite.draw(batch);
         
         for(Actor a : getStage().getActors()){
@@ -224,7 +230,9 @@ public class MovingNpc extends Actor{
                 for(Quest quest : ((Player)a).getQuests()){
                     if(quest instanceof InformationQuest){
                         if(((InformationQuest)quest).hasSpecialDialogue(id, mapId)){
-                            batch.draw(questBubble, getX()-8, getY() + getHeight() - 16);
+                            questBubble.setSpritePosition((int)(getX()-8), (int)(getY() + getHeight() - 16));
+                            questBubble.updateAnimation(0.01f);
+                            questBubble.draw(batch);
                             break;
                         }   
                     }
@@ -235,7 +243,7 @@ public class MovingNpc extends Actor{
         
         
         
-        super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
+        super.draw(batch, delta); //To change body of generated methods, choose Tools | Templates.
     }
     
      public boolean collidingWithMapCollisionObject(){
