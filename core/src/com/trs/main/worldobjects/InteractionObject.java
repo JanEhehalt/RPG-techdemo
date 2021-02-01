@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.trs.main.Dialogue;
 import com.trs.main.DialogueParser;
 import com.trs.main.Main;
-import com.trs.main.Textbox;
+import com.trs.main.view.UI.Textbox;
 
 public class InteractionObject extends Actor{
     Textbox t;
@@ -37,7 +37,7 @@ public class InteractionObject extends Actor{
         dialoguePath = "mapData/map"+mapId+"/interactionObjects/"+id+"/dialogue.txt";
         parser = new DialogueParser(dialoguePath);
         Dialogue nextDialogue = parser.firstDialogue();
-        this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
+        this.t = new Textbox(nextDialogue.question, nextDialogue.ans);
         
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
     }
@@ -53,14 +53,14 @@ public class InteractionObject extends Actor{
         dialoguePath = "mapData/map"+mapId+"/interactionObjects/"+id+"/dialogue.txt";
         parser = new DialogueParser(dialoguePath);
         Dialogue nextDialogue = parser.firstDialogue();
-        this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
+        this.t = new Textbox(nextDialogue.question, nextDialogue.ans);
         
         setBounds(xPos, yPos, collisionRect.getWidth(), collisionRect.getHeight());
     }
     
     public void startDialogue(float xPos, float yPos) {
     	currentlyTalking = true;
-    	getStage().addActor(new Textbox(t, xPos, yPos));
+    	getStage().addActor(t);
     }
     
     @Override

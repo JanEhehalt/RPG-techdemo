@@ -6,11 +6,14 @@
 package com.trs.main.view.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.trs.main.Main;
 import com.trs.main.MapContainer;
 import com.trs.main.Quest;
+import com.trs.main.fightscreen.FightDialogue;
 import com.trs.main.view.UI.QuestWindow;
+import com.trs.main.view.UI.Textbox;
 import com.trs.main.worldobjects.Player;
 
 /**
@@ -25,7 +28,11 @@ public class GameScreen extends AbstractScreen{
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
         map = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, new Player(200, 200), "tiledmapData/maps/map1.tmx", 2, 1);
-        qw = new QuestWindow();
+        qw = new QuestWindow(map.getCamera().combined);
+        Matrix4 uiMatrix = map.getCamera().combined.cpy();
+        uiMatrix.setToOrtho2D(0, 0, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT);
+        Textbox.m = uiMatrix;
+        FightDialogue.m = uiMatrix;
     }
     
     public void loadNewMap(int map, int doorId){
@@ -48,7 +55,7 @@ public class GameScreen extends AbstractScreen{
         }
         
         //qw.draw(rects, map.getStage().getBatch(), map.getPlayer().getX()+32, map.getPlayer().getY()+32);
-        qw.draw(rects, map.getStage().getBatch(), map.getStage().getCamera().position.x, map.getStage().getCamera().position.y );
+        qw.draw(rects);
         
         if(map.getCollidingDoor() != null) {
         	loadNewMap(map.getCollidingDoor().destinationMap, map.getCollidingDoor().destinationDoor);

@@ -3,18 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trs.main;
+package com.trs.main.view.UI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.trs.main.Dialogue;
+import com.trs.main.Main;
 import java.util.ArrayList;
 
 /**
@@ -23,14 +28,15 @@ import java.util.ArrayList;
  */
 public class Textbox extends Actor{
     
+    final Color TextColor = Color.WHITE;
+    final Color SelectedColor = Color.FIREBRICK;
+    
     BitmapFont font;
     Rectangle r;
     float printChar;
     
     float textSpeed = 0.8f;
     //ArrayList<String> splitted;
-    
-    ShapeRenderer renderer;
     
     int state; // 0: drawing    1: waiting for input    2: finished
     
@@ -42,15 +48,22 @@ public class Textbox extends Actor{
     
     String toPrint;
     
-    public Textbox(String toPrint, String[] ans, float xPos, float yPos) {
+    
+    Texture txt = new Texture("txt.png");
+    Texture txtTop = new Texture("txt_top.png");
+    Texture txtBot = new Texture("txt_bot.png");
+    
+    public static Matrix4 m;
+    
+    Batch batch = new SpriteBatch();
+    
+    public Textbox(String toPrint, String[] ans) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 21;
         font = generator.generateFont(parameter);
         generator.dispose();
         font.setColor(Color.BLACK);
-        
-        renderer = new ShapeRenderer();
         textHeight = getTextHeight(font,"A");
         printChar = 0;
         this.ans = ans;
@@ -58,38 +71,11 @@ public class Textbox extends Actor{
         font = new BitmapFont();
         
         setWidth(Main.CAMERA_WIDTH - 40);
-        //splitted = getSplitted(toPrint, (int)(Main.CAMERA_WIDTH - 40));
-        
-        // CALCULATE NEEDED HEIGHT
-        //float height = splitted.size() * 1.2f * textHeight + (ans.length+1) * 1.2f * textHeight;
-        
-        r = new Rectangle(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20, Main.CAMERA_WIDTH - 40, 0);
+        r = new Rectangle(20, 20, 814, 0);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         
         this.toPrint = toPrint;
         state = 0;
-    }
-    
-    public Textbox(Textbox t, float xPos, float yPos){
-        font = new BitmapFont();
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 21;
-        font = generator.generateFont(parameter);
-        generator.dispose();
-        font.setColor(Color.BLACK);
-        
-        textHeight = getTextHeight(font,"A");
-        this.ans = t.ans;
-        this.r = t.r;
-        this.r.setPosition(xPos - Main.CAMERA_WIDTH/2 + 20, yPos - Main.CAMERA_HEIGHT/2 + 20);
-        setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-        
-        renderer = new ShapeRenderer();
-        printChar = 0;
-        setName("textbox");
-        this.toPrint = t.toPrint;
-        
     }
     
     public void update(Dialogue d) {
@@ -155,82 +141,52 @@ public class Textbox extends Actor{
     
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(Batch camBatch, float parentAlpha) {
+        camBatch.end();
+        
+        batch.setProjectionMatrix(m);
+        batch.begin();
         
         int alignment = -1;
         
         font.setColor(Color.CLEAR);
-        float height = font.draw(batch, toPrint.substring(0, (int)printChar), getX()+2, getY(), getWidth(), alignment, true).height+5;
-        float textHeight = height;
+        float height = font.draw(batch, toPrint.substring(0, (int)printChar), getX()+2, getY(), getWidth(), alignment, true).height;
+        float textHeight = getTextHeight(font, "A");
+        if(state == 1){
             for(String s : ans){
-                height += getTextHeight(font, "A") + 10;
+                height +=  textHeight + 5;
             }
+        }
         setHeight(height);
         font.setColor(Color.BLACK);
         
-        batch.end();
-        renderer.setProjectionMatrix(batch.getProjectionMatrix());
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(Color.BLUE);
-    	renderer.rect(getX(), getY(), getWidth(), getHeight());
-        renderer.end();
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.RED);
-    	renderer.rect(getX(), getY(), getWidth(), getHeight());
-        renderer.end();
-        batch.begin();
         
+        int amount = 1+(int)(getHeight()/txt.getHeight());
         
-        font.draw(batch, toPrint.substring(0, (int)printChar), getX()+6, getY()+getHeight()-3, getWidth()-8, alignment, true);
+        batch.draw(txtTop, getX(), getY() + amount*txt.getHeight());
+        for(int i = 0; i < amount; i++){
+            batch.draw(txt, getX(), getY() + txt.getHeight()*i);
+        }
+        batch.draw(txtBot, getX(), getY() - txtBot.getHeight());
+        
+        font.setColor(TextColor);
+        font.draw(batch, toPrint.substring(0, (int)printChar), getX()+6, getY()+getHeight(), getWidth()-8, alignment, true);
         
         if(state == 1){
             for(int i = 0; i < ans.length; i++){
                 if(selectedAsw == i){
-                    font.setColor(Color.RED);
+                    font.setColor(SelectedColor);
                 }
-                font.draw(batch, ans[i], getX()+20, (getY()+getHeight()-5) - (textHeight + i*(getTextHeight(font, "A")+5)) - 3, getWidth(), alignment, true);
-                font.setColor(Color.BLACK);
+                font.draw(batch, ans[i], getX()+20, (getY()+getHeight()-5) - (textHeight + i*(getTextHeight(font, "A")+5)), getWidth(), alignment, true);
+                
+                font.setColor(TextColor);
             }
         }
+        batch.end();
+        camBatch.begin();
         
         super.draw(batch, parentAlpha);
     }
-    /*
-    public ArrayList<String> getSplitted(String toSplit, int maxLength){
-        ArrayList<String> words = new ArrayList<>();
-        int tail = 0;
-        for(int head = 0; head < toSplit.length(); head++){
-            if(toSplit.charAt(head) == ' '){
-                words.add(toSplit.substring(tail, head+1));
-                head++;
-                tail=head;
-            }  
-        }
-        words.add(toSplit.substring(tail, toSplit.length()));
-        
-        ArrayList<String> toReturn = new ArrayList<>();
-        String string = new String();
-        for(String s : words){
-            if(getTextWidth(font,string)+getTextWidth(font,s) >= getWidth()){
-                toReturn.add(string);
-                string = new String();
-                string += s;
-            }
-            else if(getTextWidth(font,string)+getTextWidth(font,s) < getWidth()){
-                string += s;
-            }
-        }
-        toReturn.add(string);
-        
-            System.out.println(getWidth());
-            System.out.println(maxLength);
-        for(String s : toReturn){
-            System.out.println("-"+s+"-"+getTextWidth(font,s));
-        }
-        
-        return toReturn;
-    }
-*/
     
     public float getTextWidth(BitmapFont font, String text){
         GlyphLayout glyphLayout = new GlyphLayout();

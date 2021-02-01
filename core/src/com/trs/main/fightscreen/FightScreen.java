@@ -13,7 +13,7 @@ import com.trs.main.StaticMath;
 
 public class FightScreen {
 	
-        final int gridWidth = 20;
+        final int gridWidth = 18;
         final int gridHeight = 12;
     
 	Batch batch;
@@ -29,16 +29,16 @@ public class FightScreen {
 	int state = 0;
 	
 	public FightScreen(Batch batch, FightObject[] objects, Rectangle[] collisionRects, float camX, float camY) {
-		this.batch = batch;
-		this.objects = objects;
-		this.collisionRects = collisionRects;
-        this.renderer = new ShapeRenderer();
-        this.fightDialogue = new FightDialogue(camX, camY);
-        
-        gridPos = new Vector2();
-        
-        gridPos.x = (float)(Math.ceil((double)(camX-Main.CAMERA_WIDTH/2)/32.0) * 32.0) + 64;
-        gridPos.y = (float)(Math.ceil((double)(camY-Main.CAMERA_HEIGHT/2)/32.0) * 32.0) + 32;
+            this.batch = batch;
+            this.objects = objects;
+            this.collisionRects = collisionRects;
+            this.renderer = new ShapeRenderer();
+            this.fightDialogue = new FightDialogue();
+
+            gridPos = new Vector2();
+
+            gridPos.x = (float)(Math.ceil((double)(camX-Main.CAMERA_WIDTH/2)/32.0) * 32.0) + 64;
+            gridPos.y = (float)(Math.ceil((double)(camY-Main.CAMERA_HEIGHT/2)/32.0) * 32.0) + 32;
 
 
         // SORTING OBJECTS BY INITIATIVE STAT

@@ -11,8 +11,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.trs.main.Main;
 
@@ -28,21 +30,26 @@ public class FightDialogue {
     int selectedAsw = 0;
     String[] ans = {"Melee", "Range", "Skip"};
     
-    public FightDialogue(float camX, float camY){
+    public static Matrix4 m;
+    
+    Batch batch = new SpriteBatch();
+    
+    public FightDialogue(){
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 21;
         font = generator.generateFont(parameter);
         generator.dispose();
         font.setColor(Color.BLACK);
-        
         renderer = new ShapeRenderer();
         
-        r = new Rectangle(camX-Main.CAMERA_WIDTH/2f + Main.CAMERA_WIDTH*0.8f, camY-Main.CAMERA_HEIGHT/2 + Main.CAMERA_HEIGHT*0.2f, Main.CAMERA_WIDTH*0.18f, Main.CAMERA_HEIGHT*0.6f);
+        r = new Rectangle(Main.CAMERA_WIDTH - 200, 20, 180, Main.CAMERA_HEIGHT-40);
         
     }
     
-    public void draw(Batch batch){
+    public void draw(Batch camBatch){
+        
+        batch.setProjectionMatrix(m);
         
         if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
             if(selectedAsw < ans.length - 1) {

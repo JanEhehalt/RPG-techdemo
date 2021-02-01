@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Matrix4;
 import com.trs.main.InformationQuest;
 import com.trs.main.Main;
 import com.trs.main.Quest;
@@ -36,10 +36,16 @@ public class QuestWindow {
     
     double visiblePerc;
     
-    public QuestWindow(){
+    Batch batch = new SpriteBatch();
+    
+    public QuestWindow(Matrix4 m){
         renderer = new ShapeRenderer();
         visible = true;
         selectedQuest = 0;
+        
+        Matrix4 uiMatrix = m.cpy();
+        uiMatrix.setToOrtho2D(0, 0, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT);
+        batch.setProjectionMatrix(uiMatrix);
         
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -49,7 +55,7 @@ public class QuestWindow {
         font.setColor(Color.WHITE);
     }
     
-    public void draw(Quest[] quests, Batch batch, float playerX, float playerY){
+    public void draw(Quest[] quests){
         
         if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
             if(selectedQuest < quests.length-1){
@@ -63,10 +69,10 @@ public class QuestWindow {
         }
         
         
-        float boxX = playerX + Main.CAMERA_WIDTH/2 - 200;
-        float boxY = playerY + Main.CAMERA_HEIGHT/2 - 0.4f*Main.CAMERA_HEIGHT - 30;
-        float boxWidth = 0.2f*Main.CAMERA_WIDTH;
-        float boxHeight = 0.4f*Main.CAMERA_HEIGHT;
+        float boxX = Main.CAMERA_WIDTH - 200;
+        float boxY = Main.CAMERA_HEIGHT - 250;
+        float boxWidth = 180;
+        float boxHeight = 230;
         
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         

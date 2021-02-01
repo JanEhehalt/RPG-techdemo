@@ -19,7 +19,7 @@ import com.trs.main.InformationQuest;
 import com.trs.main.Main;
 import com.trs.main.Quest;
 import com.trs.main.StaticMath;
-import com.trs.main.Textbox;
+import com.trs.main.view.UI.Textbox;
 
 /**
  *
@@ -54,6 +54,7 @@ public class MovingNpc extends Actor{
     private AnimatedSprite questBubble;
     
     public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture){
+        super();
         setName("npc");
         this.id = id;
         this.mapId = mapId;
@@ -76,16 +77,17 @@ public class MovingNpc extends Actor{
         dialoguePath = "mapData/map"+mapId+"/npcs/"+id+"/dialogue.txt";
         parser = new DialogueParser(dialoguePath);
         Dialogue nextDialogue = parser.firstDialogue();
-        this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
+        this.t = new Textbox(nextDialogue.question, nextDialogue.ans);
         
         collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
         
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
+        
     }
     
     public void startDialogue(float xPos, float yPos) {
     	currentlyTalking = true;
-    	getStage().addActor(new Textbox(t, xPos, yPos));
+    	getStage().addActor(t);
     }
     
     public void startSpecialDialogue(String path, float xPos, float yPos){
@@ -93,8 +95,8 @@ public class MovingNpc extends Actor{
     	currentlyTalking = true;
         specialDialogue = true;
         Dialogue nextDialogue = tempSpecialDialogueParser.firstDialogue();
-        this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
-    	getStage().addActor(new Textbox(t, xPos, yPos));
+        this.t = new Textbox(nextDialogue.question, nextDialogue.ans);
+    	getStage().addActor(t);
     }
     
     @Override
@@ -134,7 +136,7 @@ public class MovingNpc extends Actor{
                                     specialDialogue = false;
                                     parser = new DialogueParser(dialoguePath);
                                     Dialogue nextDialogue = parser.firstDialogue();
-                                    this.t = new Textbox(nextDialogue.question, nextDialogue.ans, getX()+getWidth()/2, getY()+getHeight()/2);
+                                    this.t = new Textbox(nextDialogue.question, nextDialogue.ans);
                                     tempSpecialDialogueParser = null;
                                 }
                                 else {
