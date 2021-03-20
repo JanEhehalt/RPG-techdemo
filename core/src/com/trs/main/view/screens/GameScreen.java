@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.trs.main.Main;
 import com.trs.main.MapContainer;
 import com.trs.main.Quest;
@@ -27,12 +28,13 @@ public class GameScreen extends AbstractScreen{
     
     MapContainer map;
     QuestWindow qw;
-    DebugUI debugUI = new DebugUI();
+    DebugUI debugUI;
 
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
         map = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, new Player(200, 200), "tiledmapData/maps/map1.tmx", 2, 1);
         qw = new QuestWindow(map.getCamera().combined);
+        debugUI = new DebugUI(map.getCamera().combined);
         Matrix4 uiMatrix = map.getCamera().combined.cpy();
         uiMatrix.setToOrtho2D(0, 0, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT);
         Textbox.m = uiMatrix;
@@ -51,6 +53,7 @@ public class GameScreen extends AbstractScreen{
 
     @Override
     public void render(float f) {
+        
         map.render(f);
         
         Quest[] rects = new Quest[map.getPlayer().getQuests().size()];
@@ -66,30 +69,40 @@ public class GameScreen extends AbstractScreen{
         }
         
         if(Main.gamestate == -1){
+            float camSpeed = 15;
+            if(Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT)){
+                camSpeed = 1;
+            }
+            
+            
             if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-                map.getStage().getCamera().translate(-10, 0, 0);
+                map.getStage().getCamera().translate(-camSpeed, 0, 0);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-                map.getStage().getCamera().translate(10, 0, 0);
+                map.getStage().getCamera().translate(camSpeed, 0, 0);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-                map.getStage().getCamera().translate(0, 10, 0);
+                map.getStage().getCamera().translate(0, camSpeed, 0);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-                map.getStage().getCamera().translate(0, -10, 0);
+                map.getStage().getCamera().translate(0, -camSpeed, 0);
             }
-            debugUI.draw(map.getStage().getActors().size);
         }
         else{
             Player a = map.getPlayer();
             map.getStage().getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
             //map.getStage().getCamera().update();
         }
+        
+        if(Main.debugUI){
+            debugUI.draw(map.getStage().getActors().size, new Vector2(map.getStage().getCamera().position.x, map.getStage().getCamera().position.y));
+        }
     }
 
     @Override
     public void resize(int width, int height) {
         map.resize(width, height);
+        debugUI.resize();
     }
 
     @Override

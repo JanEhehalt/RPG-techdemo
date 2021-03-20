@@ -4,8 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.trs.main.view.UI.DebugUI;
 import com.trs.main.view.screens.GameScreen;
 import com.trs.main.view.screens.InventoryScreen;
 import com.trs.main.view.screens.MenuScreen;
@@ -21,6 +19,7 @@ public class Main extends Game{
 	// 0: normal game world, 1: dialogue, 2: fight
         // 7: Load MenuScreen 8: Load GameScreen 9: Load InventoryScreen
     public static int gamestate = 0;
+    public static boolean debugUI = false;
     private int fallbackState = 0;
     public static float CAMERA_WIDTH = 854;
     public static float CAMERA_HEIGHT = 480;
@@ -106,6 +105,14 @@ public class Main extends Game{
             else{
                 fallbackState = gamestate;
                 gamestate = -1;
+            }
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F1)){
+            if(!debugUI){
+                debugUI = true;
+            }
+            else{
+                debugUI = false;
             }
         }
     }
