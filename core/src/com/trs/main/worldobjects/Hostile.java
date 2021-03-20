@@ -203,19 +203,35 @@ public class Hostile extends Actor {
                 shapeRenderer.circle(POI.x, POI.y, 5);
             }
             shapeRenderer.end();
+            
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.GREEN);
-            shapeRenderer.line(getX()+ sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, POI.x, POI.y);
+            shapeRenderer.setColor(Color.ORANGE);
+            shapeRenderer.line(getCenterX(), getCenterY(), POI.x, POI.y);
             shapeRenderer.setColor(Color.YELLOW);
-            shapeRenderer.circle(getX()+ sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, getAttentionCircle().radius);
+            shapeRenderer.circle(getCenterX(), getCenterY(), getAttentionCircle().radius);
             shapeRenderer.setColor(Color.RED);
-            shapeRenderer.circle(getX()+ sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, getAttackCircle().radius);
-            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.circle(getCenterX(), getCenterY(), getAttackCircle().radius);
             shapeRenderer.rect(getX(), getY(), sprite.getSprite().getWidth(),  sprite.getSprite().getHeight());
+            
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(area.x, area.y, area.width, area.height);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x, area.y);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x, area.y + area.height);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x + area.width, area.y);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x + area.width, area.y+area.height);
+            
             shapeRenderer.end();
             
             batch.begin();
         }
+        
+    public float getCenterX(){
+        return getX()+ sprite.getSprite().getWidth()/2;
+    }
+    public float getCenterY(){
+        return getY()+sprite.getSprite().getHeight()/2;
+    }
 	
 	@Override
     protected void positionChanged() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="40" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="116">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="40" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="117">
  <tileset firstgid="1" source="../tilesets/terrain.tsx"/>
  <tileset firstgid="2049" source="../tilesets/village.tsx"/>
  <tileset firstgid="3849" source="../tilesets/crops.tsx"/>
@@ -125,7 +125,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3037,3038,3037,3038,3037,3038,3962,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,6300,6301,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3962,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,6316,6317,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3803,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,7032,0,0,0,0,0,0,0,0,0,0,0,6451,6454,0,6487,0,0,3962,0,0,0,3962,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,7032,0,0,0,0,0,7437,0,0,0,0,0,6451,6454,0,6487,0,0,3962,0,0,0,3962,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2195,2196,6467,6470,6520,6503,2255,0,0,3803,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2077,2078,2256,2137,0,0,2078,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2256,2138,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -278,7 +278,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="CollisionRects">
+ <objectgroup id="6" name="CollisionRects" visible="0">
   <object id="1" x="0" y="1344" width="160" height="64"/>
   <object id="2" x="160" y="1376" width="32" height="32"/>
   <object id="3" x="0" y="1408" width="32" height="192"/>
@@ -365,7 +365,7 @@
   <object id="113" x="1056" y="992" width="224" height="32"/>
   <object id="114" x="1088" y="1024" width="192" height="576"/>
  </objectgroup>
- <objectgroup id="7" name="DoorRects">
+ <objectgroup id="7" name="DoorRects" visible="0">
   <object id="88" x="150.875" y="191.75" width="52.625" height="43.625">
    <properties>
     <property name="destinationDoor" type="int" value="0"/>
@@ -418,8 +418,14 @@
     <property name="texture" value="-"/>
    </properties>
   </object>
+  <object id="116" x="640" y="224" width="32" height="32">
+   <properties>
+    <property name="id" type="int" value="3"/>
+    <property name="texture" value="-"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup id="9" name="NpcRects">
+ <objectgroup id="9" name="NpcRects" visible="0">
   <object id="98" x="896" y="288" width="64" height="64">
    <properties>
     <property name="id" type="int" value="0"/>
@@ -433,7 +439,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="10" name="EnemyRects">
+ <objectgroup id="10" name="EnemyRects" visible="0">
   <object id="115" x="736" y="1216" width="160" height="96">
    <properties>
     <property name="atk" type="int" value="2"/>

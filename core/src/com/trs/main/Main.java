@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.trs.main.view.UI.DebugUI;
 import com.trs.main.view.screens.GameScreen;
 import com.trs.main.view.screens.InventoryScreen;
 import com.trs.main.view.screens.MenuScreen;
@@ -28,6 +29,7 @@ public class Main extends Game{
     MenuScreen menuScreen;
     GameScreen gameScreen;
     InventoryScreen inventoryScreen;
+    
         
         
        

@@ -41,9 +41,9 @@ public class FightScreen {
             gridPos.y = (float)(Math.ceil((double)(camY-Main.CAMERA_HEIGHT/2)/32.0) * 32.0) + 32;
 
 
-        // SORTING OBJECTS BY INITIATIVE STAT
+            // SORTING OBJECTS BY INITIATIVE STAT
 
-        for(int j = 0; j < objects.length-1; j++){
+            for(int j = 0; j < objects.length-1; j++){
                 for(int i = objects.length-1; i >= 0; i--){
                     if(i > 0 && objects[i].getStats().getInit() > objects[i-1].getStats().getInit()){
                         FightObject temp = objects[i-1];

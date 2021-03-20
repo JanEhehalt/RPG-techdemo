@@ -126,6 +126,8 @@ public class MovingNpc extends Actor{
                                 if(newDialogue == null) {
                                     currentlyTalking = false;
                                     parser = new DialogueParser(dialoguePath);
+                                    Dialogue nextDialogue = parser.firstDialogue();
+                                    this.t = new Textbox(nextDialogue.question, nextDialogue.ans);
                                 }
                                 else {
                                     ((Textbox)a).update(newDialogue);
@@ -265,15 +267,32 @@ public class MovingNpc extends Actor{
             shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             if(POI != null){
-                shapeRenderer.setColor(Color.GREEN);
-                shapeRenderer.line(getX()+ animatedSprite.getSprite().getWidth()/2, getY()+animatedSprite.getSprite().getHeight()/2, POI.x, POI.y);
+                shapeRenderer.setColor(Color.ORANGE);
+                shapeRenderer.line(getCenterX(), getCenterY(), POI.x, POI.y);
             }
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.rect(getX(), getY(), animatedSprite.getSprite().getWidth(),  animatedSprite.getSprite().getHeight());
+            
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(area.x, area.y, area.width, area.height);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x, area.y);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x, area.y + area.height);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x + area.width, area.y);
+            shapeRenderer.line(getCenterX(), getCenterY(), area.x + area.width, area.y+area.height);
+            
             shapeRenderer.end();
             
             batch.begin();
         }
+    
+    
+    public float getCenterX(){
+        return getX()+ animatedSprite.getSprite().getWidth()/2;
+    }
+    public float getCenterY(){
+        return getY()+animatedSprite.getSprite().getHeight()/2;
+    }
     
      public boolean collidingWithMapCollisionObject(){
         for(Actor a : getStage().getActors()){

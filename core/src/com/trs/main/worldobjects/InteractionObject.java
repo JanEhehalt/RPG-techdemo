@@ -88,6 +88,8 @@ public class InteractionObject extends Actor{
                             if(newDialogue == null) {
                                 currentlyTalking = false;
                                 parser = new DialogueParser(dialoguePath);
+                                Dialogue nextDialogue = parser.firstDialogue();
+                                this.t = new Textbox(nextDialogue.question, nextDialogue.ans);
                             }
                             else {
                                 ((Textbox)a).update(newDialogue);

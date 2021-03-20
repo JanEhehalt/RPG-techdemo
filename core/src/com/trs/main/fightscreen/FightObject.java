@@ -18,13 +18,13 @@ public abstract class FightObject {
     private int state = 0;
 	
 	public FightObject(float x, float y, AnimatedSprite sprite, Stats stats, int id) {
-		this.sprite = sprite;
-		this.stats = stats;
-		this.id = id;
-        this.x = x;
-        this.y = y;
-        maxMoves = 2;
-        moves = maxMoves;
+            this.sprite = sprite;
+            this.stats = stats;
+            this.id = id;
+            this.x = x;
+            this.y = y;
+            maxMoves = 2;
+            moves = maxMoves;
 	}
         
     void setX(float x) {

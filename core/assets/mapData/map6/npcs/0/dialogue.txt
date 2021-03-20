@@ -1,0 +1,3 @@
+Ich bin der Besitzer dieses Inns! Möchtest du hier schlafen?
+Ja, gerne!#-1
+Nein, gerade nicht.#-1

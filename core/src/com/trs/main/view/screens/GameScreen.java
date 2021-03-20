@@ -14,6 +14,7 @@ import com.trs.main.Main;
 import com.trs.main.MapContainer;
 import com.trs.main.Quest;
 import com.trs.main.fightscreen.FightDialogue;
+import com.trs.main.view.UI.DebugUI;
 import com.trs.main.view.UI.QuestWindow;
 import com.trs.main.view.UI.Textbox;
 import com.trs.main.worldobjects.Player;
@@ -26,6 +27,7 @@ public class GameScreen extends AbstractScreen{
     
     MapContainer map;
     QuestWindow qw;
+    DebugUI debugUI = new DebugUI();
 
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -76,6 +78,7 @@ public class GameScreen extends AbstractScreen{
             if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
                 map.getStage().getCamera().translate(0, -10, 0);
             }
+            debugUI.draw(map.getStage().getActors().size);
         }
         else{
             Player a = map.getPlayer();
