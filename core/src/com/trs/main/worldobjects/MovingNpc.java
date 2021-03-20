@@ -227,6 +227,21 @@ public class MovingNpc extends Actor{
         
         animatedSprite.updateAnimation(delta);
         
+        for(Actor a : getStage().getActors()){
+            if(a instanceof Player){
+                for(Quest quest : ((Player)a).getQuests()){
+                    if(quest instanceof InformationQuest){
+                        if(((InformationQuest)quest).hasSpecialDialogue(id, mapId)){
+                            questBubble.setSpritePosition((int)(getX()-8), (int)(getY() + getHeight() - 16));
+                            questBubble.updateAnimation(0.01f);
+                            break;
+                        }   
+                    }
+                }
+                break;
+            }
+        }
+        
     }
 
     @Override
@@ -238,8 +253,6 @@ public class MovingNpc extends Actor{
                 for(Quest quest : ((Player)a).getQuests()){
                     if(quest instanceof InformationQuest){
                         if(((InformationQuest)quest).hasSpecialDialogue(id, mapId)){
-                            questBubble.setSpritePosition((int)(getX()-8), (int)(getY() + getHeight() - 16));
-                            questBubble.updateAnimation(0.01f);
                             questBubble.draw(batch);
                             break;
                         }   

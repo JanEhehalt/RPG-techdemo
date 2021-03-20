@@ -77,12 +77,12 @@ public class DebugUI {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.rect(5, Main.CAMERA_HEIGHT - (strings.size()+1)*textHeight-5, width+10,(strings.size()+1)*textHeight);
-        shapeRenderer.end();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(Main.CAMERA_WIDTH/2-6, Main.CAMERA_HEIGHT/2-1, 12, 2);
+        shapeRenderer.line(Main.CAMERA_WIDTH/2-3, Main.CAMERA_HEIGHT/2, Main.CAMERA_WIDTH/2+3, Main.CAMERA_HEIGHT/2);
         shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(Main.CAMERA_WIDTH/2-1, Main.CAMERA_HEIGHT/2-6, 2, 12);
+        shapeRenderer.line(Main.CAMERA_WIDTH/2, Main.CAMERA_HEIGHT/2-3, Main.CAMERA_WIDTH/2, Main.CAMERA_HEIGHT/2+3);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.circle(Main.CAMERA_WIDTH/2, Main.CAMERA_HEIGHT/2, 6);
         shapeRenderer.end();
         
         
