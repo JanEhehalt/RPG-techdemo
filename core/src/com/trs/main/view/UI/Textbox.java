@@ -64,11 +64,11 @@ public class Textbox extends Actor{
         font = generator.generateFont(parameter);
         generator.dispose();
         font.setColor(Color.BLACK);
+        
         textHeight = getTextHeight(font,"A");
         printChar = 0;
         this.ans = ans;
         setName("textbox");
-        font = new BitmapFont();
         
         setWidth(Main.CAMERA_WIDTH - 40);
         r = new Rectangle(20, 20, 814, 0);
@@ -142,6 +142,8 @@ public class Textbox extends Actor{
 
     @Override
     public void draw(Batch camBatch, float parentAlpha) {
+        
+        
         camBatch.end();
         
         batch.setProjectionMatrix(m);
@@ -151,6 +153,7 @@ public class Textbox extends Actor{
         
         font.setColor(Color.CLEAR);
         float height = font.draw(batch, toPrint.substring(0, (int)printChar), getX()+2, getY(), getWidth(), alignment, true).height;
+        float theight = height;
         float textHeight = getTextHeight(font, "A");
         if(state == 1){
             for(String s : ans){
@@ -177,9 +180,11 @@ public class Textbox extends Actor{
                 if(selectedAsw == i){
                     font.setColor(SelectedColor);
                 }
-                font.draw(batch, ans[i], getX()+20, (getY()+getHeight()-5) - (textHeight + i*(getTextHeight(font, "A")+5)), getWidth(), alignment, true);
+                else{
+                    font.setColor(TextColor);
+                }
+                font.draw(batch, ans[i], getX()+20, (getY()+getHeight()-5) -theight- (i)*(textHeight+5), getWidth(), alignment, true);
                 
-                font.setColor(TextColor);
             }
         }
         batch.end();

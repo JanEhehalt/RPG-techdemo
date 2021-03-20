@@ -14,6 +14,7 @@ import com.badlogic.gdx.Input;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.trs.main.view.UI.Textbox;
 
@@ -96,6 +98,8 @@ public class MapContainer {
         renderer = new OrthogonalTiledMapRenderer(getMap());
         renderer.setView((OrthographicCamera)stage.getCamera());
         stage.getCamera().update();
+        
+        
         
         // adding MapObjects to the Stage
         for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
@@ -249,11 +253,13 @@ public class MapContainer {
         getRenderer().render(getLayersBelowPlayer());
         
         if(Main.gamestate == 0 || Main.gamestate == 1) {
+            /*
             Actor[] old = getStage().getActors().toArray();
             getStage().clear();
             for(Actor a : sort(old)){
                 getStage().addActor(a);
             }
+            */
             for(Actor a : getStage().getActors()) {
                 if(a instanceof Player) {
                     Rectangle rect = ((Player) a).getCollisionRect();
@@ -263,7 +269,8 @@ public class MapContainer {
                             setCollidingDoor(d);
                             break;
                         }
-                	}
+                    }
+                    break;
                 }
             }
             
@@ -271,7 +278,7 @@ public class MapContainer {
             getStage().draw();
         }
         
-        if(Main.gamestate == 2){
+        else if(Main.gamestate == 2){
         	if(getFs() == null) {
         		// CREATING MAP COLLISION OBJECTS
                 ArrayList<Rectangle> mapRectsTemp = new ArrayList<>();
@@ -339,6 +346,12 @@ public class MapContainer {
                 getFs().act(f);
                 getFs().draw();
             }
+        }
+        else if(Main.gamestate == -1){
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                getStage().act();
+            }
+            getStage().draw();
         }
         
         getRenderer().render(getLayersAbovePlayer());

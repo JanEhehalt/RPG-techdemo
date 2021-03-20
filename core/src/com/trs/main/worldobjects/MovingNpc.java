@@ -6,9 +6,11 @@
 package com.trs.main.worldobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -52,6 +54,8 @@ public class MovingNpc extends Actor{
     String dialoguePath;
     
     private AnimatedSprite questBubble;
+    
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     
     public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture){
         super();
@@ -153,7 +157,7 @@ public class MovingNpc extends Actor{
 	            POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
 	        }
 	        Vector2 movement = new Vector2(speed,0);
-	        movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
+	        movement.setAngleRad(StaticMath.calculateAngle(getX() + animatedSprite.getSprite().getWidth()/2, getY() + animatedSprite.getSprite().getHeight()/2, POI.x, POI.y));
 	        
 	        if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
 	        	facing = 0;
@@ -168,7 +172,7 @@ public class MovingNpc extends Actor{
 	        	facing = 3;
 	        }
 	        
-	        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y) < 10f) {
+	        if(StaticMath.calculateDistance(getX() + animatedSprite.getSprite().getWidth()/2, getY() + animatedSprite.getSprite().getHeight()/2, POI.x, POI.y) < 10f) {
 	        	movementX = 0;
 	        	movementY = 0;
 	        }
@@ -243,10 +247,33 @@ public class MovingNpc extends Actor{
             }
         }
         
-        
+        if(Main.gamestate == -1){
+            debug(batch);
+        }
         
         super.draw(batch, delta); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private void debug(Batch batch){
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            if(POI != null){
+                shapeRenderer.setColor(Color.RED);
+                shapeRenderer.circle(POI.x, POI.y, 5);
+            }
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            if(POI != null){
+                shapeRenderer.setColor(Color.GREEN);
+                shapeRenderer.line(getX()+ animatedSprite.getSprite().getWidth()/2, getY()+animatedSprite.getSprite().getHeight()/2, POI.x, POI.y);
+            }
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(getX(), getY(), animatedSprite.getSprite().getWidth(),  animatedSprite.getSprite().getHeight());
+            shapeRenderer.end();
+            
+            batch.begin();
+        }
     
      public boolean collidingWithMapCollisionObject(){
         for(Actor a : getStage().getActors()){

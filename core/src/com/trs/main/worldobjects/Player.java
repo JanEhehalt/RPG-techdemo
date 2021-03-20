@@ -7,8 +7,10 @@ package com.trs.main.worldobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -44,6 +46,8 @@ public class Player extends Actor{
     private Group questGroup;
     
     private Stats stats;
+    
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     
     public Player(int xPos, int yPos){
         setName("player");
@@ -198,7 +202,24 @@ public class Player extends Actor{
     @Override
     public void draw(Batch batch, float parentAlpha) {
         getPlayerSprite().draw(batch);
+        if(Main.gamestate == -1){
+            debug(batch);
+        }
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void debug(Batch batch){
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(getX(), getY(), playerSprite.getSprite().getWidth(),  playerSprite.getSprite().getHeight());
+            shapeRenderer.end();
+            
+            batch.begin();
     }
 
     @Override

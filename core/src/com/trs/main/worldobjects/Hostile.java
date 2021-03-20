@@ -1,8 +1,10 @@
 package com.trs.main.worldobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -27,6 +29,8 @@ public class Hostile extends Actor {
         private float speed = 2;
         float movementX;
         float movementY;
+        
+        private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 	// 0: normal movement, 1: locked onto Player, 2: attacking
 	private int movementState;
@@ -67,7 +71,7 @@ public class Hostile extends Actor {
                             POI = new Vector2(area.getX() + ((float) Math.random() * (float) area.getWidth()), area.getY() + ((float) Math.random() * (float) area.getHeight()));
                         }
                         Vector2 movement = new Vector2(speed,0);
-                        movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
+                        movement.setAngleRad(StaticMath.calculateAngle(getX()+sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, POI.x, POI.y));
 
                         if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
                                 facing = 0;
@@ -82,7 +86,7 @@ public class Hostile extends Actor {
                                 facing = 3;
                         }
 
-                        if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y) < 10f) {
+                        if(StaticMath.calculateDistance(getX()+sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, POI.x, POI.y) < 3f) {
                                 movementX = 0;
                                 movementY = 0;
                         }
@@ -182,15 +186,43 @@ public class Hostile extends Actor {
 	
 	@Override
 	public void draw(Batch batch, float deltatime) {
-		getSprite().draw(batch);
+            getSprite().draw(batch);
+            if(Main.gamestate == -1){
+                debug(batch);
+            }
+            super.draw(batch, deltatime);
+            
 	}
+        
+        private void debug(Batch batch){
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            if(POI != null){
+                shapeRenderer.setColor(Color.RED);
+                shapeRenderer.circle(POI.x, POI.y, 5);
+            }
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.line(getX()+ sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, POI.x, POI.y);
+            shapeRenderer.setColor(Color.YELLOW);
+            shapeRenderer.circle(getX()+ sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, getAttentionCircle().radius);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.circle(getX()+ sprite.getSprite().getWidth()/2, getY()+sprite.getSprite().getHeight()/2, getAttackCircle().radius);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(getX(), getY(), sprite.getSprite().getWidth(),  sprite.getSprite().getHeight());
+            shapeRenderer.end();
+            
+            batch.begin();
+        }
 	
 	@Override
     protected void positionChanged() {
         getSprite().setSpritePosition((int)getX(), (int)getY());
         setCollisionRect(new Rectangle(getX() + 16, getY(), 32, 16));
         setAttackCircle(new Circle(getX() + 16, getY(), 100f));
-		setAttentionCircle(new Circle(getX() + 16, getY(), 300f));
+        setAttentionCircle(new Circle(getX() + 16, getY(), 300f));
         super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
     }
 

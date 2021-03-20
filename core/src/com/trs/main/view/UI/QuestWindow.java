@@ -76,6 +76,10 @@ public class QuestWindow {
         
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         
+        if(Main.gamestate == -1){
+            visible = false;
+        }
+        
         if(visible && Main.gamestate != 2 && Main.gamestate != 1){
             if(visiblePerc < 1){
                 visiblePerc += animationSpeed;
@@ -86,6 +90,10 @@ public class QuestWindow {
                 renderer.rect((float)(boxX + boxWidth-(boxWidth * visiblePerc)), (float)(boxY + boxHeight-(boxHeight * visiblePerc)), (float)(boxWidth * visiblePerc), (float)(boxHeight * visiblePerc));
                 renderer.end();
                 Gdx.gl.glDisable(GL20.GL_BLEND);
+                renderer.begin(ShapeRenderer.ShapeType.Line);
+                renderer.setColor(Color.BLACK);
+                renderer.rect((float)(boxX + boxWidth-(boxWidth * visiblePerc)), (float)(boxY + boxHeight-(boxHeight * visiblePerc)), (float)(boxWidth * visiblePerc), (float)(boxHeight * visiblePerc));
+                renderer.end();
                 UIDrawer.drawCharBox(batch, font, boxX + boxWidth - 16   , boxY + boxHeight - 16, 32, "^");
             }
             else{
@@ -95,7 +103,13 @@ public class QuestWindow {
                 renderer.setColor(0.1f, 0.1f, 0.1f, 0.5f);
                 renderer.rect(boxX, boxY, boxWidth, boxHeight);
                 renderer.end();
-
+                Gdx.gl.glDisable(GL20.GL_BLEND);
+                renderer.begin(ShapeRenderer.ShapeType.Line);
+                renderer.setColor(Color.BLACK);
+                renderer.rect((float)(boxX + boxWidth-(boxWidth * visiblePerc)), (float)(boxY + boxHeight-(boxHeight * visiblePerc)), (float)(boxWidth * visiblePerc), (float)(boxHeight * visiblePerc));
+                renderer.end();
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
 
                 batch.begin();
@@ -130,7 +144,7 @@ public class QuestWindow {
                 Gdx.gl.glDisable(GL20.GL_BLEND);
             }
             
-            if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && Main.gamestate != -1){
                 visible = false;
             }
             
@@ -145,13 +159,17 @@ public class QuestWindow {
                 renderer.rect((float)(boxX + boxWidth-(boxWidth * visiblePerc)), (float)(boxY + boxHeight-(boxHeight * visiblePerc)),(float)(boxWidth * visiblePerc), (float)(boxHeight * visiblePerc));
                 renderer.end();
                 Gdx.gl.glDisable(GL20.GL_BLEND);
+                renderer.begin(ShapeRenderer.ShapeType.Line);
+                renderer.setColor(Color.BLACK);
+                renderer.rect((float)(boxX + boxWidth-(boxWidth * visiblePerc)), (float)(boxY + boxHeight-(boxHeight * visiblePerc)), (float)(boxWidth * visiblePerc), (float)(boxHeight * visiblePerc));
+                renderer.end();
                UIDrawer.drawCharBox(batch, font, boxX + boxWidth - 16   , boxY + boxHeight - 16, 32, "V");
             }
             else{
                UIDrawer.drawCharBox(batch, font, boxX + boxWidth - 16   , boxY + boxHeight - 16, 32, "V");
                UIDrawer.drawIcon(batch, boxX + boxWidth - 16   , boxY + boxHeight - 16, 0);
             }
-            if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && Main.gamestate != -1){
                 visible = true;
             }
         }

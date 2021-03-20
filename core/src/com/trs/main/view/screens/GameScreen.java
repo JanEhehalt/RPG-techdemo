@@ -6,6 +6,8 @@
 package com.trs.main.view.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.trs.main.Main;
@@ -61,10 +63,25 @@ public class GameScreen extends AbstractScreen{
         	loadNewMap(map.getCollidingDoor().destinationMap, map.getCollidingDoor().destinationDoor);
         }
         
-        
-        Player a = map.getPlayer();
-        map.getStage().getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
-        //map.getStage().getCamera().update();
+        if(Main.gamestate == -1){
+            if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+                map.getStage().getCamera().translate(-10, 0, 0);
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+                map.getStage().getCamera().translate(10, 0, 0);
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+                map.getStage().getCamera().translate(0, 10, 0);
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+                map.getStage().getCamera().translate(0, -10, 0);
+            }
+        }
+        else{
+            Player a = map.getPlayer();
+            map.getStage().getCamera().position.set((a.getX()+a.getWidth()/2), (a.getY()+a.getHeight()/2), 0);
+            //map.getStage().getCamera().update();
+        }
     }
 
     @Override

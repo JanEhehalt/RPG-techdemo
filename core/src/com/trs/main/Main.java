@@ -16,11 +16,14 @@ public class Main extends Game{
      */
 	// TEST
 	
+        // -1: Debug
 	// 0: normal game world, 1: dialogue, 2: fight
         // 7: Load MenuScreen 8: Load GameScreen 9: Load InventoryScreen
     public static int gamestate = 0;
+    private int fallbackState = 0;
     public static float CAMERA_WIDTH = 854;
     public static float CAMERA_HEIGHT = 480;
+    
 
     MenuScreen menuScreen;
     GameScreen gameScreen;
@@ -93,6 +96,16 @@ public class Main extends Game{
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         */
+        
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ALT_LEFT)){
+            if(gamestate == -1){
+                gamestate = fallbackState;
+            }
+            else{
+                fallbackState = gamestate;
+                gamestate = -1;
+            }
+        }
     }
 
     @Override

@@ -53,7 +53,7 @@ public class AnimatedSprite {
     }
     
     public void draw(Batch batch) {
-    	sprite.draw(batch);
+        sprite.draw(batch);
     }
     
     /**

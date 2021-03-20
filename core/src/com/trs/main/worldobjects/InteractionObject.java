@@ -1,8 +1,10 @@
 package com.trs.main.worldobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,6 +24,7 @@ public class InteractionObject extends Actor{
     int id;
     
     String dialoguePath;
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     
     public InteractionObject(Rectangle collisionRect, float xPos, float yPos,int mapId, int id, String texture){
         setName("interactive");
@@ -102,8 +105,28 @@ public class InteractionObject extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if(animatedSprite != null)animatedSprite.draw(batch);
+        if(animatedSprite != null){animatedSprite.draw(batch);}
+        if(Main.gamestate == -1){
+            debug(batch);
+        }
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+     private void debug(Batch batch){
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            
+            shapeRenderer.end();
+            
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(getX(), getY(), getWidth(),  getHeight());
+            
+            shapeRenderer.end();
+            
+            batch.begin();
     }
     
     public boolean collidingWithMapCollisionObject(){
