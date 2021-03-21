@@ -1,5 +1,6 @@
 package com.trs.main.desktop;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.trs.main.Main;
@@ -12,7 +13,9 @@ public class DesktopLauncher {
         config.width=1280;
         config.height=720;
         config.fullscreen = false;
-
+        config.backgroundFPS = 100;
+        config.foregroundFPS = 100;
+        
         //config.width=1920;
         //config.height=1080;
         //config.fullscreen = true;

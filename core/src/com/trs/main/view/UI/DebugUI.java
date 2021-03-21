@@ -52,10 +52,26 @@ public class DebugUI {
         
         ArrayList<String> strings = new ArrayList<>();
         strings.add("DeltaTime: "+Gdx.graphics.getDeltaTime());
-        strings.add("FPS: "+(int)(1/Gdx.graphics.getDeltaTime()));
+        strings.add("FPS: "+(int)(Gdx.graphics.getFramesPerSecond()));
         strings.add("Entities: "+entityAmount);
         strings.add("CamX: "+camPos.x);
         strings.add("CamY: "+camPos.y);
+        strings.add("Gamestate: "+Main.gamestate);
+        strings.add(" ");
+        if(Main.gamestate == -1){
+        strings.add("DebugMode: PlayerCam");
+        strings.add("Player input enabled");
+        strings.add(" ");
+        }
+        else if(Main.gamestate == -2){
+        strings.add("DebugMode: FreeCam");
+        strings.add("Player input disabled");
+        strings.add("press [SPACE] for Actors to act");
+        }
+        else{
+        strings.add("Gamestate "+Main.gamestate+" not supported");
+        }
+        strings.add("press [F1] to switch Gamestate");
         
         float width = 0;
         for(String s : strings){
@@ -71,7 +87,6 @@ public class DebugUI {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.1f, 0.1f, 0.1f, 0.8f);
         shapeRenderer.rect(5, Main.CAMERA_HEIGHT - (strings.size()+1)*textHeight-5, width+10,(strings.size()+1)*textHeight);
-        shapeRenderer.rect(5, Main.CAMERA_HEIGHT - (strings.size()+2)*textHeight-10, getTextWidth(font, "F1")+10, getTextHeight(font, "F1")*2f);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -81,8 +96,6 @@ public class DebugUI {
         shapeRenderer.line(Main.CAMERA_WIDTH/2-3, Main.CAMERA_HEIGHT/2, Main.CAMERA_WIDTH/2+3, Main.CAMERA_HEIGHT/2);
         shapeRenderer.setColor(Color.GREEN);
         shapeRenderer.line(Main.CAMERA_WIDTH/2, Main.CAMERA_HEIGHT/2-3, Main.CAMERA_WIDTH/2, Main.CAMERA_HEIGHT/2+3);
-        shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.circle(Main.CAMERA_WIDTH/2, Main.CAMERA_HEIGHT/2, 6);
         shapeRenderer.end();
         
         
@@ -93,7 +106,6 @@ public class DebugUI {
         for(int i = 1; i < strings.size()+1; i++){
             font.draw(batch, strings.get(i-1), 10, Main.CAMERA_HEIGHT-textHeight*i);
         }
-        font.draw(batch, "F1", 10, Main.CAMERA_HEIGHT-textHeight*(strings.size()+2));
         
         
         batch.end();

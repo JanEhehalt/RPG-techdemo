@@ -15,7 +15,7 @@ public class Main extends Game{
      */
 	// TEST
 	
-        // -1: Debug
+        // -1: Debug centerCam, -2: Debug freeCam
 	// 0: normal game world, 1: dialogue, 2: fight
         // 7: Load MenuScreen 8: Load GameScreen 9: Load InventoryScreen
     public static int gamestate = 0;
@@ -97,24 +97,22 @@ public class Main extends Game{
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         */
-        
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ALT_LEFT)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F1)){
             if(gamestate == -1){
+                debugUI = true;
+                gamestate = -2;
+            }
+            else if(gamestate == -2){
+                debugUI = false;
                 gamestate = fallbackState;
             }
             else{
+                debugUI = true;
                 fallbackState = gamestate;
                 gamestate = -1;
             }
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.F1)){
-            if(!debugUI){
-                debugUI = true;
-            }
-            else{
-                debugUI = false;
-            }
-        }
+        
     }
 
     @Override

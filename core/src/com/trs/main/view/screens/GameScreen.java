@@ -8,6 +8,7 @@ package com.trs.main.view.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -29,10 +30,12 @@ public class GameScreen extends AbstractScreen{
     MapContainer map;
     QuestWindow qw;
     DebugUI debugUI;
-
+    
+    public ShapeRenderer uiRenderer = new ShapeRenderer();
+    
     public GameScreen(Game game, float CAMERA_WIDTH, float CAMERA_HEIGHT) {
         super(game, CAMERA_WIDTH, CAMERA_HEIGHT);
-        map = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, new Player(200, 200), "tiledmapData/maps/map1.tmx", 2, 1);
+        map = new MapContainer(CAMERA_WIDTH, CAMERA_HEIGHT, new Player(200, 200, uiRenderer), "tiledmapData/maps/map1.tmx", 2, 1, uiRenderer);
         qw = new QuestWindow(map.getCamera().combined);
         debugUI = new DebugUI(map.getCamera().combined);
         Matrix4 uiMatrix = map.getCamera().combined.cpy();
@@ -43,7 +46,7 @@ public class GameScreen extends AbstractScreen{
     
     public void loadNewMap(int map, int doorId){
     	String filename = "tiledmapData/maps/map" + map + ".tmx";
-        this.map = new MapContainer(Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT, this.map.getPlayer(), filename, doorId, map);
+        this.map = new MapContainer(Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT, this.map.getPlayer(), filename, doorId, map, uiRenderer);
         System.out.println("Doorid: " + doorId);
     }
 
@@ -68,7 +71,7 @@ public class GameScreen extends AbstractScreen{
         	loadNewMap(map.getCollidingDoor().destinationMap, map.getCollidingDoor().destinationDoor);
         }
         
-        if(Main.gamestate == -1){
+        if(Main.gamestate == -2){
             float camSpeed = 15;
             if(Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT)){
                 camSpeed = 1;

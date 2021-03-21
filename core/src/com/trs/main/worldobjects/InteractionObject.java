@@ -26,9 +26,10 @@ public class InteractionObject extends Actor{
     String dialoguePath;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     
-    public InteractionObject(Rectangle collisionRect, float xPos, float yPos,int mapId, int id, String texture){
+    public InteractionObject(Rectangle collisionRect, float xPos, float yPos,int mapId, int id, String texture, ShapeRenderer uiRenderer){
         setName("interactive");
         this.id = id;
+        shapeRenderer = uiRenderer;
         Texture t = new Texture(Gdx.files.internal("textureData/sprites/"+texture));
         
         currentlyTalking = false;
@@ -45,9 +46,10 @@ public class InteractionObject extends Actor{
         setBounds(xPos, yPos, animatedSprite.getSprite().getWidth(), animatedSprite.getSprite().getHeight());
     }
     
-    public InteractionObject(Rectangle collisionRect, float xPos, float yPos,int mapId, int id){
+    public InteractionObject(Rectangle collisionRect, float xPos, float yPos,int mapId, int id, ShapeRenderer uiRenderer){
         setName("interactive");
         this.id = id;
+        shapeRenderer = uiRenderer;
         
         currentlyTalking = false;
 
@@ -108,7 +110,7 @@ public class InteractionObject extends Actor{
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if(animatedSprite != null){animatedSprite.draw(batch);}
-        if(Main.gamestate == -1){
+        if(Main.gamestate == -1 || Main.gamestate == -2){
             debug(batch);
         }
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
@@ -117,10 +119,6 @@ public class InteractionObject extends Actor{
      private void debug(Batch batch){
             batch.end();
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            
-            shapeRenderer.end();
-            
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             
             shapeRenderer.setColor(Color.WHITE);

@@ -55,10 +55,13 @@ public class MovingNpc extends Actor{
     
     private AnimatedSprite questBubble;
     
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private ShapeRenderer shapeRenderer;
     
-    public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture){
+    public MovingNpc(Rectangle area, float xPos, float yPos, int id, int mapId, String texture, ShapeRenderer uiRenderer){
         super();
+        
+        shapeRenderer = uiRenderer;
+        
         setName("npc");
         this.id = id;
         this.mapId = mapId;
@@ -262,7 +265,7 @@ public class MovingNpc extends Actor{
             }
         }
         
-        if(Main.gamestate == -1){
+        if(Main.gamestate == -1 || Main.gamestate == -2){
             debug(batch);
         }
         

@@ -77,7 +77,7 @@ public class QuestWindow {
         
         renderer.setProjectionMatrix(batch.getProjectionMatrix());
         
-        if(Main.gamestate == -1){
+        if(Main.debugUI){
             visible = false;
         }
         

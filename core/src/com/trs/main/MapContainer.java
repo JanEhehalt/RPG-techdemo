@@ -14,7 +14,7 @@ import com.badlogic.gdx.Input;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -25,7 +25,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.trs.main.view.UI.Textbox;
 
@@ -62,7 +61,7 @@ import com.trs.main.view.UI.Textbox;
  */
 
 public class MapContainer {
-        
+    
     private Stage stage;
     private OrthographicCamera camera;
     private TmxMapLoader maploader;
@@ -79,7 +78,7 @@ public class MapContainer {
     private int[] layersAbovePlayer = {3, 4};
 	
         // TODO: Value which shows from which door the player is coming?
-    public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor, int mapId) {
+    public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor, int mapId, ShapeRenderer uiRenderer) {
         // CREATION OF STAGE
         camera = new OrthographicCamera();
         camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -104,7 +103,7 @@ public class MapContainer {
         // adding MapObjects to the Stage
         for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            stage.addActor(new MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight()));
+            stage.addActor(new MapCollisionObject((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight(), uiRenderer));
         }
         
         // adding the door links
@@ -130,7 +129,7 @@ public class MapContainer {
             int id = props.get("id", Integer.class);
             String texture = props.get("texture", String.class);
             
-            stage.addActor(new MovingNpc(rect, rect.getX() + (float)(Math.random()*(rect.getWidth()-64)), rect.getY()+(float)(Math.random()*(rect.getHeight()-64)), id, mapId, texture));
+            stage.addActor(new MovingNpc(rect, rect.getX() + (float)(Math.random()*(rect.getWidth()-64)), rect.getY()+(float)(Math.random()*(rect.getHeight()-64)), id, mapId, texture, uiRenderer));
         }
         
         // adding the InteractionObjects
@@ -142,16 +141,16 @@ public class MapContainer {
             String texture = props.get("texture", String.class);
             
             if(texture.equals("-")){
-                stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id));
+                stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id, uiRenderer));
             }
             else{
-                stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id, texture));
+                stage.addActor(new InteractionObject(rect, rect.getX(), rect.getY(), mapId, id, texture, uiRenderer));
             }
             
-            stage.addActor(new MapCollisionObject((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height));
+            stage.addActor(new MapCollisionObject((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height, uiRenderer));
         }
         
-        // adding the InteractionObjects
+        // adding the Hostiles
         for(MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             MapProperties props = object.getProperties();
@@ -168,7 +167,7 @@ public class MapContainer {
             
             boolean isMelee = props.get("isMelee", Boolean.class);
             
-            Hostile h = new Hostile(rect, rect.getX() + (float)(Math.random()*(rect.getWidth()-64)), rect.getY()+(float)(Math.random()*(rect.getHeight()-64)), id, stats, texture, isMelee);
+            Hostile h = new Hostile(rect, rect.getX() + (float)(Math.random()*(rect.getWidth()-64)), rect.getY()+(float)(Math.random()*(rect.getHeight()-64)), id, stats, texture, isMelee, uiRenderer);
             stage.addActor(h);
         }
         
@@ -277,7 +276,6 @@ public class MapContainer {
             getStage().act(f);
             getStage().draw();
         }
-        
         else if(Main.gamestate == 2){
         	if(getFs() == null) {
         		// CREATING MAP COLLISION OBJECTS
@@ -348,6 +346,10 @@ public class MapContainer {
             }
         }
         else if(Main.gamestate == -1){
+            getStage().act();
+            getStage().draw();
+        }
+        else if(Main.gamestate == -2){
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
                 getStage().act();
             }

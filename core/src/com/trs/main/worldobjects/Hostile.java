@@ -35,8 +35,10 @@ public class Hostile extends Actor {
 	// 0: normal movement, 1: locked onto Player, 2: attacking
 	private int movementState;
 	
-	public Hostile(Rectangle movementRect, float xPos, float yPos, int id, Stats stats, String texture, boolean isMelee) {
+	public Hostile(Rectangle movementRect, float xPos, float yPos, int id, Stats stats, String texture, boolean isMelee, ShapeRenderer uiRenderer) {
 		
+                shapeRenderer = uiRenderer;
+                
 		this.id = id;
 		this.stats = stats;
 		this.isMelee = isMelee;
@@ -143,7 +145,7 @@ public class Hostile extends Actor {
 					}
 					
 
-					POI = new Vector2(a.getX(), a.getY());
+					POI = new Vector2(a.getX()+a.getWidth()/2, a.getY()+a.getHeight()/2);
 		            
 		            Vector2 movement = new Vector2(speed,0);
 		            movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
@@ -187,7 +189,7 @@ public class Hostile extends Actor {
 	@Override
 	public void draw(Batch batch, float deltatime) {
             getSprite().draw(batch);
-            if(Main.gamestate == -1){
+            if(Main.gamestate == -1 || Main.gamestate == -2){
                 debug(batch);
             }
             super.draw(batch, deltatime);
@@ -375,6 +377,7 @@ public class Hostile extends Actor {
     public void setMovementState(int movementState) {
         this.movementState = movementState;
     }
+    
     
     
 }
