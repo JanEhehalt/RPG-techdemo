@@ -21,6 +21,8 @@ public class Hostile extends Actor {
 	private AnimatedSprite sprite;
 	private Rectangle collisionRect;
         private Rectangle area;
+        private float attackCircleRad = 80f;
+        private float attentionCircleRad = 200f;
 	private Circle attackCircle;
 	private Circle attentionCircle;
 	private boolean isMelee;
@@ -48,8 +50,8 @@ public class Hostile extends Actor {
 		sprite = new AnimatedSprite(tx, 64, 64, true);
 		
 		collisionRect = new Rectangle(xPos + 16, yPos, 32, 16);
-		attackCircle = new Circle(xPos + 16, yPos, 100f);
-		attentionCircle = new Circle(xPos + 16, yPos, 300f);
+		attackCircle = new Circle(xPos + 16, yPos, attackCircleRad);
+		attentionCircle = new Circle(xPos + 16, yPos, attentionCircleRad);
 		
 		movementState = 0;
 		
@@ -135,50 +137,78 @@ public class Hostile extends Actor {
                         }
 		
 		if(getMovementState() == 1 && Main.gamestate != 1) {
-			for(Actor a : getStage().getActors()) {
-				if(a instanceof Player) {
-					if(Intersector.overlaps(getAttackCircle(), ((Player) a).getCollisionRect())) {
-						setMovementState(2);
-					}
-					if(!Intersector.overlaps(attentionCircle, ((Player) a).getCollisionRect())) {
-						setMovementState(0);
-					}
-					
+                    Actor a = null;
+                    for(Actor ac : getStage().getActors()) {
+                        if(ac instanceof Player) {
+                            if(Intersector.overlaps(getAttackCircle(), ((Player) ac).getCollisionRect())) {
+                                    setMovementState(2);
+                            }
+                            if(!Intersector.overlaps(attentionCircle, ((Player) ac).getCollisionRect())) {
+                                    setMovementState(0);
+                            }
+                            a = ac;
+                            break;
+                        }
+                    }
+                    if(a != null){
+                        POI = new Vector2(a.getX()+a.getWidth()/2, a.getY()+a.getHeight()/2);
 
-					POI = new Vector2(a.getX()+a.getWidth()/2, a.getY()+a.getHeight()/2);
-		            
-		            Vector2 movement = new Vector2(speed,0);
-		            movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
-		            if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
-		                    facing = 0;
-		            }
-		            else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
-		                    facing = 1;
-		            }
-		            else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
-		                    facing = 2;
-		            }
-		            else {
-		                    facing = 3;
-		            }
-		            
-		            if(StaticMath.calculateDistance(getX(), getY(), POI.x, POI.y) < 1f) {
-		                movement.x = 0;
-		                movement.y = 0;
-		            }       
-		            
-		            setX(getX() + movement.x);
-		            setY(getY() + movement.y);
-		            
-		            int animationRow = 0;
-		            if(movement.x != 0 || movement.y != 0) {
-		                    animationRow = 8;
-		            }
-		            
-		            getSprite().setRow(animationRow + facing);
-				}
-			}
-		}
+                        Vector2 movement = new Vector2(speed,0);
+                        movement.setAngleRad(StaticMath.calculateAngle(getX(), getY(), POI.x, POI.y));
+                        if(movement.angleDeg() < 135 && movement.angleDeg() >= 45) {
+                                facing = 0;
+                        }
+                        else if(movement.angleDeg() >= 135 && movement.angleDeg() < 225) {
+                                facing = 1;
+                        }
+                        else if(movement.angleDeg() >= 225 && movement.angleDeg() < 315) {
+                                facing = 2;
+                        }
+                        else {
+                                facing = 3;
+                        }
+
+                        
+                        movementX = movement.x;
+                        movementY = movement.y;
+                        if(movementX == 0 && movementY == 0){
+
+                        }
+                        else if(movementX == 0 && movementY != 0){
+                            setY(getY()+movementY);
+                            if(collidingWithMapCollisionObject()){
+                                setY(getY()-movementY);
+                            }
+                        }
+                        else if(movementY == 0 && movementX != 0){
+                            setX(getX()+movementX);
+                            if(collidingWithMapCollisionObject()){
+                                setX(getX()-movementX);
+                            }
+                        }
+                        else if(movementX != 0 && movementY != 0){
+                                setX(getX()+ (movementX));
+                            if(collidingWithMapCollisionObject()){
+                                setX(getX() - (movementX));
+                            }
+
+                            setY(getY() + (movementY));
+                            if(collidingWithMapCollisionObject()){
+                                setY(getY()- (movementY));
+                            }
+                        }
+
+
+                        //setX(getX() + movement.x);
+                        //setY(getY() + movement.y);
+
+                        int animationRow = 0;
+                        if(movement.x != 0 || movement.y != 0) {
+                                animationRow = 8;
+                        }
+                            getSprite().setRow(animationRow + facing);
+                    }
+                }
 		
 		if(getMovementState() == 2) {
 			Main.gamestate = 2;
@@ -189,7 +219,7 @@ public class Hostile extends Actor {
 	@Override
 	public void draw(Batch batch, float deltatime) {
             getSprite().draw(batch);
-            if(Main.gamestate == -1 || Main.gamestate == -2){
+        if(Main.debugModeActive){
                 debug(batch);
             }
             super.draw(batch, deltatime);
@@ -239,8 +269,8 @@ public class Hostile extends Actor {
     protected void positionChanged() {
         getSprite().setSpritePosition((int)getX(), (int)getY());
         setCollisionRect(new Rectangle(getX() + 16, getY(), 32, 16));
-        setAttackCircle(new Circle(getX() + 16, getY(), 100f));
-        setAttentionCircle(new Circle(getX() + 16, getY(), 300f));
+        setAttackCircle(new Circle(getX() + 16, getY(), attackCircleRad));
+        setAttentionCircle(new Circle(getX() + 16, getY(), attentionCircleRad));
         super.positionChanged(); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -252,7 +282,7 @@ public class Hostile extends Actor {
                         return true;
                     }
                 }
-                else if(a instanceof MovingNpc && a != this){
+                else if(a instanceof MovingNpc){
                     if(Intersector.overlaps(collisionRect, ((MovingNpc)a).collisionRect)){
                         return true;
                     }

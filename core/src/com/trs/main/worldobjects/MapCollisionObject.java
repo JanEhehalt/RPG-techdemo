@@ -38,7 +38,7 @@ public class MapCollisionObject extends Actor{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if(Main.gamestate == -1 || Main.gamestate == -2){
+        if(Main.debugModeActive){
             debug(batch);
         }
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.

@@ -34,7 +34,6 @@ public class DebugUI {
         Matrix4 uiMatrix = m.cpy();
         uiMatrix.setToOrtho2D(0, 0, Main.CAMERA_WIDTH, Main.CAMERA_HEIGHT);
         batch.setProjectionMatrix(uiMatrix);
-        
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontData/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 21;
@@ -51,27 +50,66 @@ public class DebugUI {
         float textHeight = getTextHeight(font, "A")+5;
         
         ArrayList<String> strings = new ArrayList<>();
-        strings.add("DeltaTime: "+Gdx.graphics.getDeltaTime());
-        strings.add("FPS: "+(int)(Gdx.graphics.getFramesPerSecond()));
-        strings.add("Entities: "+entityAmount);
-        strings.add("CamX: "+camPos.x);
-        strings.add("CamY: "+camPos.y);
-        strings.add("Gamestate: "+Main.gamestate);
-        strings.add(" ");
+            strings.add("DeltaTime:         "+Gdx.graphics.getDeltaTime());
+            strings.add("FPS:               "+(int)(Gdx.graphics.getFramesPerSecond()));
+            strings.add("Entities:          "+entityAmount);
+            strings.add("CamX:              "+camPos.x);
+            strings.add("CamY:              "+camPos.y);
+        if(Main.gamestate == -1 || Main.gamestate == -2){
+            strings.add("DebugMode:         "+Math.abs(Main.gamestate));
+        }
+        else{
+            strings.add("DebugMode:         no debug state");
+        }    
+            strings.add("Gamestate:         "+Main.gamestate);
+            strings.add(" ");
+            strings.add("drawAbove:         "+Main.drawAbove);
+            strings.add("drawBelow:         "+Main.drawBelow);
         if(Main.gamestate == -1){
-        strings.add("DebugMode: PlayerCam");
-        strings.add("Player input enabled");
-        strings.add(" ");
+            strings.add("DebugMode:         PlayerCam");
+            strings.add("Player input:      enabled");
+            strings.add("Doors:             disabled");
+            if(Main.drawAbove || Main.drawBelow){
+            strings.add("TiledMap:          enabled");
+            }
+            else{
+            strings.add("TiledMap:          disabled");
+            }
+            strings.add(" ");
+            strings.add("CONTROLS:");
+            strings.add(" ");
+            strings.add("press [F1] for debugMode 1");
+            strings.add("press [F2] for debugMode 2");
+            strings.add("press [F3] to end debugMode");
+            strings.add("press [F8] to switch drawAbove");
+            strings.add("press [F9] to switch drawBelow");
+            strings.add(" ");
+            strings.add(" ");
         }
         else if(Main.gamestate == -2){
-        strings.add("DebugMode: FreeCam");
-        strings.add("Player input disabled");
-        strings.add("press [SPACE] for Actors to act");
+            strings.add("DebugMode:         FreeCam");
+            strings.add("Player input:      disabled");
+            strings.add("Doors:             disabled");
+            if(Main.drawAbove || Main.drawBelow){
+            strings.add("TiledMap:          enabled");
+            }
+            else{
+            strings.add("TiledMap:          disabled");
+            }
+            strings.add(" ");
+            strings.add("CONTROLS:");
+            strings.add("hold  [SPACE] for Actors to act");
+            strings.add("press [F1] for debugMode 1");
+            strings.add("press [F2] for debugMode 2");
+            strings.add("press [F3] to end debugMode");
+            strings.add("press [F8] to switch drawAbove");
+            strings.add("press [F9] to switch drawBelow");
+            strings.add("press [ARROW_KEYS] to move Camera");
+            strings.add("hold  [ALT_GR] to slowly move Camera");
         }
         else{
         strings.add("Gamestate "+Main.gamestate+" not supported");
         }
-        strings.add("press [F1] to switch Gamestate");
         
         float width = 0;
         for(String s : strings){

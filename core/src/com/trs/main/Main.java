@@ -19,11 +19,19 @@ public class Main extends Game{
 	// 0: normal game world, 1: dialogue, 2: fight
         // 7: Load MenuScreen 8: Load GameScreen 9: Load InventoryScreen
     public static int gamestate = 0;
-    public static boolean debugUI = false;
     private int fallbackState = 0;
-    public static float CAMERA_WIDTH = 854;
-    public static float CAMERA_HEIGHT = 480;
+    public static float CAMERA_WIDTH = 960;
+    public static float CAMERA_HEIGHT = 540;
+    /**
+     * TODO: 
+     *  figure out, how(if) we can change CamWidth and Height while ingame (e.G. for debug mode)
+     */
     
+    // DEBUG
+    public static boolean debugModeActive = false;
+    
+    public static boolean drawAbove = true;
+    public static boolean drawBelow = true;
 
     MenuScreen menuScreen;
     GameScreen gameScreen;
@@ -97,22 +105,46 @@ public class Main extends Game{
         renderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         */
-        if(Gdx.input.isKeyJustPressed(Input.Keys.F1)){
-            if(gamestate == -1){
-                debugUI = true;
-                gamestate = -2;
+        if(debugModeActive){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F8)){
+                    if(drawAbove){
+                        drawAbove = false;
+                    }
+                    else{
+                        drawAbove = true;
+                    }
             }
-            else if(gamestate == -2){
-                debugUI = false;
-                gamestate = fallbackState;
-            }
-            else{
-                debugUI = true;
-                fallbackState = gamestate;
-                gamestate = -1;
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F9)){
+                    if(drawBelow){
+                        drawBelow = false;
+                    }
+                    else{
+                        drawBelow = true;
+                    }
             }
         }
         
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F1)){
+            if(!debugModeActive){
+                fallbackState = gamestate;
+                debugModeActive = true;
+            }
+            gamestate = -1;
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F2)){
+            if(!debugModeActive){
+                fallbackState = gamestate;
+                debugModeActive = true;
+            }
+            gamestate = -2;
+        }   
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F3)){
+            if(debugModeActive){
+                gamestate = fallbackState;
+                debugModeActive = false;
+                fallbackState = 0;
+            }
+        }
     }
 
     @Override

@@ -265,7 +265,7 @@ public class MovingNpc extends Actor{
             }
         }
         
-        if(Main.gamestate == -1 || Main.gamestate == -2){
+        if(Main.debugModeActive){
             debug(batch);
         }
         
@@ -286,6 +286,9 @@ public class MovingNpc extends Actor{
                 shapeRenderer.setColor(Color.ORANGE);
                 shapeRenderer.line(getCenterX(), getCenterY(), POI.x, POI.y);
             }
+            
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.rect(collisionRect.x, collisionRect.y, collisionRect.width, collisionRect.height);
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.rect(getX(), getY(), animatedSprite.getSprite().getWidth(),  animatedSprite.getSprite().getHeight());
             

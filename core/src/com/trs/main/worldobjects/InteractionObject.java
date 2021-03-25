@@ -110,7 +110,7 @@ public class InteractionObject extends Actor{
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if(animatedSprite != null){animatedSprite.draw(batch);}
-        if(Main.gamestate == -1 || Main.gamestate == -2){
+        if(Main.debugModeActive){
             debug(batch);
         }
         super.draw(batch, parentAlpha); //To change body of generated methods, choose Tools | Templates.
@@ -125,6 +125,7 @@ public class InteractionObject extends Actor{
             shapeRenderer.rect(getX(), getY(), getWidth(),  getHeight());
             
             shapeRenderer.end();
+            
             
             batch.begin();
     }

@@ -11,6 +11,7 @@ import com.trs.main.fightscreen.FightObject;
 import com.trs.main.fightscreen.FightScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -76,6 +77,7 @@ public class MapContainer {
         
     private int[] layersBelowPlayer = {0, 1, 2};
     private int[] layersAbovePlayer = {3, 4};
+    
 	
         // TODO: Value which shows from which door the player is coming?
     public MapContainer(float CAMERA_WIDTH, float CAMERA_HEIGHT, Player p, String mapString, int inDoor, int mapId, ShapeRenderer uiRenderer) {
@@ -200,6 +202,7 @@ public class MapContainer {
         stage.addActor(p);
         
     }
+    
         
     public void render(float f){
         if(Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
@@ -249,7 +252,9 @@ public class MapContainer {
         
         getRenderer().setView((OrthographicCamera)getStage().getCamera());
         
+        if(Main.drawBelow){
         getRenderer().render(getLayersBelowPlayer());
+        }
         
         if(Main.gamestate == 0 || Main.gamestate == 1) {
             /*
@@ -356,7 +361,9 @@ public class MapContainer {
             getStage().draw();
         }
         
-        getRenderer().render(getLayersAbovePlayer());
+        if(Main.drawAbove){
+            getRenderer().render(getLayersAbovePlayer());
+        }
         
         for(Actor a : getStage().getActors()){
             if(a instanceof Textbox){
@@ -416,7 +423,25 @@ public class MapContainer {
         
         return unsorted;
     }
-
+    
+    public void debugDoor(ShapeRenderer uiRenderer){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        uiRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        uiRenderer.setColor(0f,136f/255f,0f,0.4f);
+        for(Door d : doors){
+            uiRenderer.rect(d.rect.x, d.rect.y, d.rect.width, d.rect.height);
+        }
+        uiRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        uiRenderer.setColor(0f,1f,0f,1f);
+        uiRenderer.begin(ShapeRenderer.ShapeType.Line);
+        for(Door d : doors){
+            uiRenderer.rect(d.rect.x, d.rect.y, d.rect.width, d.rect.height);
+        }
+        uiRenderer.end();
+    }
+    
     /**
      * @return the stage
      */

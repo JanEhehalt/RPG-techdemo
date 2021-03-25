@@ -72,7 +72,7 @@ public class GameScreen extends AbstractScreen{
         }
         
         if(Main.gamestate == -2){
-            float camSpeed = 15;
+            float camSpeed = 10;
             if(Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT)){
                 camSpeed = 1;
             }
@@ -97,10 +97,12 @@ public class GameScreen extends AbstractScreen{
             //map.getStage().getCamera().update();
         }
         
-        if(Main.debugUI){
+        if(Main.debugModeActive){
+            map.debugDoor(uiRenderer);
             debugUI.draw(map.getStage().getActors().size, new Vector2(map.getStage().getCamera().position.x, map.getStage().getCamera().position.y));
         }
     }
+    
 
     @Override
     public void resize(int width, int height) {

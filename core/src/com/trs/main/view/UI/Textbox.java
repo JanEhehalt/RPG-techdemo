@@ -71,7 +71,7 @@ public class Textbox extends Actor{
         setName("textbox");
         
         setWidth(Main.CAMERA_WIDTH - 40);
-        r = new Rectangle(20, 20, 814, 0);
+        r = new Rectangle(20, 20, Main.CAMERA_WIDTH-40, 0);
         setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
         
         this.toPrint = toPrint;
